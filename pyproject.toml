@@ -1,0 +1,41 @@
+[project]
+# Change this to reference the name of your study
+name = "kidney-transplant-llm"
+# You can leave this alone to start. Only worry about it when you need to create
+# a package for other users
+version = "0.1.0"
+requires-python = ">= 3.11"
+# If you need python libraries, add them here
+dependencies = [
+]
+# You can alter this to discuss your study specifics
+description = "Kidney Transplant LLM for Immune Related Adverse Events (IRAE)"
+readme = "README.md"
+license = { text="Apache License 2.0" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Home = "https://smarthealthit.org/cumulus//"
+Documentation = "https://docs.smarthealthit.org/cumulus/"
+# Change this source to reference your github URL
+Source = "https://github.com/smart-on-fhir/kidney-transplant-llm"
+
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pylint",    
+]
+
+[tool.flit.sdist]
+# change this to the name of the study folder inside of the module directory
+include = ["transplant_llm/"]
