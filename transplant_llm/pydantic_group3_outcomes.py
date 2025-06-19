@@ -80,5 +80,36 @@ class FungalInfectionPresent(str, Enum):
 class FungalInfectionMention(SpanAugmentedMention):
     fungal_infection_mentioned: bool = Field(False, description="Is fungal infection mentioned?")
     fungal_infection_history: bool = Field(False, description="Has the patient ever had a fungal infection?")
-    fungal_infection_present: BacterialInfectionPresent = Field(
+    fungal_infection_present: FungalInfectionPresent = Field(
         FungalInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of fungal infection in the present encounter?")
+
+###############################################################################
+# Graft Rejection
+###############################################################################
+class GraftRejectionPresent(str, Enum):
+    BiopsyProven = "Confirmed kidney graft rejection in a biopsy report, pathology report, kidney graft rejection documented as 'biopsy proven', 'histopathology proven', 'IHC proven', or confirmed by pathologist"
+    Confirmed = "Renal graft rejection was 'diagnosed', 'confirmed' or 'positive'"
+    Treatment = "Treatment prescribed/administered for kidney rejection (AMR or TCMR)"
+    Suspected = "Renal graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
+    NoneOfTheAbove = "None of the above"
+
+class GraftRejectionMention(SpanAugmentedMention):
+    graft_rejection_mentioned: bool = Field(False, description="Is kidney graft rejection mentioned?")
+    graft_rejection__history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
+    graft_rejection__present: GraftRejectionPresent = Field(
+        GraftRejectionPresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft rejection in the present encounter?")
+
+###############################################################################
+# Graft Failure
+###############################################################################
+class GraftFailurePresent(str, Enum):
+    Confirmed = "Kidney graft has failed or kidney graft loss"
+    Suspected = "Kidney graft failure presumed, suspected, likely, or cannot be ruled out"
+    NoneOfTheAbove = "None of the above"
+
+class GraftFailureMention(SpanAugmentedMention):
+    graft_failure_mentioned: bool = Field(False, description="Is kidney graft failure mentioned?")
+    graft_failure_history: bool = Field(False, description="Has the patient ever had kidney graft failure?")
+    graft_failure_present: GraftFailurePresent = Field(
+        GraftFailurePresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft failure in the present encounter?")
+
