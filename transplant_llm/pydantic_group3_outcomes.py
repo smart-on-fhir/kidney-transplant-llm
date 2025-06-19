@@ -27,7 +27,7 @@ class DSAMention(SpanAugmentedMention):
 #   * useful as a secondary check to ensure more specific infection types are not missed
 ############################################################################################################
 class InfectionPresent(str, Enum):
-    Confirmed = "Infection confirmed by laboratory test or imaging, infection diagnosed 'confirmed' or 'positive', or reduced immunosuppression due to infection"
+    Confirmed = "Infection confirmed by laboratory test or imaging, infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to infection"
     Treatment = "Treatment prescribed/administered for infection (not including prophylaxis)"
     Suspected = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or viral test result is pending"
     NoneOfTheAbove = "None of the above"
@@ -42,7 +42,7 @@ class InfectionMention(SpanAugmentedMention):
 # Infection (Viral)
 ###############################################################################
 class ViralInfectionPresent(str, Enum):
-    Confirmed = "Viral infection confirmed by laboratory test or imaging, viral infection diagnosed 'confirmed' or 'positive', or reduced immunosuppression due to viral infection"
+    Confirmed = "Viral infection confirmed by laboratory test or imaging, viral infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to viral infection"
     Treatment = "Antiviral treatment prescribed/administered for viral infection (not including prophylaxis)"
     Suspected = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
     NoneOfTheAbove = "None of the above"
@@ -57,7 +57,7 @@ class ViralInfectionMention(SpanAugmentedMention):
 # Infection (Bacterial)
 ###############################################################################
 class BacterialInfectionPresent(str, Enum):
-    Confirmed = "Bacterial infection confirmed by laboratory test or imaging, bacterial infection diagnosed 'confirmed' or 'positive', or reduced immunosuppression due to bacterial infection"
+    Confirmed = "Bacterial infection confirmed by laboratory test or imaging, bacterial infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to bacterial infection"
     Treatment = "Antibacterial treatment prescribed/administered for bacterial infection (not including prophylaxis)"
     Suspected = "Bacterial infection is suspected, likely, cannot be ruled out, bacterial infection is a differential diagnosis or bacterial test result is pending"
     NoneOfTheAbove = "None of the above"
@@ -72,7 +72,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
 # Infection (Fungal)
 ###############################################################################
 class FungalInfectionPresent(str, Enum):
-    Confirmed = "Fungal infection confirmed by laboratory test or imaging, fungal infection diagnosed 'confirmed' or 'positive', or reduced immunosuppression due to fungal infection"
+    Confirmed = "Fungal infection confirmed by laboratory test or imaging, fungal infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to fungal infection"
     Treatment = "Antifungal treatment prescribed/administered for fungal infection (not including prophylaxis)"
     Suspected = "Fungal infection is suspected, likely, cannot be ruled out, fungal infection is a differential diagnosis or fungal test result is pending"
     NoneOfTheAbove = "None of the above"
