@@ -87,16 +87,16 @@ class FungalInfectionMention(SpanAugmentedMention):
 # Graft Rejection
 ###############################################################################
 class GraftRejectionPresent(str, Enum):
-    BiopsyProven = "Confirmed kidney graft rejection in a biopsy report, pathology report, kidney graft rejection documented as 'biopsy proven', 'histopathology proven', 'IHC proven', or confirmed by pathologist"
-    Confirmed = "Renal graft rejection was 'diagnosed', 'confirmed' or 'positive'"
+    BiopsyProven = "Biopsy proven kidney graft rejection or pathology proven kidney graft rejection"
+    Confirmed = "Kidney graft rejection was 'diagnosed', 'confirmed' or 'positive'"
     Treatment = "Treatment prescribed/administered for kidney rejection (AMR or TCMR)"
-    Suspected = "Renal graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
+    Suspected = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
     NoneOfTheAbove = "None of the above"
 
 class GraftRejectionMention(SpanAugmentedMention):
     graft_rejection_mentioned: bool = Field(False, description="Is kidney graft rejection mentioned?")
-    graft_rejection__history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
-    graft_rejection__present: GraftRejectionPresent = Field(
+    graft_rejection_history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
+    graft_rejection_present: GraftRejectionPresent = Field(
         GraftRejectionPresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft rejection in the present encounter?")
 
 ###############################################################################
@@ -113,3 +113,34 @@ class GraftFailureMention(SpanAugmentedMention):
     graft_failure_present: GraftFailurePresent = Field(
         GraftFailurePresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft failure in the present encounter?")
 
+###############################################################################
+# PTLD
+###############################################################################
+class PTLDPresent(str, Enum):
+    BiopsyProven = "Biopsy proven or pathology proven post transplant lymphoproliferative disorder (PTLD)"
+    Confirmed = "Post transplant lymphoproliferative disorder (PTLD) was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
+    Treatment = "Treatment prescribed/administered for post transplant lymphoproliferative disorder (PTLD) or stopped immunosuppression due to PTLD"
+    Suspected = "Post transplant lymphoproliferative disorder (PTLD) presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
+    NoneOfTheAbove = "None of the above"
+
+class PTLDMention(SpanAugmentedMention):
+    ptld_mentioned: bool = Field(False, description="Is post transplant lymphoproliferative disorder (PTLD) mentioned?")
+    ptld_history: bool = Field(False, description="Has the patient ever had post transplant lymphoproliferative disorder (PTLD)?")
+    ptld_present: PTLDPresent = Field(
+        PTLDPresent.NoneOfTheAbove, description="Is there documented evidence of post transplant lymphoproliferative disorder (PTLD) in the present encounter?")
+
+###############################################################################
+# Cancer
+###############################################################################
+class CancerPresent(str, Enum):
+    BiopsyProven = "Biopsy proven or pathology proven cancer"
+    Confirmed = "Cancer was 'diagnosed', 'confirmed' or 'positive'"
+    Treatment = "Treatment prescribed/administered for cancer"
+    Suspected = "Cancer is presumed, suspected, likely, cannot be ruled out, or biopsy of any lesion"
+    NoneOfTheAbove = "None of the above"
+
+class CancerMention(SpanAugmentedMention):
+    cancer_mentioned: bool = Field(False, description="Is cancer mentioned?")
+    cancer_history: bool = Field(False, description="Has the patient ever had cancer?")
+    cancer_present: CancerPresent = Field(
+        CancerPresent.NoneOfTheAbove, description="Is there documented evidence of cancer in the present encounter?")
