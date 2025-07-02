@@ -29,7 +29,7 @@ class DSAMention(SpanAugmentedMention):
 class InfectionPresent(str, Enum):
     Confirmed = "Infection confirmed by laboratory test or imaging, infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to infection"
     Treatment = "Treatment prescribed/administered for infection (not including prophylaxis)"
-    Suspected = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or viral test result is pending"
+    Suspected = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or infectious test result is pending"
     NoneOfTheAbove = "None of the above"
 
 class InfectionMention(SpanAugmentedMention):
