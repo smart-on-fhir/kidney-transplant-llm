@@ -8,7 +8,7 @@ class SpanAugmentedMention(BaseModel):
 
 class DocumentedStatus(str, Enum):
     DocumentedTrue = 'Documented as true'
-    DocumentedFalse = 'Documented as False'
+    DocumentedFalse = 'Documented as false'
     NotMentioned = 'Not mentioned'
 
 ###############################################################################
