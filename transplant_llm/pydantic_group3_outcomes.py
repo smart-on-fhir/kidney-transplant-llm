@@ -6,6 +6,72 @@ class SpanAugmentedMention(BaseModel):
     is_present: Optional[bool]  # True, False, or None
     spans: List[str]
 
+class DocumentedStatus(str, Enum):
+    DocumentedTrue = 'Documented as true'
+    DocumentedFalse = 'Documented as False'
+    NotMentioned = 'Not mentioned'
+
+###############################################################################
+# Donor Characteristics
+###############################################################################
+class DonorTransplantDateMention(SpanAugmentedMention):
+    transplant_date: str = Field(None, description='Date of renal transplant')
+
+class DonorType(str, Enum):
+    Living = 'Donor was alive at time of renal transplant'
+    Deceased = 'Donor was deceased at time of renal transplant'
+    NotMentioned = "Donor was not mentioned as living or deceased"
+
+class DonorTypeMention(SpanAugmentedMention):
+    donor_type: DonorType = Field(DonorType.NotMentioned,
+                                  description='Was the renal donor living at the time of transplant?')
+
+class DonorRelationship(str, Enum):
+    Related = 'Donor was related to the renal transplant recipient'
+    Unrelated = 'Donor was unrelated to the renal transplant recipient'
+    NotMentioned = "Donor relationship status was not mentioned"
+
+class DonorRelationshipMention(SpanAugmentedMention):
+    donor_relationship: DonorRelationship = Field(DonorRelationship.NotMentioned,
+                                                  description='Was the renal donor related to the recipient?')
+
+class DonorHlaMatchQuality(str, Enum):
+    Well = 'Well matched (0-1 mismatches)'
+    Moderate = 'Moderately matched (2-4 mismatches)'
+    Poor = 'Poorly matched (5-6 mismatches)'
+    NotMentioned = "HLA match quality not mentioned"
+
+class DonorHlaMatchQualityMention(SpanAugmentedMention):
+    donor_hla_match_quality: DonorHlaMatchQuality = Field(DonorHlaMatchQuality.NotMentioned,
+                                                          description='What was the renal transplant HLA match quality?')
+
+class DonorHlaMismatchCount(str, Enum):
+    Zero = 0
+    One = 1
+    Two = 2
+    Three = 3
+    Four = 4
+    Five = 5
+    Six = 6
+    NotMentioned = 'HLA mismatch count not mentioned'
+
+class DonorHlaMismatchCountMention(SpanAugmentedMention):
+    donor_hla_mismatch_count: DonorHlaMismatchCount = Field(DonorHlaMismatchCount.NotMentioned,
+                                                            description='What was the renal donor-recipient HLA mismatch count? ')
+
+###############################################################################
+# Medication Compliance
+###############################################################################
+class RxTherapeuticMention(SpanAugmentedMention):
+    therapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as therapeutic or adequate?')
+    subtherapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as subtherapeutic or insufficient?')
+    supratherapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as supratherapeutic or above therapeutic level?')
+
+class RxComplianceMention(SpanAugmentedMention):
+    compliant: DocumentedStatus = Field(None, description='Is the patient compliant with immunosuppressive medications?')
+    partial: DocumentedStatus = Field(None, description='Is the patient only partially compliant with immunosuppressive medications?')
+    noncompliant: DocumentedStatus = Field(None, description='Is the patient noncompliant with immunosuppressive medications?')
+
 ###############################################################################
 # DSA Donor Specific Antibody
 ###############################################################################
