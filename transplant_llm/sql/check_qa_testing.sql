@@ -34,11 +34,11 @@ group by variable
 order by cnt_patients desc;
 
 
-select  count(*) as cnt, donor_transplant_date
+select  count(*) as cnt, donor_date
 from    irae__gpt4_donor
 where   subject_ref =
 'Patient/806dda1fd7979681eeee1e88d703b69e47c10370663584e380919b9f4e6088b4'
-and     donor_transplant_date is not null
-and     donor_transplant_date > date('2000-01-01')
-group by donor_transplant_date
+and     donor_date is not null
+and     donor_date > date('2000-01-01')
+group by donor_date
 order by cnt desc

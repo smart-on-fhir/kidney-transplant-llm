@@ -1,29 +1,17 @@
 create TABLE irae__ranking as select * from (values
 
--- All Infection Type Rankings
- ('infection', 'Confirmed', 3)
-,('infection', 'Treatment', 2)
-,('infection', 'Suspected', 1)
-,('infection', 'NoneOfTheAbove', 0)
-
--- Graft Rejection includes BiopsyProven
-,('rejection', 'BiopsyProven', 4)
-,('rejection', 'Confirmed', 3)
-,('rejection', 'Treatment', 2)
-,('rejection', 'Suspected', 1)
-,('rejection', 'NoneOfTheAbove', 0)
-
--- Graft Failure, no treatment case (study endpoint)
-,('failure', 'Confirmed', 3)
-,('failure', 'Suspected', 1)
-,('failure', 'NoneOfTheAbove', 0)
-
--- Cancer including PTLD (Lymphoma)
-,('cancer', 'BiopsyProven', 4)
-,('cancer', 'Treatment', 2)
-,('cancer', 'Suspected', 1)
-
-
+-- DocumentedStatus
+ ('documented', 'DocumentedTrue', 1)
+,('documented', 'DocumentedFalse', -1)
+,('documented', 'NotMentioned', 0)
+        
+-- Evidence Ranking 
+,('evidence', 'BiopsyProven', 4)
+,('evidence', 'Confirmed', 3)
+,('evidence', 'Treatment', 2)
+,('evidence', 'Suspected', 1)
+,('evidence', 'NoneOfTheAbove', 0)
+    
 -- Donor Characteristics
 ,('donor', 'Living', 1)
 ,('donor', 'Deceased', -1)
@@ -48,10 +36,5 @@ create TABLE irae__ranking as select * from (values
 ,('hla', 'Five', 6-5)
 ,('hla', 'Six', 6-6)
 ,('hla', 'NotMentioned', 0)
-
--- Especially medication compliance and drug therapeutic dosing                                                             
-,('documented', 'DocumentedTrue', 1)
-,('documented', 'DocumentedFalse', -1)
-,('documented', 'NotMentioned', 0)
 
 ) AS t (topic, code, ranking) ;

@@ -11,15 +11,15 @@ select  distinct
         infection_mentioned	                    ,
         infection_history	                    ,
         infection_present	                    ,
-        viral_infection_mentioned	            ,
-        viral_infection_history	                ,
-        viral_infection_present	                ,
-        bacterial_infection_mentioned	        ,
-        bacterial_infection_history	            ,
-        bacterial_infection_present	            ,
-        fungal_infection_mentioned	            ,
-        fungal_infection_history	            ,
-        fungal_infection_present
+        viral_mentioned	            ,
+        viral_history	                ,
+        viral_present	                ,
+        bacterial_mentioned	        ,
+        bacterial_history	            ,
+        bacterial_present	            ,
+        fungal_mentioned	            ,
+        fungal_history	            ,
+        fungal_present
 from irae__gpt4_fhir;
 
 create or replace view irae__gpt4_infection_present as
@@ -28,14 +28,14 @@ with union_note as
     select distinct documentreference_ref, infection_present        as present
     from    irae__gpt4_fhir    where infection_present!='NoneOfTheAbove'
     UNION
-    select distinct documentreference_ref, viral_infection_present  as present
-    from    irae__gpt4_fhir    where viral_infection_present!='NoneOfTheAbove'
+    select distinct documentreference_ref, viral_present  as present
+    from    irae__gpt4_fhir    where viral_present!='NoneOfTheAbove'
     UNION
-    select distinct documentreference_ref, bacterial_infection_present as present
-    from    irae__gpt4_fhir    where bacterial_infection_present!='NoneOfTheAbove'
+    select distinct documentreference_ref, bacterial_present as present
+    from    irae__gpt4_fhir    where bacterial_present!='NoneOfTheAbove'
     UNION
-    select distinct documentreference_ref, fungal_infection_present as present
-    from    irae__gpt4_fhir    where fungal_infection_present!='NoneOfTheAbove'
+    select distinct documentreference_ref, fungal_present as present
+    from    irae__gpt4_fhir    where fungal_present!='NoneOfTheAbove'
 ),
 ranked_note as
 (
