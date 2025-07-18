@@ -3,6 +3,66 @@ select distinct
     concat('Patient/', split_part(filename, '.', 1))            as subject_ref,
     concat('DocumentReference/', split_part(filename, '.', 2))  as documentreference_ref,
 
+    coalesce(donor_type_mentioned, False)               as donor_type_mentioned,
+    case    when    donor_type = ''
+            then    'NotMentioned'
+            else    donor_type
+            end as  donor_type,
+
+    coalesce(donor_relationship_mentioned, False)       as donor_relationship_mentioned,
+    case    when    donor_relationship = ''
+            then    'NotMentioned'
+            else    donor_relationship
+            end as  donor_relationship,
+
+    coalesce(donor_hla_match_quality_mentioned, False)  as donor_hla_match_quality_mentioned,
+    case    when    donor_hla_match_quality = ''
+            then    'NotMentioned'
+            else    donor_hla_match_quality
+            end as  donor_hla_match_quality,
+
+    coalesce(donor_hla_mismatch_count_mentioned, False) as donor_hla_mismatch_count_mentioned,
+    case    when    donor_hla_mismatch_count = ''
+            then    'NotMentioned'
+            else    donor_hla_mismatch_count
+            end as  donor_hla_mismatch_count,
+
+    coalesce(donor_transplant_date_mentioned, False)    as donor_transplant_date_mentioned,
+    donor_transplant_date,
+
+    coalesce(rx_therapeutic_mentioned, False)           as rx_therapeutic_mentioned,
+
+    case    when rx_therapeutic_therapeutic = ''
+            then    'NotMentioned'
+            else    rx_therapeutic_therapeutic
+            end as  rx_therapeutic_therapeutic,
+
+    case    when    rx_therapeutic_subtherapeutic = ''
+            then    'NotMentioned'
+            else    rx_therapeutic_subtherapeutic
+            end as  rx_therapeutic_subtherapeutic,
+
+    case    when    rx_therapeutic_supratherapeutic = ''
+            then    'NotMentioned'
+            else    rx_therapeutic_supratherapeutic
+            end as  rx_therapeutic_supratherapeutic,
+
+    coalesce(rx_compliance_mentioned, False)            as rx_compliance_mentioned,
+    case    when    rx_compliance_compliant = ''
+            then    'NotMentioned'
+            else    rx_compliance_compliant
+            end as  rx_compliance_compliant,
+
+    case    when    rx_compliance_partial = ''
+            then    'NotMentioned'
+            else    rx_compliance_partial
+            end as  rx_compliance_partial,
+
+    case    when    rx_compliance_noncompliant = ''
+            then    'NotMentioned'
+            else    rx_compliance_noncompliant
+            end as  rx_compliance_noncompliant,
+
     coalesce(dsa_mentioned, False)	    as dsa_mentioned,
     coalesce(dsa_history, False)        as dsa_history,
     case    when    dsa_present = ''
@@ -66,65 +126,6 @@ select distinct
             else    cancer_present
             end as  cancer_present,
 
-    coalesce(donor_transplant_date_mentioned, False) as donor_transplant_date_mentioned,
-    donor_transplant_date,
-
-    coalesce(donor_type_mentioned, False)            as donor_type_mentioned,
-    case    when    donor_type = ''
-            then    'NotMentioned'
-            else    donor_type
-            end as  donor_type,
-
-    coalesce(donor_relationship_mentioned, False)       as donor_relationship_mentioned,
-    case    when    donor_relationship = ''
-            then    'NotMentioned'
-            else    donor_relationship
-            end as  donor_relationship,
-
-    coalesce(donor_hla_match_quality_mentioned, False)  as donor_hla_match_quality_mentioned,
-    case    when    donor_hla_match_quality = ''
-            then    'NotMentioned'
-            else    donor_hla_match_quality
-            end as  donor_hla_match_quality,
-
-    coalesce(donor_hla_mismatch_count_mentioned, False) as donor_hla_mismatch_count_mentioned,
-    case    when    donor_hla_mismatch_count = ''
-            then    'NotMentioned'
-            else    donor_hla_mismatch_count
-            end as  donor_hla_mismatch_count,
-
-    coalesce(rx_therapeutic_mentioned, False)               as rx_therapeutic_mentioned,
-
-    case    when rx_therapeutic_therapeutic = ''
-            then    'NotMentioned'
-            else    rx_therapeutic_therapeutic
-            end as  rx_therapeutic_therapeutic,
-
-    case    when    rx_therapeutic_subtherapeutic = ''
-            then    'NotMentioned'
-            else    rx_therapeutic_subtherapeutic
-            end as  rx_therapeutic_subtherapeutic,
-
-    case    when    rx_therapeutic_supratherapeutic = ''
-            then    'NotMentioned'
-            else    rx_therapeutic_supratherapeutic
-            end as  rx_therapeutic_supratherapeutic,
-
-    coalesce(rx_compliance_mentioned, False)    as rx_compliance_mentioned,
-    case    when    rx_compliance_compliant = ''
-            then    'NotMentioned'
-            else    rx_compliance_compliant
-            end as  rx_compliance_compliant,
-
-    case    when    rx_compliance_partial = ''
-            then    'NotMentioned'
-            else    rx_compliance_partial
-            end as  rx_compliance_partial,
-
-    case    when    rx_compliance_noncompliant = ''
-            then    'NotMentioned'
-            else    rx_compliance_noncompliant
-            end as  rx_compliance_noncompliant,
     "filename",
     error_found
 from    irae__gpt4_raw;

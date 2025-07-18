@@ -11,7 +11,6 @@ select  distinct
         DOC.author_day      as doc_author_date,
         DOC.type_code       as doc_type_code,
         DOC.type_display    as doc_type_display,
-        DOC.type_system     as doc_type_system,
         DOC.encounter_ref,
         GPT4.*
 from    irae__gpt4_parsed       as GPT4,
