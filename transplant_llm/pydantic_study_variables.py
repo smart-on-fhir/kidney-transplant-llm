@@ -6,16 +6,14 @@ class SpanAugmentedMention(BaseModel):
     is_present: Optional[bool]  # True, False, or None
     spans: List[str]
 
-class DocumentedStatus(str, Enum):
-    DocumentedTrue = 'Documented as true'
-    DocumentedFalse = 'Documented as false'
-    NotMentioned = 'Not mentioned'
-
 ###############################################################################
 # Donor Characteristics
 ###############################################################################
 class DonorTransplantDateMention(SpanAugmentedMention):
-    transplant_date: str = Field(None, description='Date of renal transplant')
+    transplant_date: str = Field(
+        None,
+        description='Date of renal transplant'
+    )
 
 class DonorType(str, Enum):
     Living = 'Donor was alive at time of renal transplant'
@@ -23,8 +21,10 @@ class DonorType(str, Enum):
     NotMentioned = "Donor was not mentioned as living or deceased"
 
 class DonorTypeMention(SpanAugmentedMention):
-    donor_type: DonorType = Field(DonorType.NotMentioned,
-                                  description='Was the renal donor living at the time of transplant?')
+    donor_type: DonorType = Field(
+        DonorType.NotMentioned,
+        description='Was the renal donor living at the time of transplant?'
+    )
 
 class DonorRelationship(str, Enum):
     Related = 'Donor was related to the renal transplant recipient'
@@ -32,8 +32,10 @@ class DonorRelationship(str, Enum):
     NotMentioned = "Donor relationship status was not mentioned"
 
 class DonorRelationshipMention(SpanAugmentedMention):
-    donor_relationship: DonorRelationship = Field(DonorRelationship.NotMentioned,
-                                                  description='Was the renal donor related to the recipient?')
+    donor_relationship: DonorRelationship = Field(
+        DonorRelationship.NotMentioned,
+        description='Was the renal donor related to the recipient?'
+    )
 
 class DonorHlaMatchQuality(str, Enum):
     Well = 'Well matched (0-1 mismatches)'
@@ -42,8 +44,10 @@ class DonorHlaMatchQuality(str, Enum):
     NotMentioned = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
-    donor_hla_quality: DonorHlaMatchQuality = Field(DonorHlaMatchQuality.NotMentioned,
-                                                          description='What was the renal transplant HLA match quality?')
+    donor_hla_quality: DonorHlaMatchQuality = Field(
+        DonorHlaMatchQuality.NotMentioned,
+        description='What was the renal transplant HLA match quality?'
+    )
 
 class DonorHlaMismatchCount(str, Enum):
     Zero = 0
@@ -56,21 +60,46 @@ class DonorHlaMismatchCount(str, Enum):
     NotMentioned = 'HLA mismatch count not mentioned'
 
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
-    donor_hla_mismatch: DonorHlaMismatchCount = Field(DonorHlaMismatchCount.NotMentioned,
-                                                            description='What was the renal donor-recipient HLA mismatch count? ')
+    donor_hla_mismatch: DonorHlaMismatchCount = Field(
+        DonorHlaMismatchCount.NotMentioned,
+        description='What was the renal donor-recipient HLA mismatch count?'
+    )
 
 ###############################################################################
 # Medication Compliance
 ###############################################################################
+# TO DISCUSS: Why is this a mention with 3-different fields and not just an enum
+# then modelled as a mention. 
+# Assuming this is a mistake and fixing
+class RxTherapeutic(str, Enum):
+    therapeutic = 'Immunosuppression levels are documented as therapeutic or adequate.'
+    subtherapeutic = 'Immunosuppression levels are documented as subtherapeutic or insufficient.'
+    supratherapeutic = 'Immunosuppression levels are documented as supratherapeutic or above therapeutic level.'
+
 class RxTherapeuticMention(SpanAugmentedMention):
-    therapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as therapeutic or adequate?')
-    subtherapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as subtherapeutic or insufficient?')
-    supratherapeutic: DocumentedStatus = Field(None, description='Are immunosuppression levels documented as supratherapeutic or above therapeutic level?')
+    documented_status : DocumentedStatus = Field(
+        DocumentedStatus.NotMentioned, 
+        description='Are immunosuppression levels documented at a therapeutic level?'
+    )
+    therapeutic_status : Optional[RxTherapeutic]= Field(
+        None, 
+        description='If the immnosuppresion levels are documented at a therapeutic level, what level are they?'
+    ) 
+
+class RxCompliance(str, Enum):
+    compliant ='Is the patient compliant with immunosuppressive medications?'
+    partial ='Is the patient only partially compliant with immunosuppressive medications?'
+    noncompliant ='Is the patient noncompliant with immunosuppressive medications?'
 
 class RxComplianceMention(SpanAugmentedMention):
-    compliant: DocumentedStatus = Field(None, description='Is the patient compliant with immunosuppressive medications?')
-    partial: DocumentedStatus = Field(None, description='Is the patient only partially compliant with immunosuppressive medications?')
-    noncompliant: DocumentedStatus = Field(None, description='Is the patient noncompliant with immunosuppressive medications?')
+    documented_status : DocumentedStatus = Field(
+        DocumentedStatus.NotMentioned, 
+        description='Is immunosuppressive medication compliance documented?'
+    )
+    therapeutic_status : Optional[RxCompliance]= Field(
+        None, 
+        description='If immunosuppressive medication compliance is documented, what type of compliance is seen?'
+    ) 
 
 ###############################################################################
 # DSA Donor Specific Antibody
@@ -82,10 +111,11 @@ class DSAPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class DSAMention(SpanAugmentedMention):
-    dsa_mentioned: bool = Field(False, description="Are donor specific antibodies (DSA) mentioned?")
     dsa_history: bool = Field(False, description="Has the patient ever had donor specific antibodies (DSA)?")
     dsa_present: DSAPresent = Field(
-        DSAPresent.NoneOfTheAbove, description="Is there documented evidence of donor specific antibodies (DSA) in the present encounter?")
+        DSAPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of donor specific antibodies (DSA) in the present encounter?"
+    )
 
 ############################################################################################################
 # Infection (** Any **)
@@ -210,3 +240,58 @@ class CancerMention(SpanAugmentedMention):
     cancer_history: bool = Field(False, description="Has the patient ever had cancer?")
     cancer_present: CancerPresent = Field(
         CancerPresent.NoneOfTheAbove, description="Is there documented evidence of cancer in the present encounter?")
+
+
+
+###############################################################################
+# Aggregated Annotation and Mention Classes 
+###############################################################################
+
+class KidneyTransplantAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants.
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    filename: str
+    dsa: DSAMention
+    infection: InfectionMention
+    viral_infection: ViralInfectionMention
+    bacterial_infection: BacterialInfectionMention
+    fungal_infection: FungalInfectionMention
+    graft_rejection: GraftRejectionMention
+    graft_failure: GraftFailureMention
+    ptld: PTLDMention
+    cancer: CancerMention
+    donor_transplant_date: DonorTransplantDateMention
+    donor_type: DonorTypeMention
+    donor_relationship: DonorRelationshipMention
+    donor_hla_match_quality: DonorHlaMatchQualityMention
+    donor_hla_mismatch_count: DonorHlaMismatchCountMention
+    rx_therapeutic: RxTherapeuticMention
+    rx_compliance: RxComplianceMention
+    error: str
+
+# Enum describing all the relevant mention types' display labels
+# Keys should be 1 to 1 with the IbdAnnotation
+class KidneyTransplantMentionLabels(Enum):
+    dsa: "Donor Specific Antibodies"
+    infection: "Infection"
+    viral_infection: "Viral Infection"
+    bacterial_infection: "Bacterial Infection"
+    fungal_infection: "Fungal Infection"
+    graft_rejection: "Graft Rejection"
+    graft_failure: "Graft Failure"
+    ptld: "Post-transplant lymphoproliferative disorder"
+    cancer: "Cancer"
+    donor_transplant_date: "Donor Transplate Date"
+    donor_type: "Donor Type"
+    donor_relationship: "Donor Relationship"
+    donor_hla_match_quality: "Donor Hla Match Quality"
+    donor_hla_mismatch_count: "Donor Hla Mismatch Count"
+    rx_therapeutic: "rx_therapeutic"
+    rx_compliance: "rx_compliance"
