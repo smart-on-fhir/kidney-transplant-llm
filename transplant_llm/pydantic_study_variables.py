@@ -12,7 +12,7 @@ class SpanAugmentedMention(BaseModel):
 
 # Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
-    transplant_date: str = Field(
+    transplant_date: Optional[str] = Field(
         None,
         description='Date of renal transplant'
     )
