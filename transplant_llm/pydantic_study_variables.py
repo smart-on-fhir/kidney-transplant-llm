@@ -9,6 +9,8 @@ class SpanAugmentedMention(BaseModel):
 ###############################################################################
 # Donor Characteristics
 ###############################################################################
+
+# Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
     transplant_date: str = Field(
         None,
@@ -75,30 +77,25 @@ class RxTherapeutic(str, Enum):
     therapeutic = 'Immunosuppression levels are documented as therapeutic or adequate.'
     subtherapeutic = 'Immunosuppression levels are documented as subtherapeutic or insufficient.'
     supratherapeutic = 'Immunosuppression levels are documented as supratherapeutic or above therapeutic level.'
+    NotMentioned = 'Immunosuppression levels are not documented or mentioned at a therapeutic level.'
+
 
 class RxTherapeuticMention(SpanAugmentedMention):
-    documented_status : DocumentedStatus = Field(
-        DocumentedStatus.NotMentioned, 
-        description='Are immunosuppression levels documented at a therapeutic level?'
-    )
     therapeutic_status : Optional[RxTherapeutic]= Field(
         None, 
-        description='If the immnosuppresion levels are documented at a therapeutic level, what level are they?'
+        description='What type of therapeutic-level immunosuppression levels are documented for the patient?'
     ) 
 
 class RxCompliance(str, Enum):
-    compliant ='Is the patient compliant with immunosuppressive medications?'
-    partial ='Is the patient only partially compliant with immunosuppressive medications?'
-    noncompliant ='Is the patient noncompliant with immunosuppressive medications?'
+    compliant ='The patient is compliant with immunosuppressive medications.'
+    partial ='The patient is only partially compliant with immunosuppressive medications.'
+    noncompliant ='The patient is noncompliant with immunosuppressive medications.'
+    NotMentioned = 'Immunosuppressive medication compliance was not documented or mentioned.'
 
 class RxComplianceMention(SpanAugmentedMention):
-    documented_status : DocumentedStatus = Field(
-        DocumentedStatus.NotMentioned, 
-        description='Is immunosuppressive medication compliance documented?'
-    )
-    therapeutic_status : Optional[RxCompliance]= Field(
+    compliance_status : RxCompliance= Field(
         None, 
-        description='If immunosuppressive medication compliance is documented, what type of compliance is seen?'
+        description='What type of immunosuppressive medication compliance is mentioned?'
     ) 
 
 ###############################################################################
@@ -129,7 +126,6 @@ class InfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class InfectionMention(SpanAugmentedMention):
-    infection_mentioned: bool = Field(False, description="Is infection mentioned?")
     infection_history: bool = Field(False, description="Has the patient ever had an infection?")
     infection_present: InfectionPresent = Field(
         InfectionPresent.NoneOfTheAbove, description="Is there documented evidence of infection in the present encounter?")
@@ -144,7 +140,6 @@ class ViralInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class ViralInfectionMention(SpanAugmentedMention):
-    viral_mentioned: bool = Field(False, description="Is viral infection mentioned?")
     viral_history: bool = Field(False, description="Has the patient ever had a viral infection?")
     viral_present: ViralInfectionPresent = Field(
         ViralInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of viral infection in the present encounter?")
@@ -159,7 +154,6 @@ class BacterialInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class BacterialInfectionMention(SpanAugmentedMention):
-    bacterial_mentioned: bool = Field(False, description="Is bacterial infection mentioned?")
     bacterial_history: bool = Field(False, description="Has the patient ever had a bacterial infection?")
     bacterial_present: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of bacterial infection in the present encounter?")
@@ -174,7 +168,6 @@ class FungalInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class FungalInfectionMention(SpanAugmentedMention):
-    fungal_mentioned: bool = Field(False, description="Is fungal infection mentioned?")
     fungal_history: bool = Field(False, description="Has the patient ever had a fungal infection?")
     fungal_present: FungalInfectionPresent = Field(
         FungalInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of fungal infection in the present encounter?")
@@ -190,7 +183,6 @@ class GraftRejectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class GraftRejectionMention(SpanAugmentedMention):
-    rejection_mentioned: bool = Field(False, description="Is kidney graft rejection mentioned?")
     rejection_history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
     rejection_present: GraftRejectionPresent = Field(
         GraftRejectionPresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft rejection in the present encounter?")
@@ -204,7 +196,6 @@ class GraftFailurePresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class GraftFailureMention(SpanAugmentedMention):
-    failure_mentioned: bool = Field(False, description="Is kidney graft failure mentioned?")
     failure_history: bool = Field(False, description="Has the patient ever had kidney graft failure?")
     failure_present: GraftFailurePresent = Field(
         GraftFailurePresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft failure in the present encounter?")
@@ -220,7 +211,6 @@ class PTLDPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class PTLDMention(SpanAugmentedMention):
-    ptld_mentioned: bool = Field(False, description="Is post transplant lymphoproliferative disorder (PTLD) mentioned?")
     ptld_history: bool = Field(False, description="Has the patient ever had post transplant lymphoproliferative disorder (PTLD)?")
     ptld_present: PTLDPresent = Field(
         PTLDPresent.NoneOfTheAbove, description="Is there documented evidence of post transplant lymphoproliferative disorder (PTLD) in the present encounter?")
@@ -236,7 +226,6 @@ class CancerPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class CancerMention(SpanAugmentedMention):
-    cancer_mentioned: bool = Field(False, description="Is cancer mentioned?")
     cancer_history: bool = Field(False, description="Has the patient ever had cancer?")
     cancer_present: CancerPresent = Field(
         CancerPresent.NoneOfTheAbove, description="Is there documented evidence of cancer in the present encounter?")
@@ -257,7 +246,13 @@ class KidneyTransplantAnnotation(BaseModel):
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
-    filename: str
+    donor_transplant_date: DonorTransplantDateMention
+    donor_type: DonorTypeMention
+    donor_relationship: DonorRelationshipMention
+    donor_hla_match_quality: DonorHlaMatchQualityMention
+    donor_hla_mismatch_count: DonorHlaMismatchCountMention
+    rx_therapeutic: RxTherapeuticMention
+    rx_compliance: RxComplianceMention
     dsa: DSAMention
     infection: InfectionMention
     viral_infection: ViralInfectionMention
@@ -267,18 +262,17 @@ class KidneyTransplantAnnotation(BaseModel):
     graft_failure: GraftFailureMention
     ptld: PTLDMention
     cancer: CancerMention
-    donor_transplant_date: DonorTransplantDateMention
-    donor_type: DonorTypeMention
-    donor_relationship: DonorRelationshipMention
-    donor_hla_match_quality: DonorHlaMatchQualityMention
-    donor_hla_mismatch_count: DonorHlaMismatchCountMention
-    rx_therapeutic: RxTherapeuticMention
-    rx_compliance: RxComplianceMention
-    error: str
 
 # Enum describing all the relevant mention types' display labels
-# Keys should be 1 to 1 with the IbdAnnotation
+# Keys should be 1 to 1 with the KidneyTransplantAnnotation
 class KidneyTransplantMentionLabels(Enum):
+    donor_transplant_date: "Donor Transplate Date"
+    donor_type: "Donor Type"
+    donor_relationship: "Donor Relationship"
+    donor_hla_match_quality: "Donor Hla Match Quality"
+    donor_hla_mismatch_count: "Donor Hla Mismatch Count"
+    rx_therapeutic: "Immunosuppresion levels - therapeutic"
+    rx_compliance: "Immunosuppresion medication compliance"
     dsa: "Donor Specific Antibodies"
     infection: "Infection"
     viral_infection: "Viral Infection"
@@ -288,10 +282,3 @@ class KidneyTransplantMentionLabels(Enum):
     graft_failure: "Graft Failure"
     ptld: "Post-transplant lymphoproliferative disorder"
     cancer: "Cancer"
-    donor_transplant_date: "Donor Transplate Date"
-    donor_type: "Donor Type"
-    donor_relationship: "Donor Relationship"
-    donor_hla_match_quality: "Donor Hla Match Quality"
-    donor_hla_mismatch_count: "Donor Hla Mismatch Count"
-    rx_therapeutic: "rx_therapeutic"
-    rx_compliance: "rx_compliance"
