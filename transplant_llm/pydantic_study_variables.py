@@ -46,7 +46,7 @@ class DonorHlaMatchQuality(str, Enum):
     NotMentioned = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
-    donor_hla_quality: DonorHlaMatchQuality = Field(
+    donor_hla_match_quality: DonorHlaMatchQuality = Field(
         DonorHlaMatchQuality.NotMentioned,
         description='What was the renal transplant HLA match quality?'
     )
@@ -62,7 +62,7 @@ class DonorHlaMismatchCount(str, Enum):
     NotMentioned = 'HLA mismatch count not mentioned'
 
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
-    donor_hla_mismatch: DonorHlaMismatchCount = Field(
+    donor_hla_mismatch_count: DonorHlaMismatchCount = Field(
         DonorHlaMismatchCount.NotMentioned,
         description='What was the renal donor-recipient HLA mismatch count?'
     )
@@ -81,7 +81,7 @@ class RxTherapeutic(str, Enum):
 
 
 class RxTherapeuticMention(SpanAugmentedMention):
-    therapeutic_status: RxTherapeutic = Field(
+    rx_therapeutic: RxTherapeutic = Field(
         RxTherapeutic.NotMentioned, 
         description='What type of therapeutic-level immunosuppression levels are documented for the patient?'
     ) 
@@ -93,10 +93,15 @@ class RxCompliance(str, Enum):
     NotMentioned = 'Immunosuppressive medication compliance was not documented or mentioned.'
 
 class RxComplianceMention(SpanAugmentedMention):
-    compliance_status: RxCompliance= Field(
+    rx_compliance: RxCompliance= Field(
         RxCompliance.NotMentioned, 
         description='What type of immunosuppressive medication compliance is mentioned?'
     ) 
+
+###############################################################################
+# THE FOLLOWING DATA ELEMENTS TRACK BOTH 
+# THE HISTORY AND THE PRESENT STATUS OF VARIABLES
+###############################################################################
 
 ###############################################################################
 # DSA Donor Specific Antibody
@@ -142,8 +147,8 @@ class ViralInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class ViralInfectionMention(SpanAugmentedMention):
-    viral_history: bool = Field(False, description="Has the patient ever had a viral infection?")
-    viral_present: ViralInfectionPresent = Field(
+    viral_infection_history: bool = Field(False, description="Has the patient ever had a viral infection?")
+    viral_infection_present: ViralInfectionPresent = Field(
         ViralInfectionPresent.NoneOfTheAbove, 
         description="Is there documented evidence of viral infection in the present encounter?"
     )
@@ -158,8 +163,8 @@ class BacterialInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class BacterialInfectionMention(SpanAugmentedMention):
-    bacterial_history: bool = Field(False, description="Has the patient ever had a bacterial infection?")
-    bacterial_present: BacterialInfectionPresent = Field(
+    bacterial_infection_history: bool = Field(False, description="Has the patient ever had a bacterial infection?")
+    bacterial_infection_present: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NoneOfTheAbove, 
         description="Is there documented evidence of bacterial infection in the present encounter?"
     )
@@ -174,8 +179,8 @@ class FungalInfectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class FungalInfectionMention(SpanAugmentedMention):
-    fungal_history: bool = Field(False, description="Has the patient ever had a fungal infection?")
-    fungal_present: FungalInfectionPresent = Field(
+    fungal_infection_history: bool = Field(False, description="Has the patient ever had a fungal infection?")
+    fungal_infection_present: FungalInfectionPresent = Field(
         FungalInfectionPresent.NoneOfTheAbove, 
         description="Is there documented evidence of fungal infection in the present encounter?"
     )
@@ -191,8 +196,8 @@ class GraftRejectionPresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class GraftRejectionMention(SpanAugmentedMention):
-    rejection_history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
-    rejection_present: GraftRejectionPresent = Field(
+    graft_rejection_history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
+    graft_rejection_present: GraftRejectionPresent = Field(
         GraftRejectionPresent.NoneOfTheAbove, 
         description="Is there documented evidence of kidney graft rejection in the present encounter?"
     )
@@ -206,8 +211,8 @@ class GraftFailurePresent(str, Enum):
     NoneOfTheAbove = "None of the above"
 
 class GraftFailureMention(SpanAugmentedMention):
-    failure_history: bool = Field(False, description="Has the patient ever had kidney graft failure?")
-    failure_present: GraftFailurePresent = Field(
+    graft_failure_history: bool = Field(False, description="Has the patient ever had kidney graft failure?")
+    graft_failure_present: GraftFailurePresent = Field(
         GraftFailurePresent.NoneOfTheAbove, 
         description="Is there documented evidence of kidney graft failure in the present encounter?"
     )
