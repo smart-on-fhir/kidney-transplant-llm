@@ -81,8 +81,8 @@ class RxTherapeutic(str, Enum):
 
 
 class RxTherapeuticMention(SpanAugmentedMention):
-    therapeutic_status : Optional[RxTherapeutic]= Field(
-        None, 
+    therapeutic_status: RxTherapeutic = Field(
+        RxTherapeutic.NotMentioned, 
         description='What type of therapeutic-level immunosuppression levels are documented for the patient?'
     ) 
 
@@ -93,8 +93,8 @@ class RxCompliance(str, Enum):
     NotMentioned = 'Immunosuppressive medication compliance was not documented or mentioned.'
 
 class RxComplianceMention(SpanAugmentedMention):
-    compliance_status : RxCompliance= Field(
-        None, 
+    compliance_status: RxCompliance= Field(
+        RxCompliance.NotMentioned, 
         description='What type of immunosuppressive medication compliance is mentioned?'
     ) 
 
