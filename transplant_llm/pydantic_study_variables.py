@@ -262,39 +262,39 @@ class KidneyTransplantAnnotation(BaseModel):
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
-    donor_transplant_date: DonorTransplantDateMention
-    donor_type: DonorTypeMention
-    donor_relationship: DonorRelationshipMention
-    donor_hla_match_quality: DonorHlaMatchQualityMention
-    donor_hla_mismatch_count: DonorHlaMismatchCountMention
-    rx_therapeutic: RxTherapeuticMention
-    rx_compliance: RxComplianceMention
-    dsa: DSAMention
-    infection: InfectionMention
-    viral_infection: ViralInfectionMention
-    bacterial_infection: BacterialInfectionMention
-    fungal_infection: FungalInfectionMention
-    graft_rejection: GraftRejectionMention
-    graft_failure: GraftFailureMention
-    ptld: PTLDMention
-    cancer: CancerMention
+    donor_transplant_date_mention: DonorTransplantDateMention
+    donor_type_mention: DonorTypeMention
+    donor_relationship_mention: DonorRelationshipMention
+    donor_hla_match_quality_mention: DonorHlaMatchQualityMention
+    donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+    rx_therapeutic_mention: RxTherapeuticMention
+    rx_compliance_mention: RxComplianceMention
+    dsa_mention: DSAMention
+    infection_mention: InfectionMention
+    viral_infection_mention: ViralInfectionMention
+    bacterial_infection_mention: BacterialInfectionMention
+    fungal_infection_mention: FungalInfectionMention
+    graft_rejection_mention: GraftRejectionMention
+    graft_failure_mention: GraftFailureMention
+    ptld_mention: PTLDMention
+    cancer_mention: CancerMention
 
 # Enum describing all the relevant mention types' display labels
 # Keys should be 1 to 1 with the KidneyTransplantAnnotation
 class KidneyTransplantMentionLabels(Enum):
-    donor_transplant_date: "Donor Transplate Date"
-    donor_type: "Donor Type"
-    donor_relationship: "Donor Relationship"
-    donor_hla_match_quality: "Donor Hla Match Quality"
-    donor_hla_mismatch_count: "Donor Hla Mismatch Count"
-    rx_therapeutic: "Immunosuppresion levels - therapeutic"
-    rx_compliance: "Immunosuppresion medication compliance"
-    dsa: "Donor Specific Antibodies"
-    infection: "Infection"
-    viral_infection: "Viral Infection"
-    bacterial_infection: "Bacterial Infection"
-    fungal_infection: "Fungal Infection"
-    graft_rejection: "Graft Rejection"
-    graft_failure: "Graft Failure"
-    ptld: "Post-transplant lymphoproliferative disorder"
-    cancer: "Cancer"
+    donor_transplant_date_mention:      "Donor Transplate Date"
+    donor_type_mention:                 "Donor Type"
+    donor_relationship_mention:         "Donor Relationship"
+    donor_hla_match_quality_mention:    "Donor Hla Match Quality"
+    donor_hla_mismatch_count_mention:   "Donor Hla Mismatch Count"
+    rx_therapeutic_mention:             "Immunosuppresion levels - therapeutic"
+    rx_compliance_mention:              "Immunosuppresion medication compliance"
+    dsa_mention:                        "Donor Specific Antibodies"
+    infection_mention:                  "Infection"
+    viral_infection_mention:            "Viral Infection"
+    bacterial_infection_mention:        "Bacterial Infection"
+    fungal_infection_mention:           "Fungal Infection"
+    graft_rejection_mention:            "Graft Rejection"
+    graft_failure_mention:              "Graft Failure"
+    ptld_mention:                       "Post-transplant lymphoproliferative disorder"
+    cancer_mention:                     "Cancer"
