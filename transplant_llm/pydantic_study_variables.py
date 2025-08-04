@@ -128,7 +128,9 @@ class InfectionPresent(str, Enum):
 class InfectionMention(SpanAugmentedMention):
     infection_history: bool = Field(False, description="Has the patient ever had an infection?")
     infection_present: InfectionPresent = Field(
-        InfectionPresent.NoneOfTheAbove, description="Is there documented evidence of infection in the present encounter?")
+        InfectionPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of infection in the present encounter?"
+    )
 
 ###############################################################################
 # Infection (Viral)
@@ -142,7 +144,9 @@ class ViralInfectionPresent(str, Enum):
 class ViralInfectionMention(SpanAugmentedMention):
     viral_history: bool = Field(False, description="Has the patient ever had a viral infection?")
     viral_present: ViralInfectionPresent = Field(
-        ViralInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of viral infection in the present encounter?")
+        ViralInfectionPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of viral infection in the present encounter?"
+    )
 
 ###############################################################################
 # Infection (Bacterial)
@@ -156,7 +160,9 @@ class BacterialInfectionPresent(str, Enum):
 class BacterialInfectionMention(SpanAugmentedMention):
     bacterial_history: bool = Field(False, description="Has the patient ever had a bacterial infection?")
     bacterial_present: BacterialInfectionPresent = Field(
-        BacterialInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of bacterial infection in the present encounter?")
+        BacterialInfectionPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of bacterial infection in the present encounter?"
+    )
 
 ###############################################################################
 # Infection (Fungal)
@@ -170,7 +176,9 @@ class FungalInfectionPresent(str, Enum):
 class FungalInfectionMention(SpanAugmentedMention):
     fungal_history: bool = Field(False, description="Has the patient ever had a fungal infection?")
     fungal_present: FungalInfectionPresent = Field(
-        FungalInfectionPresent.NoneOfTheAbove, description="Is there documented evidence of fungal infection in the present encounter?")
+        FungalInfectionPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of fungal infection in the present encounter?"
+    )
 
 ###############################################################################
 # Graft Rejection
@@ -185,7 +193,9 @@ class GraftRejectionPresent(str, Enum):
 class GraftRejectionMention(SpanAugmentedMention):
     rejection_history: bool = Field(False, description="Has the patient ever had kidney graft rejection?")
     rejection_present: GraftRejectionPresent = Field(
-        GraftRejectionPresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft rejection in the present encounter?")
+        GraftRejectionPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of kidney graft rejection in the present encounter?"
+    )
 
 ###############################################################################
 # Graft Failure
@@ -198,7 +208,9 @@ class GraftFailurePresent(str, Enum):
 class GraftFailureMention(SpanAugmentedMention):
     failure_history: bool = Field(False, description="Has the patient ever had kidney graft failure?")
     failure_present: GraftFailurePresent = Field(
-        GraftFailurePresent.NoneOfTheAbove, description="Is there documented evidence of kidney graft failure in the present encounter?")
+        GraftFailurePresent.NoneOfTheAbove, 
+        description="Is there documented evidence of kidney graft failure in the present encounter?"
+    )
 
 ###############################################################################
 # PTLD
@@ -213,7 +225,9 @@ class PTLDPresent(str, Enum):
 class PTLDMention(SpanAugmentedMention):
     ptld_history: bool = Field(False, description="Has the patient ever had post transplant lymphoproliferative disorder (PTLD)?")
     ptld_present: PTLDPresent = Field(
-        PTLDPresent.NoneOfTheAbove, description="Is there documented evidence of post transplant lymphoproliferative disorder (PTLD) in the present encounter?")
+        PTLDPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of post transplant lymphoproliferative disorder (PTLD) in the present encounter?"
+    )
 
 ###############################################################################
 # Cancer
@@ -228,7 +242,9 @@ class CancerPresent(str, Enum):
 class CancerMention(SpanAugmentedMention):
     cancer_history: bool = Field(False, description="Has the patient ever had cancer?")
     cancer_present: CancerPresent = Field(
-        CancerPresent.NoneOfTheAbove, description="Is there documented evidence of cancer in the present encounter?")
+        CancerPresent.NoneOfTheAbove, 
+        description="Is there documented evidence of cancer in the present encounter?"
+    )
 
 
 
