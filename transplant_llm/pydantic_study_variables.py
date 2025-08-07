@@ -1,9 +1,9 @@
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import List
 
 class SpanAugmentedMention(BaseModel):
-    is_present: Optional[bool]  # True, False, or None
+    is_present: bool | None  # True, False, or None
     spans: List[str]
 
 ###############################################################################
@@ -14,7 +14,7 @@ class SpanAugmentedMention(BaseModel):
 
 # Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
-    transplant_date: Optional[str] = Field(
+    transplant_date: str | None = Field(
         None,
         description='Date of renal transplant'
     )
