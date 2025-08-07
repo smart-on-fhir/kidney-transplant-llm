@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 from pydantic import BaseModel, Field
 
 class SpanAugmentedMention(BaseModel):
@@ -18,10 +18,10 @@ class DonorTransplantDateMention(SpanAugmentedMention):
         description='Date of renal transplant'
     )
 
-class DonorType(str, Enum):
-    Living = 'Donor was alive at time of renal transplant'
-    Deceased = 'Donor was deceased at time of renal transplant'
-    NotMentioned = "Donor was not mentioned as living or deceased"
+class DonorType(StrEnum):
+    LIVING = 'Donor was alive at time of renal transplant'
+    DECEASED = 'Donor was deceased at time of renal transplant'
+    NOT_MENTIONED = "Donor was not mentioned as living or deceased"
 
 class DonorTypeMention(SpanAugmentedMention):
     donor_type: DonorType = Field(
@@ -29,10 +29,10 @@ class DonorTypeMention(SpanAugmentedMention):
         description='Was the renal donor living at the time of transplant?'
     )
 
-class DonorRelationship(str, Enum):
-    Related = 'Donor was related to the renal transplant recipient'
-    Unrelated = 'Donor was unrelated to the renal transplant recipient'
-    NotMentioned = "Donor relationship status was not mentioned"
+class DonorRelationship(StrEnum):
+    RELATED = 'Donor was related to the renal transplant recipient'
+    UNRELATED = 'Donor was unrelated to the renal transplant recipient'
+    NOT_MENTIONED = "Donor relationship status was not mentioned"
 
 class DonorRelationshipMention(SpanAugmentedMention):
     donor_relationship: DonorRelationship = Field(
@@ -40,11 +40,11 @@ class DonorRelationshipMention(SpanAugmentedMention):
         description='Was the renal donor related to the recipient?'
     )
 
-class DonorHlaMatchQuality(str, Enum):
-    Well = 'Well matched (0-1 mismatches)'
-    Moderate = 'Moderately matched (2-4 mismatches)'
-    Poor = 'Poorly matched (5-6 mismatches)'
-    NotMentioned = "HLA match quality not mentioned"
+class DonorHlaMatchQuality(StrEnum):
+    WELL = 'Well matched (0-1 mismatches)'
+    MODERATE = 'Moderately matched (2-4 mismatches)'
+    POOR = 'Poorly matched (5-6 mismatches)'
+    NOT_MENTIONED = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
     donor_hla_match_quality: DonorHlaMatchQuality = Field(
@@ -52,15 +52,15 @@ class DonorHlaMatchQualityMention(SpanAugmentedMention):
         description='What was the renal transplant HLA match quality?'
     )
 
-class DonorHlaMismatchCount(str, Enum):
-    Zero = 0
-    One = 1
-    Two = 2
-    Three = 3
-    Four = 4
-    Five = 5
-    Six = 6
-    NotMentioned = 'HLA mismatch count not mentioned'
+class DonorHlaMismatchCount(StrEnum):
+    ZERO = 0
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    NOT_MENTIONED = 'HLA mismatch count not mentioned'
 
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
     donor_hla_mismatch_count: DonorHlaMismatchCount = Field(
@@ -120,11 +120,11 @@ class RxNonComplianceMention(SpanAugmentedMention):
 ###############################################################################
 # DSA Donor Specific Antibody
 ###############################################################################
-class DSAPresent(str, Enum):
-    Confirmed = "DSA diagnostic test positive, DSA diagnosis 'confirmed' or 'positive', or increase in immunosuppression due to DSA"
-    Treatment = "DSA Treatment prescribed or DSA treatment administered"
-    Suspected = "DSA suspected, DSA likely, DSA cannot be ruled out, DSA test result pending or DSA is a differential diagnosis"
-    NoneOfTheAbove = "None of the above"
+class DSAPresent(StrEnum):
+    CONFIRMED = "DSA diagnostic test positive, DSA diagnosis 'confirmed' or 'positive', or increase in immunosuppression due to DSA"
+    TREATMENT = "DSA Treatment prescribed or DSA treatment administered"
+    SUSPECTED = "DSA suspected, DSA likely, DSA cannot be ruled out, DSA test result pending or DSA is a differential diagnosis"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class DSAMention(SpanAugmentedMention):
     dsa_history: bool = Field(
@@ -132,7 +132,7 @@ class DSAMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of donor specific antibodies (DSA)?"
     )
     dsa_present: DSAPresent = Field(
-        DSAPresent.NoneOfTheAbove, 
+        DSAPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of donor specific antibodies (DSA)?"
     )
 
@@ -141,11 +141,11 @@ class DSAMention(SpanAugmentedMention):
 #   * necessary for PNA and UTI infections that often do not have a confirmed infection type!
 #   * useful as a secondary check to ensure more specific infection types are not missed
 ############################################################################################################
-class InfectionPresent(str, Enum):
-    Confirmed = "Infection confirmed by laboratory test or imaging, infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to infection"
-    Treatment = "Treatment prescribed/administered for infection (not including prophylaxis)"
-    Suspected = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or infectious test result is pending"
-    NoneOfTheAbove = "None of the above"
+class InfectionPresent(StrEnum):
+    CONFIRMED = "Infection confirmed by laboratory test or imaging, infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to infection"
+    TREATMENT = "Treatment prescribed/administered for infection (not including prophylaxis)"
+    SUSPECTED = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or infectious test result is pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class InfectionMention(SpanAugmentedMention):
     infection_history: bool = Field(
@@ -153,18 +153,18 @@ class InfectionMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of an infection?"
     )
     infection_present: InfectionPresent = Field(
-        InfectionPresent.NoneOfTheAbove, 
+        InfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of infection?"
     )
 
 ###############################################################################
 # Infection (Viral)
 ###############################################################################
-class ViralInfectionPresent(str, Enum):
-    Confirmed = "Viral infection confirmed by laboratory test or imaging, viral infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to viral infection"
-    Treatment = "Antiviral treatment prescribed/administered for viral infection (not including prophylaxis)"
-    Suspected = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
-    NoneOfTheAbove = "None of the above"
+class ViralInfectionPresent(StrEnum):
+    CONFIRMED = "Viral infection confirmed by laboratory test or imaging, viral infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to viral infection"
+    TREATMENT = "Antiviral treatment prescribed/administered for viral infection (not including prophylaxis)"
+    SUSPECTED = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class ViralInfectionMention(SpanAugmentedMention):
     viral_infection_history: bool = Field(
@@ -172,18 +172,18 @@ class ViralInfectionMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of a viral infection?"
     )
     viral_infection_present: ViralInfectionPresent = Field(
-        ViralInfectionPresent.NoneOfTheAbove, 
+        ViralInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of viral infection?"
     )
 
 ###############################################################################
 # Infection (Bacterial)
 ###############################################################################
-class BacterialInfectionPresent(str, Enum):
-    Confirmed = "Bacterial infection confirmed by laboratory test or imaging, bacterial infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to bacterial infection"
-    Treatment = "Antibacterial treatment prescribed/administered for bacterial infection (not including prophylaxis)"
-    Suspected = "Bacterial infection is suspected, likely, cannot be ruled out, bacterial infection is a differential diagnosis or bacterial test result is pending"
-    NoneOfTheAbove = "None of the above"
+class BacterialInfectionPresent(StrEnum):
+    CONFIRMED = "Bacterial infection confirmed by laboratory test or imaging, bacterial infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to bacterial infection"
+    TREATMENT = "Antibacterial treatment prescribed/administered for bacterial infection (not including prophylaxis)"
+    SUSPECTED = "Bacterial infection is suspected, likely, cannot be ruled out, bacterial infection is a differential diagnosis or bacterial test result is pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class BacterialInfectionMention(SpanAugmentedMention):
     bacterial_infection_history: bool = Field(
@@ -191,18 +191,18 @@ class BacterialInfectionMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of a bacterial infection?"
     )
     bacterial_infection_present: BacterialInfectionPresent = Field(
-        BacterialInfectionPresent.NoneOfTheAbove, 
+        BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of bacterial infection?"
     )
 
 ###############################################################################
 # Infection (Fungal)
 ###############################################################################
-class FungalInfectionPresent(str, Enum):
-    Confirmed = "Fungal infection confirmed by laboratory test or imaging, fungal infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to fungal infection"
-    Treatment = "Antifungal treatment prescribed/administered for fungal infection (not including prophylaxis)"
-    Suspected = "Fungal infection is suspected, likely, cannot be ruled out, fungal infection is a differential diagnosis or fungal test result is pending"
-    NoneOfTheAbove = "None of the above"
+class FungalInfectionPresent(StrEnum):
+    CONFIRMED = "Fungal infection confirmed by laboratory test or imaging, fungal infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to fungal infection"
+    TREATMENT = "Antifungal treatment prescribed/administered for fungal infection (not including prophylaxis)"
+    SUSPECTED = "Fungal infection is suspected, likely, cannot be ruled out, fungal infection is a differential diagnosis or fungal test result is pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class FungalInfectionMention(SpanAugmentedMention):
     fungal_infection_history: bool = Field(
@@ -210,19 +210,19 @@ class FungalInfectionMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of a fungal infection?"
     )
     fungal_infection_present: FungalInfectionPresent = Field(
-        FungalInfectionPresent.NoneOfTheAbove, 
+        FungalInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of fungal infection?"
     )
 
 ###############################################################################
 # Graft Rejection
 ###############################################################################
-class GraftRejectionPresent(str, Enum):
-    BiopsyProven = "Biopsy proven kidney graft rejection or pathology proven kidney graft rejection"
-    Confirmed = "Kidney graft rejection was 'diagnosed', 'confirmed' or 'positive'"
-    Treatment = "Treatment prescribed/administered for kidney rejection (AMR or TCMR)"
-    Suspected = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
-    NoneOfTheAbove = "None of the above"
+class GraftRejectionPresent(StrEnum):
+    BIOPSY_PROVEN = "Biopsy proven kidney graft rejection or pathology proven kidney graft rejection"
+    CONFIRMED = "Kidney graft rejection was 'diagnosed', 'confirmed' or 'positive'"
+    TREATMENT = "Treatment prescribed/administered for kidney rejection (AMR or TCMR)"
+    SUSPECTED = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class GraftRejectionMention(SpanAugmentedMention):
     graft_rejection_history: bool = Field(
@@ -230,17 +230,17 @@ class GraftRejectionMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of kidney graft rejection?"
     )
     graft_rejection_present: GraftRejectionPresent = Field(
-        GraftRejectionPresent.NoneOfTheAbove, 
+        GraftRejectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of kidney graft rejection?"
     )
 
 ###############################################################################
 # Graft Failure
 ###############################################################################
-class GraftFailurePresent(str, Enum):
-    Confirmed = "Kidney graft has failed or kidney graft loss"
-    Suspected = "Kidney graft failure presumed, suspected, likely, or cannot be ruled out"
-    NoneOfTheAbove = "None of the above"
+class GraftFailurePresent(StrEnum):
+    CONFIRMED = "Kidney graft has failed or kidney graft loss"
+    SUSPECTED = "Kidney graft failure presumed, suspected, likely, or cannot be ruled out"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class GraftFailureMention(SpanAugmentedMention):
     graft_failure_history: bool = Field(
@@ -248,19 +248,19 @@ class GraftFailureMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of kidney graft failure?"
     )
     graft_failure_present: GraftFailurePresent = Field(
-        GraftFailurePresent.NoneOfTheAbove, 
+        GraftFailurePresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of kidney graft failure?"
     )
 
 ###############################################################################
 # PTLD
 ###############################################################################
-class PTLDPresent(str, Enum):
-    BiopsyProven = "Biopsy proven or pathology proven post transplant lymphoproliferative disorder (PTLD)"
-    Confirmed = "Post transplant lymphoproliferative disorder (PTLD) was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
-    Treatment = "Treatment prescribed/administered for post transplant lymphoproliferative disorder (PTLD) or stopped immunosuppression due to PTLD"
-    Suspected = "Post transplant lymphoproliferative disorder (PTLD) presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
-    NoneOfTheAbove = "None of the above"
+class PTLDPresent(StrEnum):
+    BIOPSY_PROVEN = "Biopsy proven or pathology proven post transplant lymphoproliferative disorder (PTLD)"
+    CONFIRMED = "Post transplant lymphoproliferative disorder (PTLD) was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
+    TREATMENT = "Treatment prescribed/administered for post transplant lymphoproliferative disorder (PTLD) or stopped immunosuppression due to PTLD"
+    SUSPECTED = "Post transplant lymphoproliferative disorder (PTLD) presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class PTLDMention(SpanAugmentedMention):
     ptld_history: bool = Field(
@@ -268,19 +268,19 @@ class PTLDMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of post transplant lymphoproliferative disorder (PTLD)?"
     )
     ptld_present: PTLDPresent = Field(
-        PTLDPresent.NoneOfTheAbove, 
+        PTLDPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of post transplant lymphoproliferative disorder (PTLD)?"
     )
 
 ###############################################################################
 # Cancer
 ###############################################################################
-class CancerPresent(str, Enum):
-    BiopsyProven = "Biopsy proven or pathology proven cancer"
-    Confirmed = "Cancer was 'diagnosed', 'confirmed' or 'positive'"
-    Treatment = "Treatment prescribed/administered for cancer"
-    Suspected = "Cancer is presumed, suspected, likely, cannot be ruled out, or biopsy of any lesion"
-    NoneOfTheAbove = "None of the above"
+class CancerPresent(StrEnum):
+    BIOPSY_PROVEN = "Biopsy proven or pathology proven cancer"
+    CONFIRMED = "Cancer was 'diagnosed', 'confirmed' or 'positive'"
+    TREATMENT = "Treatment prescribed/administered for cancer"
+    SUSPECTED = "Cancer is presumed, suspected, likely, cannot be ruled out, or biopsy of any lesion"
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class CancerMention(SpanAugmentedMention):
     cancer_history: bool = Field(
@@ -288,7 +288,7 @@ class CancerMention(SpanAugmentedMention):
         description="Does the patient have a past medical history of cancer?"
     )
     cancer_present: CancerPresent = Field(
-        CancerPresent.NoneOfTheAbove, 
+        CancerPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of cancer?"
     )
 
