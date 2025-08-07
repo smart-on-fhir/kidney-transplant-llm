@@ -1,10 +1,9 @@
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import List
 
 class SpanAugmentedMention(BaseModel):
     is_present: bool | None  # True, False, or None
-    spans: List[str]
+    spans: list[str]
 
 ###############################################################################
 # Donor Characteristics
