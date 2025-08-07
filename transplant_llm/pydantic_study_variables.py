@@ -25,7 +25,7 @@ class DonorType(StrEnum):
 
 class DonorTypeMention(SpanAugmentedMention):
     donor_type: DonorType = Field(
-        DonorType.NotMentioned,
+        DonorType.NOT_MENTIONED,
         description='Was the renal donor living at the time of transplant?'
     )
 
@@ -36,7 +36,7 @@ class DonorRelationship(StrEnum):
 
 class DonorRelationshipMention(SpanAugmentedMention):
     donor_relationship: DonorRelationship = Field(
-        DonorRelationship.NotMentioned,
+        DonorRelationship.NOT_MENTIONED,
         description='Was the renal donor related to the recipient?'
     )
 
@@ -48,23 +48,23 @@ class DonorHlaMatchQuality(StrEnum):
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
     donor_hla_match_quality: DonorHlaMatchQuality = Field(
-        DonorHlaMatchQuality.NotMentioned,
+        DonorHlaMatchQuality.NOT_MENTIONED,
         description='What was the renal transplant HLA match quality?'
     )
 
 class DonorHlaMismatchCount(StrEnum):
-    ZERO = 0
-    ONE = 1
-    TWO = 2
-    THREE = 3
-    FOUR = 4
-    FIVE = 5
-    SIX = 6
+    ZERO = "0"
+    ONE = "1"
+    TWO = "2"
+    THREE = "3"
+    FOUR = "4"
+    FIVE = "5"
+    SIX = "6"
     NOT_MENTIONED = 'HLA mismatch count not mentioned'
 
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
     donor_hla_mismatch_count: DonorHlaMismatchCount = Field(
-        DonorHlaMismatchCount.NotMentioned,
+        DonorHlaMismatchCount.NOT_MENTIONED,
         description='What was the renal donor-recipient HLA mismatch count?'
     )
 
@@ -332,7 +332,7 @@ class KidneyTransplantAnnotation(BaseModel):
 # Enum describing all the relevant mention types' display labels
 # Keys should be 1 to 1 with the KidneyTransplantAnnotation
 # Labels aim to be as short as possible
-class KidneyTransplantMentionLabels(Enum):
+class KidneyTransplantMentionLabels(StrEnum):
     donor_transplant_date_mention:      "Transplate Date"
     donor_type_mention:                 "Donor Type"
     donor_relationship_mention:         "Donor Relationship"
