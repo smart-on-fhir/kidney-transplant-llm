@@ -2,7 +2,7 @@ from enum import StrEnum
 from pydantic import BaseModel, Field
 
 class SpanAugmentedMention(BaseModel):
-    is_present: bool | None  # True, False, or None
+    has_mention: bool | None  # True, False, or None
     spans: list[str]
 
 ###############################################################################
