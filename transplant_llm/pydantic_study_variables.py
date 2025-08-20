@@ -304,7 +304,7 @@ class DeceasedMention(SpanAugmentedMention):
     deceased_datetime: str | None = Field(
         None, 
         description=(
-            'If the patient is deceased, include the datetime of when the patient became deceased? '
+            'If the patient is deceased, include the datetime of when the patient became deceased. '
             'Use None if there is no datetime recorded or if the patient is not observed as deceased.'
         )
     )
