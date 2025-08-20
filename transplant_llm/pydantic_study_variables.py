@@ -299,7 +299,7 @@ class CancerMention(SpanAugmentedMention):
 class DeceasedMention(SpanAugmentedMention):
     deceased: bool | None = Field(
         None, 
-        description='In the present encounter, does the note state if the patient is deceased?'
+        description='Does the note indicate that the patient is deceased?'
     )
     deceased_datetime: str | None = Field(
         None, 
