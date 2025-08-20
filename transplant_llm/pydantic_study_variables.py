@@ -94,19 +94,19 @@ class RxSupraTherapeuticMention(SpanAugmentedMention):
     )
 
 class RxComplianceMention(SpanAugmentedMention):
-    compliant: bool | None = Field(
+    rx_compliance: bool | None = Field(
         None, 
         description='In the present encounter is the patient documented as compliant with immunosuppressive medications?'
     )
 
 class RxPartialComplianceMention(SpanAugmentedMention):
-    partial: bool | None = Field(
+    rx_partial_compliance: bool | None = Field(
         None, 
         description='In the present encounter is the patient documented as only partially compliant with immunosuppressive medications?'
     )
 
 class RxNonComplianceMention(SpanAugmentedMention):
-    noncompliant: bool | None = Field(
+    rx_non_compliance: bool | None = Field(
         None, 
         description='In the present encounter is the patient documented as noncompliant with immunosuppressive medications?'
     )
@@ -131,7 +131,7 @@ class DSAMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of donor specific antibodies (DSA)?"
     )
-    dsa_present: DSAPresent = Field(
+    dsa: DSAPresent = Field(
         DSAPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of donor specific antibodies (DSA)?"
     )
@@ -152,7 +152,7 @@ class InfectionMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of an infection?"
     )
-    infection_present: InfectionPresent = Field(
+    infection: InfectionPresent = Field(
         InfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of infection?"
     )
@@ -171,7 +171,7 @@ class ViralInfectionMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of a viral infection?"
     )
-    viral_infection_present: ViralInfectionPresent = Field(
+    viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of viral infection?"
     )
@@ -190,7 +190,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of a bacterial infection?"
     )
-    bacterial_infection_present: BacterialInfectionPresent = Field(
+    bacterial_infection: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of bacterial infection?"
     )
@@ -209,7 +209,7 @@ class FungalInfectionMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of a fungal infection?"
     )
-    fungal_infection_present: FungalInfectionPresent = Field(
+    fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of fungal infection?"
     )
@@ -229,7 +229,7 @@ class GraftRejectionMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of kidney graft rejection?"
     )
-    graft_rejection_present: GraftRejectionPresent = Field(
+    graft_rejection: GraftRejectionPresent = Field(
         GraftRejectionPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of kidney graft rejection?"
     )
@@ -247,7 +247,7 @@ class GraftFailureMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of kidney graft failure?"
     )
-    graft_failure_present: GraftFailurePresent = Field(
+    graft_failure: GraftFailurePresent = Field(
         GraftFailurePresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of kidney graft failure?"
     )
@@ -267,7 +267,7 @@ class PTLDMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of post transplant lymphoproliferative disorder (PTLD)?"
     )
-    ptld_present: PTLDPresent = Field(
+    ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of post transplant lymphoproliferative disorder (PTLD)?"
     )
@@ -287,9 +287,26 @@ class CancerMention(SpanAugmentedMention):
         False, 
         description="Does the patient have a past medical history of cancer?"
     )
-    cancer_present: CancerPresent = Field(
+    cancer: CancerPresent = Field(
         CancerPresent.NONE_OF_THE_ABOVE, 
         description="In the present encounter is there documented evidence of cancer?"
+    )
+
+###############################################################################
+# Deceased
+#  For tracking if the patient is noted to be deceased in any notes
+###############################################################################
+class DeceasedMention(SpanAugmentedMention):
+    deceased: bool | None = Field(
+        None, 
+        description='In the present encounter, does the note state if the patient is deceased?'
+    )
+    deceased_datetime: str | None = Field(
+        None, 
+        description=(
+            'If the patient is deceased, include the datetime of when the patient became deceased? '
+            'Use None if there is no datetime recorded or if the patient is not observed as deceased.'
+        )
     )
 
 
@@ -328,28 +345,30 @@ class KidneyTransplantAnnotation(BaseModel):
     graft_failure_mention: GraftFailureMention
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
+    deceased_mention: DeceasedMention
 
 # Enum describing all the relevant mention types' display labels
 # Keys should be 1 to 1 with the KidneyTransplantAnnotation
 # Labels aim to be as short as possible
 class KidneyTransplantMentionLabels(StrEnum):
-    donor_transplant_date_mention:      "Transplate Date"
-    donor_type_mention:                 "Donor Type"
-    donor_relationship_mention:         "Donor Relationship"
-    donor_hla_match_quality_mention:    "Hla Match Quality"
-    donor_hla_mismatch_count_mention:   "Hla Mismatch Count"
-    rx_therapeutic_mention:             "Therapeutic"
-    rx_sub_therapeutic_mention:         "Sub therapeutic"
-    rx_supra_therapeutic_mention:       "Supra therapeutic"
-    rx_compliance_mention:              "Rx compliance"
-    rx_partial_compliance_mention:      "Rx partial compliance"
-    rx_non_compliance_mention:          "Rx non compliance"
-    dsa_mention:                        "DSA"
-    infection_mention:                  "Infection"
-    viral_infection_mention:            "Viral"
-    bacterial_infection_mention:        "Bacterial"
-    fungal_infection_mention:           "Fungal"
-    graft_rejection_mention:            "Graft Rejection"
-    graft_failure_mention:              "Graft Failure"
-    ptld_mention:                       "PTLD"
-    cancer_mention:                     "Cancer"
+    donor_transplant_date_mention =     "Transplate Date"
+    donor_type_mention =                "Donor Type"
+    donor_relationship_mention =        "Donor Relationship"
+    donor_hla_match_quality_mention =   "Hla Match Quality"
+    donor_hla_mismatch_count_mention =  "Hla Mismatch Count"
+    rx_therapeutic_mention =            "Therapeutic"
+    rx_sub_therapeutic_mention =        "Sub therapeutic"
+    rx_supra_therapeutic_mention =      "Supra therapeutic"
+    rx_compliance_mention =             "Rx compliance"
+    rx_partial_compliance_mention =     "Rx partial compliance"
+    rx_non_compliance_mention =         "Rx non compliance"
+    dsa_mention =                       "DSA"
+    infection_mention =                 "Infection"
+    viral_infection_mention =           "Viral"
+    bacterial_infection_mention =       "Bacterial"
+    fungal_infection_mention =          "Fungal"
+    graft_rejection_mention =           "Graft Rejection"
+    graft_failure_mention =             "Graft Failure"
+    ptld_mention =                      "PTLD"
+    cancer_mention =                    "Cancer"
+    deceased_mention =                  "Deceased"
