@@ -299,13 +299,13 @@ class CancerMention(SpanAugmentedMention):
 class DeceasedMention(SpanAugmentedMention):
     deceased: bool | None = Field(
         None, 
-        description='Does the note indicate that the patient is deceased?'
+        description='Does the note document that the patient is deceased?'
     )
-    deceased_datetime: str | None = Field(
+    deceased_date: str | None = Field(
         None, 
         description=(
-            'If the patient is deceased, include the datetime of when the patient became deceased. '
-            'Use None if there is no datetime recorded or if the patient is not observed as deceased.'
+            'If the patient is deceased, include the date the patient became deceased. '
+            'Use None if there is no date recorded or if the patient is not observed as deceased.'
         )
     )
 
