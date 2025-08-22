@@ -13,7 +13,7 @@ class SpanAugmentedMention(BaseModel):
 
 # Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
-    transplant_date: str | None = Field(
+    donor_transplant_date: str | None = Field(
         None,
         description='Date of renal transplant'
     )
@@ -69,46 +69,34 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
     )
 
 ###############################################################################
-# Medication Compliance
-# NOTE: Therapeutic mentions and compliance values modeled below are 
-#       technically mutually exclusive (Therapeutic|Subtherapeutic|Supra, and 
-#       compliance|non-compliance|partial). That said, we model them separately 
-#       allowing for inconsistent responses because of how complex these values are
+# Therapeutic Status Compliance
 ###############################################################################
-class RxTherapeuticMention(SpanAugmentedMention):
-    rx_therapeutic: bool | None = Field(
-        None, 
-        description='In the present encounter are immunosuppression levels documented as therapeutic or adequate?'
+class RxTherapeuticStatus(StrEnum):
+    THERAPEUTIC = "Immunosuppression levels are documented as therapeutic, adequate, or within target range."
+    SUB_THERAPEUTIC = 'Immunosuppression levels are documented as subtherapeutic, insufficient, or below target range.'
+    SUPRA_THERAPEUTIC = 'Immunosuppression levels are documented as supratherapeutic, above therapeutic level, or above target range.'
+    NONE_OF_THE_ABOVE = "None of the above"
+
+
+###############################################################################
+# Medication Compliance
+###############################################################################
+class RxTherapeuticStatusMention(SpanAugmentedMention):
+    rx_therapeutic_status: RxTherapeuticStatus = Field(
+        RxTherapeuticStatus.NONE_OF_THE_ABOVE, 
+        description='In the present encounter, what is the documented immunosuppresion level?'
     )
 
-class RxSubTherapeuticMention(SpanAugmentedMention):
-    rx_subtherapeutic: bool | None = Field(
-        None, 
-        description='In the present encounter are immunosuppression levels documented as subtherapeutic or insufficient?'
-    )
-
-class RxSupraTherapeuticMention(SpanAugmentedMention):
-    rx_supratherapeutic: bool | None = Field(
-        None, 
-        description='In the present encounter are immunosuppression levels documented as supratherapeutic or above therapeutic level?'
-    )
+class RxCompliance(StrEnum):
+    COMPLIANT = 'Patient is documented as compliant with immunosuppressive medications.'
+    PARTIALLY_COMPLIANT = "Patient is documented as only partially compliant with immunosuppressive medications."
+    NON_COMPLIANT = "Patient is documented as noncompliant with immunosuppressive medications."
+    NONE_OF_THE_ABOVE = "None of the above"
 
 class RxComplianceMention(SpanAugmentedMention):
-    rx_compliance: bool | None = Field(
-        None, 
-        description='In the present encounter is the patient documented as compliant with immunosuppressive medications?'
-    )
-
-class RxPartialComplianceMention(SpanAugmentedMention):
-    rx_partial_compliance: bool | None = Field(
-        None, 
-        description='In the present encounter is the patient documented as only partially compliant with immunosuppressive medications?'
-    )
-
-class RxNonComplianceMention(SpanAugmentedMention):
-    rx_non_compliance: bool | None = Field(
-        None, 
-        description='In the present encounter is the patient documented as noncompliant with immunosuppressive medications?'
+    rx_compliance: RxCompliance = Field(
+        RxCompliance.NONE_OF_THE_ABOVE, 
+        description='In the present encounter, is the patient documented as compliant with immunosuppressive medications?'
     )
 
 
@@ -299,7 +287,7 @@ class CancerMention(SpanAugmentedMention):
 class DeceasedMention(SpanAugmentedMention):
     deceased: bool | None = Field(
         None, 
-        description='Does the note document that the patient is deceased?'
+        description='Does the present encounter document that the patient is deceased?'
     )
     deceased_date: str | None = Field(
         None, 
@@ -330,12 +318,8 @@ class KidneyTransplantAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
-    rx_therapeutic_mention: RxTherapeuticMention
-    rx_sub_therapeutic_mention: RxSubTherapeuticMention
-    rx_supra_therapeutic_mention: RxSupraTherapeuticMention
+    rx_therapeutic_status_mention: RxTherapeuticStatusMention
     rx_compliance_mention: RxComplianceMention
-    rx_partial_compliance_mention: RxPartialComplianceMention
-    rx_non_compliance_mention: RxNonComplianceMention
     dsa_mention: DSAMention
     infection_mention: InfectionMention
     viral_infection_mention: ViralInfectionMention
@@ -356,12 +340,8 @@ class KidneyTransplantMentionLabels(StrEnum):
     donor_relationship_mention =        "Donor Relationship"
     donor_hla_match_quality_mention =   "Hla Match Quality"
     donor_hla_mismatch_count_mention =  "Hla Mismatch Count"
-    rx_therapeutic_mention =            "Therapeutic"
-    rx_sub_therapeutic_mention =        "Sub therapeutic"
-    rx_supra_therapeutic_mention =      "Supra therapeutic"
-    rx_compliance_mention =             "Rx compliance"
-    rx_partial_compliance_mention =     "Rx partial compliance"
-    rx_non_compliance_mention =         "Rx non compliance"
+    rx_therapeutic_status_mention =     "Rx Therapeutic"
+    rx_compliance_mention =             "Rx Compliance"
     dsa_mention =                       "DSA"
     infection_mention =                 "Infection"
     viral_infection_mention =           "Viral"
