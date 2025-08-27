@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 from pydantic import BaseModel, Field
 
 class SpanAugmentedMention(BaseModel):
@@ -77,16 +77,15 @@ class RxTherapeuticStatus(StrEnum):
     SUPRA_THERAPEUTIC = 'Immunosuppression levels are documented as supratherapeutic, above therapeutic level, or above target range.'
     NONE_OF_THE_ABOVE = "None of the above"
 
-
-###############################################################################
-# Medication Compliance
-###############################################################################
 class RxTherapeuticStatusMention(SpanAugmentedMention):
     rx_therapeutic_status: RxTherapeuticStatus = Field(
         RxTherapeuticStatus.NONE_OF_THE_ABOVE, 
         description='In the present encounter, what is the documented immunosuppresion level?'
     )
 
+###############################################################################
+# Medication Compliance
+###############################################################################
 class RxCompliance(StrEnum):
     COMPLIANT = 'Patient is documented as compliant with immunosuppressive medications.'
     PARTIALLY_COMPLIANT = "Patient is documented as only partially compliant with immunosuppressive medications."
@@ -121,7 +120,7 @@ class DSAMention(SpanAugmentedMention):
     )
     dsa: DSAPresent = Field(
         DSAPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of donor specific antibodies (DSA)?"
+        description="In the present encounter is there documented evidence of current or recent donor specific antibodies (DSA)?"
     )
 
 ############################################################################################################
@@ -131,7 +130,6 @@ class DSAMention(SpanAugmentedMention):
 ############################################################################################################
 class InfectionPresent(StrEnum):
     CONFIRMED = "Infection confirmed by laboratory test or imaging, infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to infection"
-    TREATMENT = "Treatment prescribed/administered for infection (not including prophylaxis)"
     SUSPECTED = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or infectious test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
@@ -142,7 +140,7 @@ class InfectionMention(SpanAugmentedMention):
     )
     infection: InfectionPresent = Field(
         InfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of infection?"
+        description="In the present encounter is there documented evidence of current or recent infection?"
     )
 
 ###############################################################################
@@ -150,7 +148,6 @@ class InfectionMention(SpanAugmentedMention):
 ###############################################################################
 class ViralInfectionPresent(StrEnum):
     CONFIRMED = "Viral infection confirmed by laboratory test or imaging, viral infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to viral infection"
-    TREATMENT = "Antiviral treatment prescribed/administered for viral infection (not including prophylaxis)"
     SUSPECTED = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
@@ -161,7 +158,7 @@ class ViralInfectionMention(SpanAugmentedMention):
     )
     viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of viral infection?"
+        description="In the present encounter is there documented evidence of current or recent viral infection?",
     )
 
 ###############################################################################
@@ -169,7 +166,6 @@ class ViralInfectionMention(SpanAugmentedMention):
 ###############################################################################
 class BacterialInfectionPresent(StrEnum):
     CONFIRMED = "Bacterial infection confirmed by laboratory test or imaging, bacterial infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to bacterial infection"
-    TREATMENT = "Antibacterial treatment prescribed/administered for bacterial infection (not including prophylaxis)"
     SUSPECTED = "Bacterial infection is suspected, likely, cannot be ruled out, bacterial infection is a differential diagnosis or bacterial test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
@@ -180,7 +176,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
     )
     bacterial_infection: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of bacterial infection?"
+        description="In the present encounter is there documented evidence of current or recent bacterial infection?"
     )
 
 ###############################################################################
@@ -188,7 +184,6 @@ class BacterialInfectionMention(SpanAugmentedMention):
 ###############################################################################
 class FungalInfectionPresent(StrEnum):
     CONFIRMED = "Fungal infection confirmed by laboratory test or imaging, fungal infection diagnosis was 'confirmed' or 'positive', or reduced immunosuppression due to fungal infection"
-    TREATMENT = "Antifungal treatment prescribed/administered for fungal infection (not including prophylaxis)"
     SUSPECTED = "Fungal infection is suspected, likely, cannot be ruled out, fungal infection is a differential diagnosis or fungal test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
@@ -199,7 +194,7 @@ class FungalInfectionMention(SpanAugmentedMention):
     )
     fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of fungal infection?"
+        description="In the present encounter is there documented evidence of current or recent fungal infection?"
     )
 
 ###############################################################################
@@ -219,7 +214,7 @@ class GraftRejectionMention(SpanAugmentedMention):
     )
     graft_rejection: GraftRejectionPresent = Field(
         GraftRejectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of kidney graft rejection?"
+        description="In the present encounter is there documented evidence of current or recent kidney graft rejection?"
     )
 
 ###############################################################################
@@ -237,7 +232,8 @@ class GraftFailureMention(SpanAugmentedMention):
     )
     graft_failure: GraftFailurePresent = Field(
         GraftFailurePresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of kidney graft failure?"
+        # description="Does this clinical encounter document kidney graft failure as occuring recently?",
+        description="In the present encounter is there documented evidence of current or recent kidney graft failure?"
     )
 
 ###############################################################################
@@ -257,7 +253,7 @@ class PTLDMention(SpanAugmentedMention):
     )
     ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of post transplant lymphoproliferative disorder (PTLD)?"
+        description="In the present encounter is there documented evidence of current or recent post transplant lymphoproliferative disorder (PTLD)?"
     )
 
 ###############################################################################
@@ -277,7 +273,7 @@ class CancerMention(SpanAugmentedMention):
     )
     cancer: CancerPresent = Field(
         CancerPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of cancer?"
+        description="In the present encounter is there documented evidence of current or recent cancer?"
     )
 
 ###############################################################################
@@ -331,24 +327,179 @@ class KidneyTransplantAnnotation(BaseModel):
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
 
+
+
+###############################################################################
+# Artifacts for Label Studio usage  
+###############################################################################
+
 # Enum describing all the relevant mention types' display labels
-# Keys should be 1 to 1 with the KidneyTransplantAnnotation
-# Labels aim to be as short as possible
+# Names of Enum members should be 1 to 1 with the KidneyTransplantAnnotation fields
 class KidneyTransplantMentionLabels(StrEnum):
-    donor_transplant_date_mention =     "Transplate Date"
-    donor_type_mention =                "Donor Type"
-    donor_relationship_mention =        "Donor Relationship"
-    donor_hla_match_quality_mention =   "Hla Match Quality"
-    donor_hla_mismatch_count_mention =  "Hla Mismatch Count"
-    rx_therapeutic_status_mention =     "Rx Therapeutic"
-    rx_compliance_mention =             "Rx Compliance"
-    dsa_mention =                       "DSA"
-    infection_mention =                 "Infection"
-    viral_infection_mention =           "Viral"
-    bacterial_infection_mention =       "Bacterial"
-    fungal_infection_mention =          "Fungal"
-    graft_rejection_mention =           "Graft Rejection"
-    graft_failure_mention =             "Graft Failure"
-    ptld_mention =                      "PTLD"
-    cancer_mention =                    "Cancer"
-    deceased_mention =                  "Deceased"
+    donor_transplant_date_mention = auto()
+    donor_type_mention = auto()
+    donor_relationship_mention = auto()
+    donor_hla_match_quality_mention = auto()
+    donor_hla_mismatch_count_mention = auto()
+    rx_therapeutic_status_mention = auto()
+    rx_compliance_mention = auto()
+    dsa_mention = auto()
+    infection_mention = auto()
+    viral_infection_mention = auto()
+    bacterial_infection_mention = auto()
+    fungal_infection_mention = auto()
+    graft_rejection_mention = auto()
+    graft_failure_mention = auto()
+    ptld_mention = auto()
+    cancer_mention = auto()
+    deceased_mention = auto()
+
+#  Groups to be used in the eventual labelstudio interface
+# Right now this only encodes background, but could be used to organize/
+# determine sorting order, etc
+class KidneyTransplantMentionGroups(StrEnum):
+    TRANSPLANT_DATE = auto()
+    DONOR = auto()
+    THERAPEUTIC = auto()
+    COMPLIANCE = auto()
+    DSA = auto()
+    INFECTION = auto()
+    REJECTION = auto()
+    CANCER = auto()
+    ENDPOINTS_FAILURE_DECEASED = auto()
+
+kidney_transplant_mention_groups_metadata = {
+    KidneyTransplantMentionGroups.TRANSPLANT_DATE : {
+        "background": "#008B8B"
+    },
+    KidneyTransplantMentionGroups.DONOR : {
+        "background": "#00FFFF"
+    },
+    KidneyTransplantMentionGroups.THERAPEUTIC : {
+        "background": '#90ee90'
+    },
+    KidneyTransplantMentionGroups.COMPLIANCE : {
+        "background": '#20b2aa'
+    },
+    KidneyTransplantMentionGroups.DSA : {
+        "background": '#9370db'
+    },
+    KidneyTransplantMentionGroups.INFECTION : {
+        "background": '#DC143C'
+    },
+    KidneyTransplantMentionGroups.REJECTION : {
+        "background": "#FF00FF"
+    },
+    KidneyTransplantMentionGroups.CANCER : {
+        "background": "#FF8C00"
+    },
+    KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED : {
+        "background": "#00008B"
+    },
+}
+
+# Tying the Label Enum to the Group Enum and other metadata (display strings, e.g.)
+kidney_transplant_mention_ls_metadata = {
+    KidneyTransplantMentionLabels.donor_transplant_date_mention : {
+        "display": "Transplate Date",
+        "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
+        "hotkey": "W",
+        "hotkey_mnemonic": "Which day?",
+    },
+    KidneyTransplantMentionLabels.donor_type_mention : {
+        "display": "Donor Type",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "L",
+        "hotkey_mnemonic": "Living donor?",
+    },
+    KidneyTransplantMentionLabels.donor_relationship_mention : {
+        "display": "Donor Relationship",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "S",
+        "hotkey_mnemonic": "Sibling?",
+    },
+    KidneyTransplantMentionLabels.donor_hla_match_quality_mention : {
+        "display": "Hla Match Quality",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "Q",
+        "hotkey_mnemonic": "Quality?",
+    },
+    KidneyTransplantMentionLabels.donor_hla_mismatch_count_mention : {
+        "display": "Hla Mismatch Count",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "M",
+        "hotkey_mnemonic": "Mismatch?",
+    },
+    KidneyTransplantMentionLabels.rx_therapeutic_status_mention : {
+        "display": "Rx Therapeutic",
+        "group": KidneyTransplantMentionGroups.THERAPEUTIC,
+        "hotkey": "E",
+        "hotkey_mnemonic": "Effect?",
+    },
+    KidneyTransplantMentionLabels.rx_compliance_mention : {
+        "display": "Rx Compliance",
+        "group": KidneyTransplantMentionGroups.COMPLIANCE,
+        "hotkey": "U",
+        "hotkey_mnemonic": "Use?",
+    },
+    KidneyTransplantMentionLabels.dsa_mention : {
+        "display": "DSA",
+        "group": KidneyTransplantMentionGroups.DSA,
+        "hotkey": "A",
+        "hotkey_mnemonic": "Antibodies?",
+    },
+    KidneyTransplantMentionLabels.infection_mention : {
+        "display": "Infection",
+        "group": KidneyTransplantMentionGroups.INFECTION,
+        "hotkey": "I",
+        "hotkey_mnemonic": "Infection?",
+    },
+    KidneyTransplantMentionLabels.viral_infection_mention : {
+        "display": "Viral",
+        "group": KidneyTransplantMentionGroups.INFECTION,
+        "hotkey": "V",
+        "hotkey_mnemonic": "Viral?",
+    },
+    KidneyTransplantMentionLabels.bacterial_infection_mention : {
+        "display": "Bacterial",
+        "group": KidneyTransplantMentionGroups.INFECTION,
+        "hotkey": "B",
+        "hotkey_mnemonic": "Bacterial?",
+    },
+    KidneyTransplantMentionLabels.fungal_infection_mention : {
+        "display": "Fungal",
+        "group": KidneyTransplantMentionGroups.INFECTION,
+        "hotkey": "G",
+        "hotkey_mnemonic": "funGal?",
+    },
+    KidneyTransplantMentionLabels.graft_rejection_mention : {
+        "display": "Graft Rejection",
+        "group": KidneyTransplantMentionGroups.REJECTION,
+        "hotkey": "R",
+        "hotkey_mnemonic": "Rejection?",
+    },
+    KidneyTransplantMentionLabels.graft_failure_mention : {
+        "display": "Graft Failure",
+        "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
+        "hotkey": "F",
+        "hotkey_mnemonic": "Failure?",
+    },
+    KidneyTransplantMentionLabels.ptld_mention : {
+        "display": "PTLD",
+        "group": KidneyTransplantMentionGroups.CANCER,
+        "hotkey": "P",
+        "hotkey_mnemonic": "PTLD?",
+    },
+    KidneyTransplantMentionLabels.cancer_mention : {
+        "display": "Cancer",
+        "group": KidneyTransplantMentionGroups.CANCER,
+        "hotkey": "C",
+        "hotkey_mnemonic": "Cancer?",
+    },
+    KidneyTransplantMentionLabels.deceased_mention    : {
+        "display": "Deceased",
+        "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
+        "hotkey": "D",
+        "hotkey_mnemonic": "Deceased?",
+    },
+}
