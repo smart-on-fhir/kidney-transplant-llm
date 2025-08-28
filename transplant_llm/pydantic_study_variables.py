@@ -120,7 +120,7 @@ class DSAMention(SpanAugmentedMention):
     )
     dsa: DSAPresent = Field(
         DSAPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent donor specific antibodies (DSA)?"
+        description="Are donor specific antibodies (DSA) documented as current, active, or being evaluated/treated now?"
     )
 
 ############################################################################################################
@@ -140,7 +140,7 @@ class InfectionMention(SpanAugmentedMention):
     )
     infection: InfectionPresent = Field(
         InfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent infection?"
+        description="Is infection documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -158,7 +158,7 @@ class ViralInfectionMention(SpanAugmentedMention):
     )
     viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent viral infection?",
+        description="Is viral infection documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -176,7 +176,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
     )
     bacterial_infection: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent bacterial infection?"
+        description="Is bacterial infection documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -194,7 +194,7 @@ class FungalInfectionMention(SpanAugmentedMention):
     )
     fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent fungal infection?"
+        description="Is fungal infection documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -214,7 +214,7 @@ class GraftRejectionMention(SpanAugmentedMention):
     )
     graft_rejection: GraftRejectionPresent = Field(
         GraftRejectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent kidney graft rejection?"
+        description="Is kidney graft rejection documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -233,17 +233,17 @@ class GraftFailureMention(SpanAugmentedMention):
     graft_failure: GraftFailurePresent = Field(
         GraftFailurePresent.NONE_OF_THE_ABOVE, 
         # description="Does this clinical encounter document kidney graft failure as occuring recently?",
-        description="In the present encounter is there documented evidence of current or recent kidney graft failure?"
+        description="Is kidney graft failure documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
 # PTLD
 ###############################################################################
 class PTLDPresent(StrEnum):
-    BIOPSY_PROVEN = "Biopsy proven or pathology proven post transplant lymphoproliferative disorder (PTLD)"
-    CONFIRMED = "Post transplant lymphoproliferative disorder (PTLD) was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
+    BIOPSY_PROVEN = "Biopsy proven or pathology proven PTLD"
+    CONFIRMED = "PTLD was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
     TREATMENT = "Treatment prescribed/administered for post transplant lymphoproliferative disorder (PTLD) or stopped immunosuppression due to PTLD"
-    SUSPECTED = "Post transplant lymphoproliferative disorder (PTLD) presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
+    SUSPECTED = "PTLD presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class PTLDMention(SpanAugmentedMention):
@@ -253,7 +253,7 @@ class PTLDMention(SpanAugmentedMention):
     )
     ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent post transplant lymphoproliferative disorder (PTLD)?"
+        description="Is Post transplant lymphoproliferative disorder (PTLD) documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -273,7 +273,7 @@ class CancerMention(SpanAugmentedMention):
     )
     cancer: CancerPresent = Field(
         CancerPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent cancer?"
+        description="Is cancer documented as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
