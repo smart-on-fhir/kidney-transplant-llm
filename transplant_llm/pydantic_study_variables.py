@@ -18,11 +18,12 @@ document and map it into a predefined Pydantic schema.
 Core Rules:  
 1. Base all assertions ONLY on patient-specific information in the clinical document.  
    - Never negate or exclude information just because it is not mentioned.  
-   - Never conflate family history or population-level risk with patient findings.  
+   - Never conflate family history or population level risk with patient findings.  
    - Do not count past medical history, prior episodes, or family history.
 2. Do not invent or infer facts beyond what is documented.  
 3. Maintain high fidelity to the clinical document language when citing spans. 
-4. Answer with the highest level of documented evidence: biopsy-proven > confirmed > treatment > suspected.
+4. Answer patient outcomes with strongest available documented evidence: 
+    BIOPSY_PROVEN > CONFIRMED > TREATMENT > SUSPECTED > NONE_OF_THE_ABOVE.
 5. Always produce structured JSON that conforms to the Pydantic schema provided below.  
 
 Pydantic Schema: 
