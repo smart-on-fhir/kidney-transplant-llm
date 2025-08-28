@@ -80,7 +80,7 @@ class RxTherapeuticStatus(StrEnum):
 class RxTherapeuticStatusMention(SpanAugmentedMention):
     rx_therapeutic_status: RxTherapeuticStatus = Field(
         RxTherapeuticStatus.NONE_OF_THE_ABOVE, 
-        description='In the present encounter, what is the documented immunosuppresion level?'
+        description='In the present encounter, what is the documented immunosuppression level?'
     )
 
 ###############################################################################
