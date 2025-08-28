@@ -252,7 +252,7 @@ class PTLDMention(SpanAugmentedMention):
     )
     ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
-        description="What evidence documents Post transplant lymphoproliferative disorder (PTLD) as current, active, or being evaluated/treated now?"
+        description="What evidence documents post transplant lymphoproliferative disorder (PTLD) as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
