@@ -80,7 +80,7 @@ class RxTherapeuticStatus(StrEnum):
 class RxTherapeuticStatusMention(SpanAugmentedMention):
     rx_therapeutic_status: RxTherapeuticStatus = Field(
         RxTherapeuticStatus.NONE_OF_THE_ABOVE, 
-        description='In the present encounter, what is the documented immunosuppresion level?'
+        description='In the present encounter, what is the documented immunosuppression level?'
     )
 
 ###############################################################################
@@ -120,7 +120,7 @@ class DSAMention(SpanAugmentedMention):
     )
     dsa: DSAPresent = Field(
         DSAPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent donor specific antibodies (DSA)?"
+        description="What evidence documents donor specific antibodies (DSA) as current, active, or being evaluated/treated now?"
     )
 
 ############################################################################################################
@@ -140,7 +140,7 @@ class InfectionMention(SpanAugmentedMention):
     )
     infection: InfectionPresent = Field(
         InfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent infection?"
+        description="What evidence documents infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -158,7 +158,7 @@ class ViralInfectionMention(SpanAugmentedMention):
     )
     viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent viral infection?",
+        description="What evidence documents viral infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -176,7 +176,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
     )
     bacterial_infection: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent bacterial infection?"
+        description="What evidence documents bacterial infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -194,7 +194,7 @@ class FungalInfectionMention(SpanAugmentedMention):
     )
     fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent fungal infection?"
+        description="What evidence documents fungal infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -214,7 +214,7 @@ class GraftRejectionMention(SpanAugmentedMention):
     )
     graft_rejection: GraftRejectionPresent = Field(
         GraftRejectionPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent kidney graft rejection?"
+        description="What evidence documents kidney graft rejection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -232,18 +232,17 @@ class GraftFailureMention(SpanAugmentedMention):
     )
     graft_failure: GraftFailurePresent = Field(
         GraftFailurePresent.NONE_OF_THE_ABOVE, 
-        # description="Does this clinical encounter document kidney graft failure as occuring recently?",
-        description="In the present encounter is there documented evidence of current or recent kidney graft failure?"
+        description="What evidence documents kidney graft failure as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
 # PTLD
 ###############################################################################
 class PTLDPresent(StrEnum):
-    BIOPSY_PROVEN = "Biopsy proven or pathology proven post transplant lymphoproliferative disorder (PTLD)"
-    CONFIRMED = "Post transplant lymphoproliferative disorder (PTLD) was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
-    TREATMENT = "Treatment prescribed/administered for post transplant lymphoproliferative disorder (PTLD) or stopped immunosuppression due to PTLD"
-    SUSPECTED = "Post transplant lymphoproliferative disorder (PTLD) presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
+    BIOPSY_PROVEN = "Biopsy proven or pathology proven PTLD"
+    CONFIRMED = "PTLD was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
+    TREATMENT = "Treatment prescribed/administered for PTLD or stopped immunosuppression due to PTLD"
+    SUSPECTED = "PTLD presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class PTLDMention(SpanAugmentedMention):
@@ -253,7 +252,7 @@ class PTLDMention(SpanAugmentedMention):
     )
     ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent post transplant lymphoproliferative disorder (PTLD)?"
+        description="What evidence documents post transplant lymphoproliferative disorder (PTLD) as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -273,7 +272,7 @@ class CancerMention(SpanAugmentedMention):
     )
     cancer: CancerPresent = Field(
         CancerPresent.NONE_OF_THE_ABOVE, 
-        description="In the present encounter is there documented evidence of current or recent cancer?"
+        description="What evidence documents cancer as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
