@@ -120,7 +120,7 @@ class DSAMention(SpanAugmentedMention):
     )
     dsa: DSAPresent = Field(
         DSAPresent.NONE_OF_THE_ABOVE, 
-        description="Are donor specific antibodies (DSA) documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents donor specific antibodies (DSA) as current, active, or being evaluated/treated now?"
     )
 
 ############################################################################################################
@@ -140,7 +140,7 @@ class InfectionMention(SpanAugmentedMention):
     )
     infection: InfectionPresent = Field(
         InfectionPresent.NONE_OF_THE_ABOVE, 
-        description="Is infection documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -158,7 +158,7 @@ class ViralInfectionMention(SpanAugmentedMention):
     )
     viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="Is viral infection documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents viral infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -176,7 +176,7 @@ class BacterialInfectionMention(SpanAugmentedMention):
     )
     bacterial_infection: BacterialInfectionPresent = Field(
         BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="Is bacterial infection documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents bacterial infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -194,7 +194,7 @@ class FungalInfectionMention(SpanAugmentedMention):
     )
     fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
-        description="Is fungal infection documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents fungal infection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -214,7 +214,7 @@ class GraftRejectionMention(SpanAugmentedMention):
     )
     graft_rejection: GraftRejectionPresent = Field(
         GraftRejectionPresent.NONE_OF_THE_ABOVE, 
-        description="Is kidney graft rejection documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents kidney graft rejection as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -232,8 +232,7 @@ class GraftFailureMention(SpanAugmentedMention):
     )
     graft_failure: GraftFailurePresent = Field(
         GraftFailurePresent.NONE_OF_THE_ABOVE, 
-        # description="Does this clinical encounter document kidney graft failure as occuring recently?",
-        description="Is kidney graft failure documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents kidney graft failure as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -253,7 +252,7 @@ class PTLDMention(SpanAugmentedMention):
     )
     ptld: PTLDPresent = Field(
         PTLDPresent.NONE_OF_THE_ABOVE, 
-        description="Is Post transplant lymphoproliferative disorder (PTLD) documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents Post transplant lymphoproliferative disorder (PTLD) as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
@@ -273,7 +272,7 @@ class CancerMention(SpanAugmentedMention):
     )
     cancer: CancerPresent = Field(
         CancerPresent.NONE_OF_THE_ABOVE, 
-        description="Is cancer documented as current, active, or being evaluated/treated now?"
+        description="What evidence documents cancer as current, active, or being evaluated/treated now?"
     )
 
 ###############################################################################
