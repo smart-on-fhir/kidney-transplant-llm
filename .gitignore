@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .env
 
 venv/
@@ -9,3 +10,14 @@ __pycache__/
 /kidney_transplant_llm/donor.json
 /kidney_transplant_llm/history.json
 /kidney_transplant_llm/longitudinal.json
+=======
+# Custom
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+>>>>>>> 1df7e68 (renamed the transplant_llm folder for consistency across projects; got the appropriate fields exposed through the module init file for use in other projects)

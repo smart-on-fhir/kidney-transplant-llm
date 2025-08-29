@@ -1,2 +1,75 @@
+<<<<<<< HEAD
 """Exposes pydantic classes and postprocessing functions for kidney transplant data."""
 
+=======
+
+# Main Pydantic Study Variable Export 
+from kidney_transplant_llm.pydantic_study_variables import (
+    SpanAugmentedMention,
+    KidneyTransplantAnnotation,
+    KidneyTransplantMentionLabels,
+    KidneyTransplantMentionGroups,
+    kidney_transplant_mention_groups_metadata,
+    kidney_transplant_mention_ls_metadata,
+    # Individual Mentions and Enums
+    DonorTransplantDateMention,
+    DonorType,
+    DonorTypeMention,
+    DonorRelationship,
+    DonorRelationshipMention,
+    DonorHlaMatchQuality,
+    DonorHlaMatchQualityMention,
+    DonorHlaMismatchCount,
+    DonorHlaMismatchCountMention,
+    RxTherapeuticStatus,
+    RxTherapeuticStatusMention,
+    RxCompliance,
+    RxComplianceMention,
+    DSAPresent,
+    DSAMention,
+    InfectionPresent,
+    InfectionMention,
+    ViralInfectionPresent,
+    ViralInfectionMention,
+    BacterialInfectionPresent,
+    BacterialInfectionMention,
+    FungalInfectionPresent,
+    FungalInfectionMention,
+    GraftRejectionPresent,
+    GraftRejectionMention,
+    GraftFailurePresent,
+    GraftFailureMention,
+    PTLDPresent,
+    PTLDMention,
+    CancerPresent,
+    CancerMention,
+    DeceasedMention,
+)
+
+# Medication exports
+from kidney_transplant_llm.medication.annotation import (
+    # Overall annotation 
+    MedicationAnnotation,
+    # Label-stpecific annotation types 
+    RxClassAntiInfectiveMention,
+    RxClassCancerMention,
+    RxClassKidneyMention,
+    RxClassImmunosuppressionMention,
+    # Base mention types
+    RxClassMention,
+    IngredientMention,
+    # Enums
+    RxClassAntiInfective,
+    RxClassCancer,
+    RxClassKidney,
+    AntiMetabolite,
+    CalcineurinInhibitor,
+    Corticosteroid,
+    CostimulationBlocker,
+    IVIG,
+    MtorInhibitor,
+    MonoclonalAntibodies,
+    PolyclonalAntibodies,
+    RxClassImmunosuppression,
+)
+>>>>>>> 1df7e68 (renamed the transplant_llm folder for consistency across projects; got the appropriate fields exposed through the module init file for use in other projects)
