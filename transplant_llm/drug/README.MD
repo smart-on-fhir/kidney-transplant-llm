@@ -175,12 +175,12 @@ _example:_
 ```
 
 ```
-select  count(distinct subject)  as cnt_pat, 
-        count(distinct id)  as cnt_med, 
+select  count(distinct subject)     as cnt_pat, 
+        count(distinct id)          as cnt_med, 
         DAR.doseQuantity 
-from    medicationRequest as mr, 
-        UNNEST(dosageInstruction) AS t(DI), 
-        UNNEST(DI.doseAndRate) AS t(DAR)
+from    medicationRequest           as MR, 
+        UNNEST(dosageInstruction)   as t(DI), 
+        UNNEST(DI.doseAndRate)      as t(DAR)
 where   dosageInstruction is not NULL  
 group   by DAR.doseQuantity      
 order   by cnt_pat desc, cnt_med desc 
@@ -232,13 +232,12 @@ _Example_: sometimes TEXT/display is available
 ```
 
 
-
 ```
-select  count(distinct subject)  as cnt_pat, 
-        count(distinct id)  as cnt_med, 
+select  count(distinct subject)     as cnt_pat, 
+        count(distinct id)          as cnt_med, 
         DI.timing
-from    medicationRequest as mr, 
-        UNNEST(dosageInstruction) AS t(DI)
+from    medicationRequest           as MR, 
+        UNNEST(dosageInstruction)   AS t(DI)
 where   dosageInstruction is not NULL  
 group   by DI.timing 
 order   by cnt_pat desc, cnt_med desc 
@@ -260,9 +259,9 @@ _example:_
 select  count(distinct subject)  as cnt_pat, 
         count(distinct id)  as cnt_med, 
         DAR.rateQuantity 
-from    medicationRequest as mr, 
-        UNNEST(dosageInstruction) AS t(DI), 
-        UNNEST(DI.doseAndRate) AS t(DAR)
+from    medicationRequest           as MR, 
+        UNNEST(dosageInstruction)   as t(DI), 
+        UNNEST(DI.doseAndRate)      as t(DAR)
 where   dosageInstruction is not NULL  
 group   by DAR.rateQuantity      
 order   by cnt_pat desc, cnt_med desc 
@@ -280,19 +279,19 @@ _example:_
 ```
 
 ```
-select  count(distinct subject)  as cnt_pat, 
-        count(distinct id)  as cnt_med, 
+select  count(distinct subject)     as cnt_pat, 
+        count(distinct id)          as cnt_med, 
         RouteCoding.display
-from    medicationRequest as mr, 
-        UNNEST(dosageInstruction) AS t(DI), 
-        UNNEST(DI.route.coding) AS t(RouteCoding)
+from    medicationRequest           as MR, 
+        UNNEST(dosageInstruction)   as t(DI), 
+        UNNEST(DI.route.coding)     AS t(RouteCoding)
 where   dosageInstruction is not NULL  
 group   by RouteCoding.display
 order   by cnt_pat desc, cnt_med desc 
 ```
 
 ## Epic-Cerner differences
-NULL is common
+NULL is common/
 ```
 select distinct form, ingredient from medication
 ```
