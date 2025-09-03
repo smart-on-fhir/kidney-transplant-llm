@@ -118,9 +118,9 @@ Example
 select  count(distinct subject)     as cnt_pat,
         count(distinct encounter)   as cnt_enc,
         count(id)                   as cnt_med,
-        dispenseRequest.expectedsupplyduration 
+        dispenseRequest.expectedSupplyDuration 
 from    medicationrequest
-group   by dispenseRequest.expectedsupplyduration
+group   by dispenseRequest.expectedSupplyDuration
 order   by cnt_pat desc, cnt_enc desc
 ```
 
@@ -190,7 +190,18 @@ order   by cnt_pat desc, cnt_med desc
 
 **Notice** 
 * Timing codes [DataType](http://hl7.org/fhir/R4/datatypes.html#Timing) is usually NULL.
-* Timing text (and display) are more reliable 
+* Timing text (and display) are more reliable
+Typical immunosuppression dosage frequency (timing) 
+
+| Drug Class            | Common Frequency | FHIR `timing` Representation                    |
+| --------------------- | ---------------- | ----------------------------------------------- |
+| Calcineurin Inhibitor | q12h (BID)       | `repeat.frequency=1, period=12, periodUnit="h"` |
+| Antimetabolite        | q12h (BID)       | Same as above                                   |
+| Prednisone            | q24h (QD)        | `repeat.frequency=1, period=1, periodUnit="d"`  |
+| mTOR Inhibitors       | QD / BID         | QD: `period=1d`; BID: `period=12h`              |
+| Belatacept            | q2w → q4w        | `period=2wk` then `period=4wk`                  |
+| ATG / Basiliximab     | Discrete dates   | `timing.event` list                             |
+
 
 _Example:_ Ideally populated but non-existent in real world BCH data (Neither Cerner nor Epic)  
 ```json 
