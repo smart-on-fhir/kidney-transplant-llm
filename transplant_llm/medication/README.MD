@@ -1,5 +1,28 @@
+# Goals
+1. Obtain high quality medication data from EHR  
+  * FHIR MedicationRequest [STU4](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest.html) coded data  
+  * LLM chart review   
+    * [medicationrequest.py](medicationrequest.py) is a generic PyDantic class for this task
+      * Allow specific drug class/ingredients to use a base funtionality with specific rules as needed
+        * [immunosuppression.py](ingredients/immunosuppression.py)
+        * [infection.py](ingredients/infection.py)
+        * [cancer.py](ingredients/cancer.py)
+        * [kidney.py](ingredients/kidney.py)
+        
+2. Calculate "**Drug Eras**" to define when the patient was "actively" on a medication.
 
-## Table of Contents
+# Drug Eras
+_METHODS_ : "Medication exposure was derived from FHIR MedicationRequest. 
+For each immunosuppressant drug ingredient, the drug era start and end dates were derived from the FHIR medication request. 
+The preferred source of start date and end date was the “validity period” when available. 
+If the validity period start date was empty, the “authored on” date was used. 
+If the end date was empty, the end date was calculated using “dosage instructions” containing drug quantity and frequency: 
+the expected number of medicated days was derived from the number of doses requested and the usage frequency. 
+
+If the stop date could not be calculated, a fallback convention was used: set expected duration 30 days for outpatient medications, and length of stay (days) for inpatient medications. 
+If the status changed to “stopped” or status changed with an explicit stop date, the end date was set accordingly." 
+
+# Table of Contents
 - [status](#status)
 - [intent](#intent)
 - [category](#category)
@@ -15,8 +38,6 @@
   - [route](#dosageinstructionroute)
 - [Epic-Cerner differences](#epic-cerner-differences)
 
-
-# MedicationRequest [STU4](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest.html)
 
 ## [status](https://build.fhir.org/valueset-medicationrequest-status.html)
 
@@ -302,7 +323,7 @@ order   by cnt_pat desc, cnt_med desc
 ```
 
 ## Epic-Cerner differences
-NULL is common/
+NULL is common, Epic vs Cerner have different "inline" strategies for the FHIR MedicationRequest object.  
 ```
 select distinct form, ingredient from medication
 ```
