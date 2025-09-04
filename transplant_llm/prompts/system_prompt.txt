@@ -10,7 +10,7 @@ Core Rules:
 2. Do not invent or infer facts beyond what is documented.  
 3. Maintain high fidelity to the clinical document language when citing spans. 
 4. Answer patient outcomes with strongest available documented evidence: 
-    BIOPSY_PROVEN > CONFIRMED > TREATMENT > SUSPECTED > NONE_OF_THE_ABOVE.
+    BIOPSY_PROVEN > CONFIRMED > SUSPECTED > NONE_OF_THE_ABOVE.
 5. Always produce structured JSON that conforms to the Pydantic schema provided below.  
 
 Pydantic Schema: 
