@@ -209,10 +209,7 @@ order   by cnt_pat desc, cnt_med desc
 
  ### dosageInstruction.[timing](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dosageInstruction.timing)
 
-**Notice** 
-* Timing codes [DataType](http://hl7.org/fhir/R4/datatypes.html#Timing) is usually NULL.
-* Timing text (and display) are more reliable
-Typical immunosuppression dosage frequency (timing) 
+"Typical" immunosuppression dosage frequency (timing)
 
 | Drug Class            | Common Frequency | FHIR `timing` Representation                    |
 | --------------------- | ---------------- | ----------------------------------------------- |
@@ -224,7 +221,11 @@ Typical immunosuppression dosage frequency (timing)
 | ATG / Basiliximab     | Discrete dates   | `timing.event` list                             |
 
 
-_Example:_ Ideally populated but non-existent in real world BCH data (Neither Cerner nor Epic)  
+**Notice** 
+* FHIR Timing CodeableConcepts [DataType](http://hl7.org/fhir/R4/datatypes.html#Timing) are usually NULL.
+* FHIR Timing "text" (and display) are more reliable but still not certain
+
+_Example:_ **non-existent** in real world BCH data but here is the ideal contents of `timing`:   
 ```json 
 {
   "repeat": {
@@ -244,7 +245,7 @@ _Example:_ Ideally populated but non-existent in real world BCH data (Neither Ce
 }
 ```
 
-Example: Rare and also can't be assumed to exist 
+Example: **rarely** present and also can't be assumed to exist 
 ```json 
 {
   "code": "229799001",
@@ -253,7 +254,7 @@ Example: Rare and also can't be assumed to exist
 }
 ```
 
-_Example_: sometimes TEXT/display is available  
+_Example_: **sometimes** Text/display is available  
 
 ```json
 {
