@@ -125,7 +125,7 @@ order   by cnt_pat desc, cnt_enc desc
 
 ### dispenseRequest.[expectedSupplyDuration](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dispenseRequest.expectedSupplyDuration)
 
-Example 
+_Example:_ 
 ```json
 {
   "code": "d",
@@ -147,7 +147,7 @@ order   by cnt_pat desc, cnt_enc desc
 
 ### dispenseRequest.[quantity](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dispenseRequest.quantity)
 
-Example 
+_Example:_
 ```json
 { "unit" : "tablet", 
   "value" : "30.0"}
@@ -165,7 +165,7 @@ order   by cnt_pat desc, cnt_enc desc
 
 ### dispenseRequest.[numberOfRepeatsAllowed](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dispenseRequest.numberOfRepeatsAllowed)
 
-Example 
+_Example:_ 
 ```json
 { "numberOfRepeatsAllowed" : "3"}
 ```
@@ -187,7 +187,7 @@ order   by cnt_pat desc, cnt_enc desc
 
  ### dosageInstruction.[doseQuantity](http://hl7.org/fhir/R4/dosage.html#Dosage)
 
-_example:_ 
+_Example:_ 
 ```json 
 {"code" : "mg", 
 "system" : "http://unitsofmeasure.org", 
@@ -245,7 +245,7 @@ _Example:_ **non-existent** in real world BCH data but here is the ideal content
 }
 ```
 
-Example: **rarely** present and also can't be assumed to exist 
+_Example_: **rarely** present and also can't be assumed to exist 
 ```json 
 {
   "code": "229799001",
@@ -278,7 +278,7 @@ order   by cnt_pat desc, cnt_med desc
 
 ### dosageInstruction.[rateQuantity](http://hl7.org/fhir/R4/dosage.html#Dosage)
 
-_example:_ 
+_Example:_ 
 ```json
 {
   "unit": "mL/hr",
@@ -302,7 +302,7 @@ order   by cnt_pat desc, cnt_med desc
 
 
 ### dosageInstruction.[route](http://hl7.org/fhir/R4/dosage.html#Dosage)
-_example:_ 
+_Example:_ 
 ```json
 {
   "code": "47625008",
