@@ -1,6 +1,7 @@
 from enum import StrEnum
+from abc import abstractmethod
 from pydantic import BaseModel, Field, conint, confloat
-from pydantic import model_validator
+from transplant_llm.medication.timing import RxFrequency
 
 ###############################################################################
 # Spans
@@ -85,18 +86,54 @@ class RxValidityPeriodMention(SpanAugmentedMention):
         default=None,
         description='End date of the prescribed or administered medication')
 
+class RxQuantityUnit(StrEnum):
+    # Mass
+    MG  = "mg"
+    G   = "g"
+    UG  = "ug"   # microgram (mcg)
+    KG  = "kg"
+
+    # Volume
+    ML  = "mL"
+    L   = "L"
+
+    # International Units
+    U   = "U"
+    IU  = "[iU]"
+
+    # Countable units
+    TABLET      = "{tablet}"
+    CAPSULE     = "{capsule}"
+    PUFF        = "{puff}"
+    PATCH       = "{patch}"
+    SUPPOSITORY = "{suppository}"
+
+    # Ratios
+    MG_PER_ML          = "mg/mL"
+    MG_PER_KG          = "mg/kg"
+    U_PER_KG           = "U/kg"
+    UG_PER_KG_PER_MIN  = "ug/kg/min"
+
+    # Time units (for infusion rates)
+    H   = "h"
+    MIN = "min"
+    D   = "d"
+    NONE = "None of the above"
+
 # MedicationRequest.dispenseRequest.quantity
 class RxQuantity(SpanAugmentedMention):
     """
     http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest-definitions.html#MedicationRequest.dispenseRequest.quantity
     """
-    unit: str | None = Field(
-        default=None,
+    unit: RxQuantityUnit = Field(
+        default=RxQuantityUnit.NONE,
         description="Medication prescribed unit (examples: 'mg', 'ug/kg/min', 'tablet', etc)")
 
     value: str | None = Field(
         default=None,
         description='Numeric amount of medication prescribed or administered (FHIR Quantity.value)')
+
+
 
 ###############################################################################
 # Treatment Phase
@@ -109,6 +146,27 @@ class TreatmentPhase(StrEnum):
     MAINTENANCE = "Maintenance therapy"
     RESCUE = "Rescue therapy"
     NONE = "None of the above"
+
+###############################################################################
+# helper: Describe Drug Type (class or therapy modality) or drug ingredient.
+
+def drug_type_field(default=None, description=None) -> str | None:
+    return Field(default=default, description=drug_type_desc(description))
+
+def ingredient_field(default=None, description=None) -> str | None:
+    return Field(default=default, description=ingredient_desc(description))
+
+def drug_type_desc(drug_type: str) -> str:
+    return clean(
+        f"Extract the {drug_type} class or therapy modality documented for this medication, if present")
+
+def ingredient_desc(ingredient: str) -> str:
+    return clean(
+        f"Extract the {ingredient} ingredient documented for this medication, if present")
+
+def clean(text:str) -> str | None:
+    return text.replace('  ', ' ').strip()
+
 
 ###############################################################################
 # Template
@@ -152,6 +210,11 @@ class MedicationMention(SpanAugmentedMention):
         description='number of times (aka refills or repeats) that the patient can receive the prescribed medication'
     )
 
+    frequency: RxFrequency = Field(
+        default=RxFrequency.NONE,
+        description='What is the frequency of this medication?'
+    )
+
     start_date: str | None = Field(
         None,
         description='Start date of the prescribed or administered medication'
@@ -162,9 +225,9 @@ class MedicationMention(SpanAugmentedMention):
         description='End date of the prescribed or administered medication'
     )
 
-    quantity_unit: str | None = Field(
-        None,
-        description="Medication prescribed unit (examples: 'mg', 'ug/kg/min', 'tablet', etc)"
+    quantity_unit: RxQuantityUnit= Field(
+        RxQuantityUnit.NONE,
+        description="Medication prescribed unit"
     )
 
     quantity_value: str | None = Field(
@@ -172,8 +235,11 @@ class MedicationMention(SpanAugmentedMention):
         description='Numeric amount of medication prescribed or administered (FHIR Quantity.value)'
     )
 
-    ingredient: str | None = Field(
-        default=None,
-        description='What is the ingredient of this medication?'
-    )
+class RxClassMention(MedicationMention):
+    # abstract, extend to override
+    drug_type: str | object | None = drug_type_field()
+
+class IngredientMention(MedicationMention):
+    # abstract, extend to override
+    ingredient: str | object | None = ingredient_field()
 

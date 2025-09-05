@@ -7,7 +7,7 @@ GTS_SYSTEM = "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation"
 # @@@ GPT5 generated @@@
 ###############################################################################
 
-class MedicationFrequency(StrEnum):
+class RxFrequency(StrEnum):
     QD = "QD"       # once daily
     BID = "BID"     # twice daily
     TID = "TID"     # three times daily
@@ -25,31 +25,31 @@ class MedicationFrequency(StrEnum):
 
 # Minimal mapper -> FHIR Timing
 # periodUnit must be one of: 's'|'min'|'h'|'d'|'wk'|'mo'|'a'
-_TIMING_MAP: Dict[MedicationFrequency, Dict[str, Any]] = {
-    MedicationFrequency.QD:   {"repeat": {"frequency": 1, "period": 1, "periodUnit": "d"},
+_TIMING_MAP: Dict[RxFrequency, Dict[str, Any]] = {
+    RxFrequency.QD:   {"repeat": {"frequency": 1, "period": 1, "periodUnit": "d"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "QD", "display": "every day"}]}},
-    MedicationFrequency.BID:  {"repeat": {"frequency": 2, "period": 1, "periodUnit": "d"},
+    RxFrequency.BID:  {"repeat": {"frequency": 2, "period": 1, "periodUnit": "d"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "BID", "display": "2 times a day"}]}},
-    MedicationFrequency.TID:  {"repeat": {"frequency": 3, "period": 1, "periodUnit": "d"},
+    RxFrequency.TID:  {"repeat": {"frequency": 3, "period": 1, "periodUnit": "d"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "TID", "display": "3 times a day"}]}},
-    MedicationFrequency.QID:  {"repeat": {"frequency": 4, "period": 1, "periodUnit": "d"},
+    RxFrequency.QID:  {"repeat": {"frequency": 4, "period": 1, "periodUnit": "d"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "QID", "display": "4 times a day"}]}},
-    MedicationFrequency.QOD:  {"repeat": {"frequency": 1, "period": 2, "periodUnit": "d"},
+    RxFrequency.QOD:  {"repeat": {"frequency": 1, "period": 2, "periodUnit": "d"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "QOD", "display": "every other day"}]}},
-    MedicationFrequency.Q6H:  {"repeat": {"frequency": 1, "period": 6, "periodUnit": "h"},
+    RxFrequency.Q6H:  {"repeat": {"frequency": 1, "period": 6, "periodUnit": "h"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "Q6H", "display": "every 6 hours"}]}},
-    MedicationFrequency.Q8H:  {"repeat": {"frequency": 1, "period": 8, "periodUnit": "h"},
+    RxFrequency.Q8H:  {"repeat": {"frequency": 1, "period": 8, "periodUnit": "h"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "Q8H", "display": "every 8 hours"}]}},
-    MedicationFrequency.Q12H: {"repeat": {"frequency": 1, "period": 12, "periodUnit": "h"},
+    RxFrequency.Q12H: {"repeat": {"frequency": 1, "period": 12, "periodUnit": "h"},
                                "code": {"coding": [{"system": GTS_SYSTEM, "code": "Q12H", "display": "every 12 hours"}]}},
-    MedicationFrequency.WEEKLY: {"repeat": {"frequency": 1, "period": 1, "periodUnit": "wk"}},
-    MedicationFrequency.Q2W:    {"repeat": {"frequency": 1, "period": 2, "periodUnit": "wk"}},
-    MedicationFrequency.Q4W:    {"repeat": {"frequency": 1, "period": 4, "periodUnit": "wk"}},
-    MedicationFrequency.MONTHLY:{"repeat": {"frequency": 1, "period": 1, "periodUnit": "mo"}},
+    RxFrequency.WEEKLY: {"repeat": {"frequency": 1, "period": 1, "periodUnit": "wk"}},
+    RxFrequency.Q2W:    {"repeat": {"frequency": 1, "period": 2, "periodUnit": "wk"}},
+    RxFrequency.Q4W:    {"repeat": {"frequency": 1, "period": 4, "periodUnit": "wk"}},
+    RxFrequency.MONTHLY:{"repeat": {"frequency": 1, "period": 1, "periodUnit": "mo"}},
 }
 
 def frequency_to_fhir_timing(
-    freq: MedicationFrequency,
+    freq: RxFrequency,
     *,
     prn: Optional[bool] = None,
     timing_text: Optional[str] = None
@@ -59,7 +59,7 @@ def frequency_to_fhir_timing(
     - PRN is not encoded in Timing; return as a side channel you can attach to Dosage as `asNeededBoolean`.
     - If freq == OTHER, return only text (caller can fill repeat by hand if desired).
     """
-    if freq == MedicationFrequency.OTHER:
+    if freq == RxFrequency.OTHER:
         return {"code": {"text": timing_text} if timing_text else None} | {"_note": "Provide repeat manually if known."}
 
     timing = _TIMING_MAP[freq].copy()
