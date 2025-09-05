@@ -5,13 +5,14 @@ from enum import StrEnum
 # Rx Kidney
 #
 ##########################################################
-
 class RxClassKidney(StrEnum):
     RAS = 'Renin–Angiotensin System (especially ACE, ARB, renin inhibitors/blockers)'
-    Diuretic = 'Diuretic'
+    DIURETIC = 'Diuretic'
+    STATIN = 'Statin'
     BB = 'Beta Blocker'
-    CCB = 'Calcium channel blocker'
-    NSAID = 'non steroidal anti-inflammatory drug'
+    CCB = 'Calcium Channel Blocker'
+    NSAID = 'Non Steroidal Anti-Inflammatory Drug'
+    OPIOID = 'Opioid medication'
     CONTRAST = 'Iodinated contrast agents'
-    OTHER = 'Other ingredient with known association to kidney (indication for treatment or nephrotoxic)'
+    OTHER = 'Other drug indicated for treatment of kidney problem(s) or drug with known nephrotoxicity'
     NONE = 'None of the above'
