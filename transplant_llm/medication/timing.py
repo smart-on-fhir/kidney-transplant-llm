@@ -21,6 +21,7 @@ class MedicationFrequency(StrEnum):
     Q4W = "Q4W"
     MONTHLY = "MONTHLY"
     OTHER = "OTHER" # use timing_text
+    NONE = "None of the above"
 
 # Minimal mapper -> FHIR Timing
 # periodUnit must be one of: 's'|'min'|'h'|'d'|'wk'|'mo'|'a'
