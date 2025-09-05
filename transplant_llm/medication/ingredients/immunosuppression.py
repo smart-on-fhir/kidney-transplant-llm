@@ -1,7 +1,4 @@
 from enum import StrEnum
-from pydantic import BaseModel, Field, conint, confloat
-
-from transplant_llm.medication.medicationrequest import MedicationMention
 
 ##########################################################
 #
@@ -18,6 +15,9 @@ class RxClassImmunosuppression(StrEnum):
     MTOR = "mTOR Inhibitor (MTOR)"
     COSTIM = "Costimulation Blocker/blockade (COSTIM)"
     IVIG = "Immunoglobulin (IVIG)"
+    POLYCLONAL = "Polyclonal antibody (e.g., ATG, ALG)"
+    MONOCLONAL = "Monoclonal antibody (mAb, e.g., basiliximab, rituximab)"
+    OTHER = 'Other immunosuppressive drug'
     NONE = 'None of the above'
 
 ##########################################################
@@ -43,21 +43,24 @@ class Corticosteroid(StrEnum):
     PDL = 'Prednisolone'
     PRED = 'Prednisone'
     OTHER = 'Other corticosteroid ingredient'
+    NONE = 'None of the above'
 
 class CostimulationBlocker(StrEnum):
     BEL = 'Belatacept'
     ABA = 'Abatacept'
-    OTHER = 'Other costimulation blocker ingredient '
+    OTHER = 'Other Costimulation blocker ingredient '
+    NONE = 'None of the above'
+
+class IVIG(StrEnum):
+    IVIG = 'Intravenous Immunoglobulin (IVIG)'
+    CYTOGAM = 'Cytogam (CMV-specific hyperimmune globulin)'
+    OTHER = 'Other immunoglobulin therapy'
     NONE = 'None of the above'
 
 class MtorInhibitor(StrEnum):
     EVE = 'Everolimus'
     SRL = 'Sirolimus'
     OTHER = 'Other mTOR inhibitor ingredient'
-    NONE = 'None of the above'
-
-class PolyclonalAntibodies(StrEnum):
-    ATG = 'Antithymocyte Globulin (ATG)'
     NONE = 'None of the above'
 
 class MonoclonalAntibodies(StrEnum):
@@ -68,16 +71,9 @@ class MonoclonalAntibodies(StrEnum):
     OTHER = 'Other Monoclonal antibody drug'
     NONE = 'None of the above'
 
-class Immunoglobulin(StrEnum):
-    IVIG = 'Intravenous Immunoglobulin (IVIG)'
-    CYTOGAM = 'Cytogam (CMV-specific hyperimmune globulin)'
-    OTHER = 'Other Immunoglobulin'
+class PolyclonalAntibodies(StrEnum):
+    ATG = 'Antithymocyte Globulin (ATG)'
+    OTHER = 'Other polyclonal antibodies ingredient'
     NONE = 'None of the above'
 
-###############################################################################
-# AntiMetabolite
-###############################################################################
-class AntiMetaboliteMention(MedicationMention):
-    ingredient: AntiMetabolite = Field(
-        AntiMetabolite.NONE,
-        description="Which anti-metabolite ingredient is in this documented medication?")
+
