@@ -104,13 +104,25 @@ class RxComplianceMention(SpanAugmentedMention):
 # THE HISTORY AND THE PRESENT STATUS OF VARIABLES
 ###############################################################################
 
+
 ###############################################################################
 # DSA Donor Specific Antibody
 ###############################################################################
 class DSAPresent(StrEnum):
+    """
+    Notice: DSA is strongly related to `GraftRejectionPresent`.
+
+    Treatment of DSA includes immunosuppressive drugs, IVIG, and plasmapheresis (PLEX).
+
+    Treatment with immunosuppressive drugs does *NOT* imply SUSPECTED DSA,
+    as many of immunosuppressive drugs are routinely used for "maintenance" therapy.
+
+    IVIG and plasmapheresis (PLEX) during the post-transplant (post induction) phase DOES imply
+    --> DSAPresent >  SUSPECTED (and possibly CONFIRMED)
+    --> `GraftRejectionPresent` > SUSPECTED (and possibly CONFIRMED or BIOPSY_PROVEN)
+    """
     CONFIRMED = "DSA diagnostic test positive, DSA diagnosis 'confirmed' or 'positive', or increase in immunosuppression due to DSA"
-    TREATMENT = "DSA Treatment prescribed or DSA treatment administered"
-    SUSPECTED = "DSA suspected, DSA likely, DSA cannot be ruled out, DSA test result pending or DSA is a differential diagnosis"
+    SUSPECTED = "DSA suspected, DSA likely, DSA cannot be ruled out, DSA test result pending, or treatment with IVIG/plasmapheresis"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class DSAMention(SpanAugmentedMention):
@@ -201,10 +213,21 @@ class FungalInfectionMention(SpanAugmentedMention):
 # Graft Rejection
 ###############################################################################
 class GraftRejectionPresent(StrEnum):
+    """
+    Notice: Graft rejection is strongly related to `DSAPresent`.
+
+    Treatment of graft rejection includes immunosuppressive drugs, IVIG, and plasmapheresis (PLEX).
+
+    Treatment with immunosuppressive drugs does *NOT* imply outcome is SUSPECTED,
+    as many of immunosuppressive drugs are routinely used for "maintenance" therapy.
+
+    IVIG and plasmapheresis (PLEX) during the post-transplant (post induction) phase DOES imply
+    --> `GraftRejectionPresent` > SUSPECTED (and possibly CONFIRMED or BIOPSY_PROVEN)
+    --> DSAPresent >  SUSPECTED (and possibly CONFIRMED)
+    """
     BIOPSY_PROVEN = "Biopsy proven kidney graft rejection or pathology proven kidney graft rejection"
     CONFIRMED = "Kidney graft rejection was 'diagnosed', 'confirmed' or 'positive'"
-    TREATMENT = "Treatment prescribed/administered for kidney rejection (AMR or TCMR)"
-    SUSPECTED = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, or biopsy result pending"
+    SUSPECTED = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, biopsy result pending, or treatment with IVIG/plasmapheresis"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class GraftRejectionMention(SpanAugmentedMention):
@@ -239,10 +262,13 @@ class GraftFailureMention(SpanAugmentedMention):
 # PTLD
 ###############################################################################
 class PTLDPresent(StrEnum):
+    """
+    Notice: PTLD treatments may also be used in 'rescue' therapy (DSA/graft rejection) or other cancers.
+    One notable difference from other cancers (such as skin cancer) is the absence of "surgical excision" (lymphoma).
+    """
     BIOPSY_PROVEN = "Biopsy proven or pathology proven PTLD"
     CONFIRMED = "PTLD was 'diagnosed', 'confirmed' or 'positive' or viral positive lymphoma"
-    TREATMENT = "Treatment prescribed/administered for PTLD or stopped immunosuppression due to PTLD"
-    SUSPECTED = "PTLD presumed, suspected, likely, cannot be ruled out, or PTLD biopsy result pending"
+    SUSPECTED = "PTLD presumed, suspected, likely, cannot be ruled out, PTLD biopsy result pending, or treatment with chemotherapy/radiation"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class PTLDMention(SpanAugmentedMention):
@@ -259,10 +285,14 @@ class PTLDMention(SpanAugmentedMention):
 # Cancer
 ###############################################################################
 class CancerPresent(StrEnum):
+    """
+    Notice: Cancer treatments may also be used in 'rescue' therapy (DSA/graft rejection).
+    PTLD is a type of cancer. PTLD is a lymphoma and thus not treated with "surgical excision".
+    Skin cancer (of which there are many types carcinoma and melanoma) is treated with surgical excision.
+    """
     BIOPSY_PROVEN = "Biopsy proven or pathology proven cancer"
     CONFIRMED = "Cancer was 'diagnosed', 'confirmed' or 'positive'"
-    TREATMENT = "Treatment prescribed/administered for cancer"
-    SUSPECTED = "Cancer is presumed, suspected, likely, cannot be ruled out, or biopsy of any lesion"
+    SUSPECTED = "Cancer is presumed, suspected, likely, cannot be ruled out, biopsy of any lesion, or treatment with chemotherapy/radiation"
     NONE_OF_THE_ABOVE = "None of the above"
 
 class CancerMention(SpanAugmentedMention):
