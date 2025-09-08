@@ -3,7 +3,7 @@
   * FHIR MedicationRequest [STU4](http://hl7.org/fhir/us/core/STU4/StructureDefinition-us-core-medicationrequest.html) coded data  
   * LLM chart review   
     * [medicationrequest.py](medicationrequest.py) is a generic PyDantic class for this task
-      * Allow specific drug class/ingredients to use a base funtionality with specific rules as needed
+      * Allow specific drug class/ingredients to extend this base functionality with specific rules as needed
         * [immunosuppression.py](ingredients/immunosuppression.py)
         * [infection.py](ingredients/infection.py)
         * [cancer.py](ingredients/cancer.py)
