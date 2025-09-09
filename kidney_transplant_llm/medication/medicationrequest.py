@@ -1,7 +1,7 @@
 from enum import StrEnum
 from abc import abstractmethod
 from pydantic import BaseModel, Field, conint, confloat
-from transplant_llm.medication.timing import RxFrequency
+from kidney_transplant_llm.medication.timing import RxFrequency
 
 ###############################################################################
 # Spans

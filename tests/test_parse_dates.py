@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from transplant_llm import parse_dates
+from kidney_transplant_llm import parse_dates
 
 class TestDates(unittest.TestCase):
 

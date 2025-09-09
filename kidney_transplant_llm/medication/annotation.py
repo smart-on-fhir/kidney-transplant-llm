@@ -1,15 +1,15 @@
 from typing import List
 from pydantic import BaseModel, Field
-from transplant_llm.medication.medicationrequest import (
+from kidney_transplant_llm.medication.medicationrequest import (
     drug_type_desc,
     ingredient_desc,
     RxClassMention,
     IngredientMention
 )
-from transplant_llm.medication.ingredients.infection import RxClassAntiInfective
-from transplant_llm.medication.ingredients.cancer import RxClassCancer
-from transplant_llm.medication.ingredients.kidney import RxClassKidney
-from transplant_llm.medication.ingredients.immunosuppression import (
+from kidney_transplant_llm.medication.ingredients.infection import RxClassAntiInfective
+from kidney_transplant_llm.medication.ingredients.cancer import RxClassCancer
+from kidney_transplant_llm.medication.ingredients.kidney import RxClassKidney
+from kidney_transplant_llm.medication.ingredients.immunosuppression import (
     RxClassImmunosuppression,
     AntiMetabolite,
     CalcineurinInhibitor,
