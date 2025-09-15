@@ -67,12 +67,4 @@ from kidney_transplant_llm.medication.annotation import (
     MonoclonalAntibodies,
     PolyclonalAntibodies,
     RxClassImmunosuppression,
-    AntiMetabolite,
-    CalcineurinInhibitor,
-    Corticosteroid,
-    IVIG,
-    CostimulationBlocker,
-    MtorInhibitor,
-    MonoclonalAntibodies,
-    PolyclonalAntibodies,
 )
