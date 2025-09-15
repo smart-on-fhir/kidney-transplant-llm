@@ -153,9 +153,9 @@ class RxClassImmunosuppressionMention(RxClassMention):
 ##########################################################
 
 class MedicationAnnotation(BaseModel):
-    rx_class_anti_infective: List[RxClassAntiInfectiveMention]
-    rx_class_cancer: List[RxClassCancerMention]
-    rx_class_kidney: List[RxClassKidneyMention]
-    rx_class_immunosuppression: List[RxClassImmunosuppressionMention]
+    rx_class_anti_infective: List[RxClassAntiInfectiveMention] = Field(..., min_length=1)
+    rx_class_cancer: List[RxClassCancerMention] = Field(..., min_length=1)
+    rx_class_kidney: List[RxClassKidneyMention] = Field(..., min_length=1)
+    rx_class_immunosuppression: List[RxClassImmunosuppressionMention] = Field(..., min_length=1)
 
 

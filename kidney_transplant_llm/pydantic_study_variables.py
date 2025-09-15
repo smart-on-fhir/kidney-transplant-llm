@@ -400,7 +400,7 @@ kidney_transplant_mention_groups_metadata = {
 # Tying the Label Enum to the Group Enum and other metadata (display strings, e.g.)
 kidney_transplant_mention_ls_metadata = {
     KidneyTransplantMentionLabels.donor_transplant_date_mention : {
-        "display": "Transplate Date",
+        "display": "Transplant Date",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
         "hotkey": "W",
         "hotkey_mnemonic": "Which day?",
