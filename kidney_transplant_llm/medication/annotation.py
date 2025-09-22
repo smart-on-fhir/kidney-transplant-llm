@@ -44,56 +44,7 @@ class RxClassKidneyMention(RxClassMention):
         default=RxClassKidney.NONE,
         description=drug_type_desc('renal drug')
     )
-##########################################################
-#
-#           Ingredients: immunosuppression only
-#
-##########################################################
-class AntiMetaboliteMention(IngredientMention):
-    ingredient: AntiMetabolite = Field(
-        AntiMetabolite.NONE,
-        description=ingredient_desc('anti-metabolite'))
-
-class CalcineurinInhibitorMention(IngredientMention):
-    ingredient: CalcineurinInhibitor = Field(
-        CalcineurinInhibitor.NONE,
-        description=ingredient_desc('Calcineurin Inhibitor (CNI)'))
-
-class CorticosteroidMention(IngredientMention):
-    ingredient: Corticosteroid = Field(
-        default=Corticosteroid.NONE,
-        description=ingredient_desc('Corticosteroid')
-    )
-
-class CostimulationBlockerMention(IngredientMention):
-    ingredient: CostimulationBlocker = Field(
-        default=CostimulationBlocker.NONE,
-        description=ingredient_desc('Costimulation Blocker')
-    )
-
-class IVIGMention(IngredientMention):
-    ingredient: IVIG = Field(
-        default=IVIG.NONE,
-        description=ingredient_desc('IVIG')
-    )
-
-class MtorInhibitorMention(IngredientMention):
-    ingredient: MtorInhibitor = Field(
-        default=MtorInhibitor.NONE,
-        description=ingredient_desc('mTOR Inhibitor')
-    )
-
-class MonoclonalAntibodiesMention(IngredientMention):
-    ingredient: MonoclonalAntibodies = Field(
-        default=MonoclonalAntibodies.NONE,
-        description=ingredient_desc('monoclonal antibodies')
-    )
-
-class PolyclonalAntibodiesMention(IngredientMention):
-    ingredient: PolyclonalAntibodies = Field(
-        default=PolyclonalAntibodies.NONE,
-        description=ingredient_desc('polyclonal antibodies')
-    )
+    
 
 ##########################################################
 class RxClassImmunosuppressionMention(RxClassMention):
@@ -121,7 +72,7 @@ class RxClassImmunosuppressionMention(RxClassMention):
         description=ingredient_desc('Corticosteroid')
     )
 
-    ivig: IVIGMention = Field(
+    ivig: IVIG = Field(
         default=IVIG.NONE,
         description=ingredient_desc('IVIG')
     )
