@@ -8,18 +8,18 @@ GTS_SYSTEM = "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation"
 ###############################################################################
 
 class RxFrequency(StrEnum):
-    QD = "QD"       # once daily
-    BID = "BID"     # twice daily
-    TID = "TID"     # three times daily
-    QID = "QID"     # four times daily
-    QOD = "QOD"     # every other day
-    Q6H = "Q6H"
-    Q8H = "Q8H"
-    Q12H = "Q12H"
-    WEEKLY = "WEEKLY"
-    Q2W = "Q2W"
-    Q4W = "Q4W"
-    MONTHLY = "MONTHLY"
+    QD = "QD"       # 1X (once daily)
+    BID = "BID"     # 2X (twice daily)
+    TID = "TID"     # 3X (three times daily)
+    QID = "QID"     # 4X (four times daily)
+    QOD = "QOD"     # 1/2X (every other day)
+    Q6H = "Q6H"     # 4X (every 6 hours)
+    Q8H = "Q8H"     # 3X (every 8 hours)
+    Q12H = "Q12H"   # 2X (every 12 hours)
+    WEEKLY = "WEEKLY" # 1/7X (once every 7 days)
+    Q2W = "Q2W"       # 1/14X (once every 2 weeks = 14 days)
+    Q4W = "Q4W"       # 1/28X (once every 4 weeks = 28 days)
+    MONTHLY = "MONTHLY" # 1/28X (once every 4 weeks = 28 days)
     OTHER = "OTHER" # use timing_text
     NONE = "None of the above"
 
