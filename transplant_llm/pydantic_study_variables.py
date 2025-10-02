@@ -41,9 +41,9 @@ class DonorRelationshipMention(SpanAugmentedMention):
     )
 
 class DonorHlaMatchQuality(StrEnum):
-    WELL = 'Well matched (0-1 mismatches)'
-    MODERATE = 'Moderately matched (2-4 mismatches)'
-    POOR = 'Poorly matched (5-6 mismatches)'
+    WELL = "Well matched (0–1 mismatches) OR recipient described as not sensitized"
+    MODERATE = "Moderately matched (2–4 mismatches) OR recipient described as sensitized"
+    POOR = "Poorly matched (5–6 mismatches) OR recipient described as highly sensitized"
     NOT_MENTIONED = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
