@@ -1,0 +1,5 @@
+Evaluate the following clinical document for kidney transplant variables and outcomes.  
+Here is the clinical document for you to analyze:
+
+$chart_text
+
