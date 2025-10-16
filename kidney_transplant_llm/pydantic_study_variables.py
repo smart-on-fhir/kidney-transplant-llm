@@ -2,7 +2,7 @@ from enum import StrEnum, auto
 from pydantic import BaseModel, Field
 
 class SpanAugmentedMention(BaseModel):
-    has_mention: bool | None  # True, False, or None
+    has_mention: bool # True, False
     spans: list[str]
 
 ###############################################################################
@@ -15,7 +15,7 @@ class SpanAugmentedMention(BaseModel):
 class DonorTransplantDateMention(SpanAugmentedMention):
     donor_transplant_date: str | None = Field(
         None,
-        description='Date of renal transplant'
+        description='Exact date of renal transplant; use YYYY-MM-DD format in your response. Only highlight date mentions with an explicit day, month, and year (e.g. 2020-01-15). All other date mentions, or an absence of a date mention, should be indicated with None.'
     )
 
 class DonorType(StrEnum):
@@ -41,9 +41,9 @@ class DonorRelationshipMention(SpanAugmentedMention):
     )
 
 class DonorHlaMatchQuality(StrEnum):
-    WELL = "Well matched (0–1 mismatches) OR recipient explicitly documented as not sensitized"
-    MODERATE = "Moderately matched (2–4 mismatches) OR recipient explicitly documented as sensitized"
-    POOR = "Poorly matched (5–6 mismatches) OR recipient explicitly documented as highly sensitized"
+    WELL = "Well matched (0-1 mismatches) OR recipient explicitly documented as not sensitized"
+    MODERATE = "Moderately matched (2-4 mismatches) OR recipient explicitly documented as sensitized"
+    POOR = "Poorly matched (5-6 mismatches) OR recipient explicitly documented as highly sensitized"
     NOT_MENTIONED = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
@@ -317,7 +317,7 @@ class DeceasedMention(SpanAugmentedMention):
     deceased_date: str | None = Field(
         None, 
         description=(
-            'If the patient is deceased, include the date the patient became deceased. '
+            'If the patient is deceased, include the date the patient became deceased. Use YYYY-MM-DD format if possible. '
             'Use None if there is no date recorded or if the patient is not observed as deceased.'
         )
     )
@@ -354,6 +354,131 @@ class KidneyTransplantAnnotation(BaseModel):
     graft_failure_mention: GraftFailureMention
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
+    deceased_mention: DeceasedMention
+
+
+
+class KidneyTransplantDonorGroupAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. 
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    donor_transplant_date_mention: DonorTransplantDateMention
+    donor_type_mention: DonorTypeMention
+    donor_relationship_mention: DonorRelationshipMention
+    donor_hla_match_quality_mention: DonorHlaMatchQualityMention
+    donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+
+
+class KidneyTransplantLongitudinalAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants.
+
+    This class only includes longitudinally variable mentions, i.e. those
+    that can change over time, such as therapeutic status, compliance, infections,
+    graft rejection/failure, DSA, PTLD, cancer, and deceased status.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    rx_therapeutic_status_mention: RxTherapeuticStatusMention
+    rx_compliance_mention: RxComplianceMention
+    dsa_mention: DSAMention
+    infection_mention: InfectionMention
+    viral_infection_mention: ViralInfectionMention
+    bacterial_infection_mention: BacterialInfectionMention
+    fungal_infection_mention: FungalInfectionMention
+    graft_rejection_mention: GraftRejectionMention
+    graft_failure_mention: GraftFailureMention
+    ptld_mention: PTLDMention
+    cancer_mention: CancerMention
+    deceased_mention: DeceasedMention
+
+
+
+
+class KidneyTransplantComplianceGroupAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. This class only includes therapeutic status and compliance mentions.
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    rx_therapeutic_status_mention: RxTherapeuticStatusMention
+    rx_compliance_mention: RxComplianceMention
+
+
+class KidneyTransplantInfectionGroupAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. This class only includes infection and cancer-related mentions.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    infection_mention: InfectionMention
+    viral_infection_mention: ViralInfectionMention
+    bacterial_infection_mention: BacterialInfectionMention
+    fungal_infection_mention: FungalInfectionMention
+
+
+
+class KidneyTransplantRejectionFailureGroupAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. This class only includes graft rejection, DSA, graft failure mentions.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    dsa_mention: DSAMention
+    graft_rejection_mention: GraftRejectionMention
+    graft_failure_mention: GraftFailureMention
+    
+
+class KidneyTransplantPostTransplantMalignanciesAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. This class only includes post transplant malignancies.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    ptld_mention: PTLDMention
+    cancer_mention: CancerMention
+
+class KidneyTransplantDeathGroupAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants. This class only includes deceased mentions.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
     deceased_mention: DeceasedMention
 
 
