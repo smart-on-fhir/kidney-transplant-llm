@@ -375,6 +375,37 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
 
 
+class KidneyTransplantLongitudinalAnnotation(BaseModel): 
+    """
+    An object-model for annotations of immune related adverse event (IRAE) 
+    observations found in a patient's chart, relating specifically to kidney 
+    transplants.
+
+    This class only includes longitudinally variable mentions, i.e. those
+    that can change over time, such as therapeutic status, compliance, infections,
+    graft rejection/failure, DSA, PTLD, cancer, and deceased status.
+
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    rx_therapeutic_status_mention: RxTherapeuticStatusMention
+    rx_compliance_mention: RxComplianceMention
+    dsa_mention: DSAMention
+    infection_mention: InfectionMention
+    viral_infection_mention: ViralInfectionMention
+    bacterial_infection_mention: BacterialInfectionMention
+    fungal_infection_mention: FungalInfectionMention
+    graft_rejection_mention: GraftRejectionMention
+    graft_failure_mention: GraftFailureMention
+    ptld_mention: PTLDMention
+    cancer_mention: CancerMention
+    deceased_mention: DeceasedMention
+
+
+
+
 class KidneyTransplantComplianceGroupAnnotation(BaseModel): 
     """
     An object-model for annotations of immune related adverse event (IRAE) 
