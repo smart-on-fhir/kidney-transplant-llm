@@ -30,8 +30,8 @@ class DonorTypeMention(SpanAugmentedMention):
     )
 
 class DonorRelationship(StrEnum):
-    RELATED = 'Donor was related to the renal transplant recipient'
-    UNRELATED = 'Donor was unrelated to the renal transplant recipient'
+    RELATED = 'Donor was biologically related to the renal transplant recipient'
+    UNRELATED = 'Donor was biologically unrelated to the renal transplant recipient'
     NOT_MENTIONED = "Donor relationship status was not mentioned"
 
 class DonorRelationshipMention(SpanAugmentedMention):
