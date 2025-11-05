@@ -30,8 +30,8 @@ class DonorTypeMention(SpanAugmentedMention):
     )
 
 class DonorRelationship(StrEnum):
-    RELATED = 'Donor was related to the renal transplant recipient'
-    UNRELATED = 'Donor was unrelated to the renal transplant recipient'
+    RELATED = 'Donor was biologically related to the renal transplant recipient'
+    UNRELATED = 'Donor was biologically unrelated to the renal transplant recipient'
     NOT_MENTIONED = "Donor relationship status was not mentioned"
 
 class DonorRelationshipMention(SpanAugmentedMention):
@@ -95,7 +95,7 @@ class RxCompliance(StrEnum):
 class RxComplianceMention(SpanAugmentedMention):
     rx_compliance: RxCompliance = Field(
         RxCompliance.NONE_OF_THE_ABOVE, 
-        description='In the present encounter, is the patient documented as compliant with immunosuppressive medications?'
+        description='In the present encounter, is the patient documented as compliant with immunosuppressive medications? Note: If the physician documents patient-reported compliance information without contradicting it, this information should be used when evaluating compliance.'
     )
 
 
