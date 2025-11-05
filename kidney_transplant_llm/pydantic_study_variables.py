@@ -43,7 +43,7 @@ class DonorRelationship(StrEnum):
 class DonorRelationshipMention(SpanAugmentedMention):
     donor_relationship: DonorRelationship = Field(
         DonorRelationship.NOT_MENTIONED,
-        description='Was the renal donor related to the recipient?'
+        description='Was the renal donor biologically related to the recipient?'
     )
 
 class DonorHlaMatchQuality(StrEnum):
