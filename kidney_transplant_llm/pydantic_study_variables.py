@@ -12,6 +12,23 @@ class SpanAugmentedMention(BaseModel):
     )
 
 ###############################################################################
+# History of Multiple Transplants
+# 
+# Mentions relevant in tracking if this patient has a history of multiple transplants,
+# renal or otherwise.
+###############################################################################
+class MultipleTransplantHistoryMention(SpanAugmentedMention):
+    """
+    Does this patient have a history of multiple transplants, renal or otherwise?
+    For use in reevaluating the patients in our cohort, excluding patients with a history 
+    of multiple transplants from our analysis.
+    """
+    multiple_transplant_history: bool = Field(
+        False,
+        description="Whether there is any mention of a history of multiple transplants. "
+    )
+
+###############################################################################
 # Donor Characteristics
 # 
 # For a given transplant, these should be static over time 
