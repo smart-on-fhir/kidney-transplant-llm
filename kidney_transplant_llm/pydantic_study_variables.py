@@ -21,7 +21,8 @@ class SpanAugmentedMention(BaseModel):
 class DonorTransplantDateMention(SpanAugmentedMention):
     """
     Date of the first renal transplant. If there is only one transplant mentioned, 
-    assume that this is the first transplant. 
+    assume that this is the first transplant. If a POD (post-operative day) is mentioned, 
+    use that to infer the date.
     """
     donor_transplant_date: str | None = Field(
         None,
