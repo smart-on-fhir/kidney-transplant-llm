@@ -402,6 +402,15 @@ class KidneyTransplantAnnotation(BaseModel):
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
 
+class MultipleTransplantHistoryAnnotation(BaseModel):
+    """
+    An object-model for annotations of patients with a history of multiple transplants.
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    multiple_transplant_history_mention: MultipleTransplantHistoryMention
 
 
 class KidneyTransplantDonorGroupAnnotation(BaseModel): 
@@ -448,8 +457,6 @@ class KidneyTransplantLongitudinalAnnotation(BaseModel):
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
-
-
 
 
 class KidneyTransplantComplianceGroupAnnotation(BaseModel): 
@@ -536,6 +543,7 @@ class KidneyTransplantDeathGroupAnnotation(BaseModel):
 # Enum describing all the relevant mention types' display labels
 # Names of Enum members should be 1 to 1 with the KidneyTransplantAnnotation fields
 class KidneyTransplantMentionLabels(StrEnum):
+    multiple_transplant_history_mention = auto()
     donor_transplant_date_mention = auto()
     donor_type_mention = auto()
     donor_relationship_mention = auto()
@@ -558,6 +566,7 @@ class KidneyTransplantMentionLabels(StrEnum):
 # Right now this only encodes background, but could be used to organize/
 # determine sorting order, etc
 class KidneyTransplantMentionGroups(StrEnum):
+    MULTIPLE_TRANSPLANT_HISTORY = auto()
     TRANSPLANT_DATE = auto()
     DONOR = auto()
     THERAPEUTIC = auto()
@@ -569,6 +578,9 @@ class KidneyTransplantMentionGroups(StrEnum):
     ENDPOINTS_FAILURE_DECEASED = auto()
 
 kidney_transplant_mention_groups_metadata = {
+    KidneyTransplantMentionGroups.MULTIPLE_TRANSPLANT_HISTORY : {
+        "background": "#FFD700"
+    },  
     KidneyTransplantMentionGroups.TRANSPLANT_DATE : {
         "background": "#008B8B"
     },
@@ -600,8 +612,14 @@ kidney_transplant_mention_groups_metadata = {
 
 # Tying the Label Enum to the Group Enum and other metadata (display strings, e.g.)
 kidney_transplant_mention_ls_metadata = {
+    KidneyTransplantMentionLabels.multiple_transplant_history_mention : {
+        "display": "Multiple Transplant History",
+        "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
+        "hotkey": "H",
+        "hotkey_mnemonic": "History of multiple transplants?",
+    },
     KidneyTransplantMentionLabels.donor_transplant_date_mention : {
-        "display": "Transplate Date",
+        "display": "Transplant Date",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
         "hotkey": "W",
         "hotkey_mnemonic": "Which day?",
