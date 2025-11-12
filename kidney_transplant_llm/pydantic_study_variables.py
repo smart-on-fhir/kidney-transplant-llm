@@ -37,7 +37,8 @@ class DonorType(StrEnum):
 class DonorTypeMention(SpanAugmentedMention):
     """
     Type of donor in the first renal transplant. If there is only one transplant 
-    mentioned, assume that this is the first transplant. 
+    mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment. 
     """
     donor_type: DonorType = Field(
         DonorType.NOT_MENTIONED,
@@ -52,7 +53,8 @@ class DonorRelationship(StrEnum):
 class DonorRelationshipMention(SpanAugmentedMention):
     """
     Relatedness of the donor and recipient in the first renal transplant. If there is only one
-    transplant mentioned, assume that this is the first transplant. 
+    transplant mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment. 
     """
     donor_relationship: DonorRelationship = Field(
         DonorRelationship.NOT_MENTIONED,
