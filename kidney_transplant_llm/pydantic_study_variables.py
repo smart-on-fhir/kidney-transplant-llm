@@ -12,6 +12,23 @@ class SpanAugmentedMention(BaseModel):
     )
 
 ###############################################################################
+# History of Multiple Transplants
+# 
+# Mentions relevant in tracking if this patient has a history of multiple transplants,
+# renal or otherwise.
+###############################################################################
+class MultipleTransplantHistoryMention(SpanAugmentedMention):
+    """
+    Does this patient have a history of multiple transplants, renal or otherwise?
+    For use in reevaluating the patients in our cohort, excluding patients with a history 
+    of multiple transplants from our analysis.
+    """
+    multiple_transplant_history: bool = Field(
+        False,
+        description="Whether there is any mention of a history of multiple transplants. "
+    )
+
+###############################################################################
 # Donor Characteristics
 # 
 # For a given transplant, these should be static over time 
@@ -19,9 +36,14 @@ class SpanAugmentedMention(BaseModel):
 
 # Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
+    """
+    Date of the first renal transplant. If there is only one transplant mentioned, 
+    assume that this is the first transplant. If a POD (post-operative day) is mentioned, 
+    use that to infer the date.
+    """
     donor_transplant_date: str | None = Field(
         None,
-        description='Exact date of renal transplant; use YYYY-MM-DD format in your response. Only highlight date mentions with an explicit day, month, and year (e.g. 2020-01-15). All other date mentions, or an absence of a date mention, should be indicated with None.'
+        description='Exact date of first renal transplant; use YYYY-MM-DD format in your response. Only highlight date mentions with an explicit day, month, and year (e.g. 2020-01-15). All other date mentions, or an absence of a date mention, should be indicated with None.'
     )
 
 class DonorType(StrEnum):
@@ -30,9 +52,14 @@ class DonorType(StrEnum):
     NOT_MENTIONED = "Donor was not mentioned as living or deceased"
 
 class DonorTypeMention(SpanAugmentedMention):
+    """
+    Type of donor in the first renal transplant. If there is only one transplant 
+    mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment. 
+    """
     donor_type: DonorType = Field(
         DonorType.NOT_MENTIONED,
-        description='Was the renal donor living at the time of transplant?'
+        description='Was the first renal donor living at the time of renal transplant?'
     )
 
 class DonorRelationship(StrEnum):
@@ -41,9 +68,14 @@ class DonorRelationship(StrEnum):
     NOT_MENTIONED = "Donor relationship status was not mentioned"
 
 class DonorRelationshipMention(SpanAugmentedMention):
+    """
+    Relatedness of the donor and recipient in the first renal transplant. If there is only one
+    transplant mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment. 
+    """
     donor_relationship: DonorRelationship = Field(
         DonorRelationship.NOT_MENTIONED,
-        description='Was the renal donor biologically related to the recipient?'
+        description='Was the first renal transplant donor biologically related to the recipient?'
     )
 
 class DonorHlaMatchQuality(StrEnum):
@@ -53,9 +85,13 @@ class DonorHlaMatchQuality(StrEnum):
     NOT_MENTIONED = "HLA match quality not mentioned"
 
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
+    """
+    Human leukocyte antigen (HLA) match quality of the first renal transplant. If there is only one
+    transplant mentioned, assume that this is the first transplant. 
+    """
     donor_hla_match_quality: DonorHlaMatchQuality = Field(
         DonorHlaMatchQuality.NOT_MENTIONED,
-        description='What was the renal transplant HLA match quality?'
+        description='What was the HLA match quality for the first renal transplant?'
     )
 
 class DonorHlaMismatchCount(StrEnum):
@@ -69,9 +105,13 @@ class DonorHlaMismatchCount(StrEnum):
     NOT_MENTIONED = 'HLA mismatch count not mentioned'
 
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
+    """
+    Human leukocyte antigen (HLA) mismatch count for the first renal transplant. If there is only 
+    one transplant mentioned, assume that this is the first transplant. 
+    """
     donor_hla_mismatch_count: DonorHlaMismatchCount = Field(
         DonorHlaMismatchCount.NOT_MENTIONED,
-        description='What was the renal donor-recipient HLA mismatch count?'
+        description='What was the donor-recipient HLA mismatch count for the first renal transplant?'
     )
 
 ###############################################################################
@@ -362,6 +402,15 @@ class KidneyTransplantAnnotation(BaseModel):
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
 
+class MultipleTransplantHistoryAnnotation(BaseModel):
+    """
+    An object-model for annotations of patients with a history of multiple transplants.
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate 
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    multiple_transplant_history_mention: MultipleTransplantHistoryMention
 
 
 class KidneyTransplantDonorGroupAnnotation(BaseModel): 
@@ -408,8 +457,6 @@ class KidneyTransplantLongitudinalAnnotation(BaseModel):
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
-
-
 
 
 class KidneyTransplantComplianceGroupAnnotation(BaseModel): 
@@ -496,6 +543,7 @@ class KidneyTransplantDeathGroupAnnotation(BaseModel):
 # Enum describing all the relevant mention types' display labels
 # Names of Enum members should be 1 to 1 with the KidneyTransplantAnnotation fields
 class KidneyTransplantMentionLabels(StrEnum):
+    multiple_transplant_history_mention = auto()
     donor_transplant_date_mention = auto()
     donor_type_mention = auto()
     donor_relationship_mention = auto()
@@ -518,6 +566,7 @@ class KidneyTransplantMentionLabels(StrEnum):
 # Right now this only encodes background, but could be used to organize/
 # determine sorting order, etc
 class KidneyTransplantMentionGroups(StrEnum):
+    MULTIPLE_TRANSPLANT_HISTORY = auto()
     TRANSPLANT_DATE = auto()
     DONOR = auto()
     THERAPEUTIC = auto()
@@ -529,6 +578,9 @@ class KidneyTransplantMentionGroups(StrEnum):
     ENDPOINTS_FAILURE_DECEASED = auto()
 
 kidney_transplant_mention_groups_metadata = {
+    KidneyTransplantMentionGroups.MULTIPLE_TRANSPLANT_HISTORY : {
+        "background": "#FFD700"
+    },  
     KidneyTransplantMentionGroups.TRANSPLANT_DATE : {
         "background": "#008B8B"
     },
@@ -560,8 +612,14 @@ kidney_transplant_mention_groups_metadata = {
 
 # Tying the Label Enum to the Group Enum and other metadata (display strings, e.g.)
 kidney_transplant_mention_ls_metadata = {
+    KidneyTransplantMentionLabels.multiple_transplant_history_mention : {
+        "display": "Multiple Transplant History",
+        "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
+        "hotkey": "H",
+        "hotkey_mnemonic": "History of multiple transplants?",
+    },
     KidneyTransplantMentionLabels.donor_transplant_date_mention : {
-        "display": "Transplate Date",
+        "display": "Transplant Date",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
         "hotkey": "W",
         "hotkey_mnemonic": "Which day?",
