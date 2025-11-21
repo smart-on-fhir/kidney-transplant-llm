@@ -4,15 +4,14 @@ from kidney_transplant_llm.postproc import (
     filetool,
     pivot_table,
     rank_llm)
-from postproc.schema import SUBJECT_REF
-
 
 def highlights_donor_index():
     task = 'irae__highlights_donor_index'
     print('######################################################################')
     print('TASK: ', task)
-    print(f'Step1: ', 'create view {task}')
-    print(f'Output: {task}.sql')
+    print(f'Step1: create view {task}')
+    print(f'Input: {task}.sql')
+    print(f'Output: {task}.csv')
     sql = athena.select_from_athena(
         sample = 'irae__sample_casedef_index',
         highlights = 'irae__highlights_donor')
@@ -20,6 +19,7 @@ def highlights_donor_index():
     file_sql = filetool.path_highlights(f'{task}.sql')
     with open(str(file_sql), 'w') as f:
         f.write(sql)
+    print(file_sql)
     print('######################################################################')
     print('Step2: Pivot CSV sublabel_name --> as columns')
     print(f'Input: {task}.csv')
@@ -31,7 +31,7 @@ def highlights_donor_index():
     print('Step3: Rank LLM term frequency')
     input_csv = filetool.path_highlights(f'{task}.pivot.csv')
     output_csv = filetool.path_highlights(f'{task}.pivot.tf.csv')
-    output_df = rank_llm.count_tf(input_csv, stratifier=SUBJECT_REF)
+    output_df = rank_llm.count_tf(input_csv, stratifier=schema.SUBJECT_REF)
     output_df.to_csv(output_csv, index=False)
     print(output_csv)
     print('######################################################################')

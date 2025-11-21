@@ -1,7 +1,13 @@
-from kidney_transplant_llm.postproc.schema import GPT_OSS_120B
 from kidney_transplant_llm.postproc.schema import (
+    SUBJECT_REF,
+    DOCUMENT_REF,
+    NOTE_REF,
+    SORT_BY_DATE,
+    ENC_ORDINAL,
+    DOC_ORDINAL,
     SAMPLE_COLS,
-    HIGHLIGHT_COLS)
+    HIGHLIGHT_COLS,
+    GPT_OSS_120B)
 
 def select_from_athena(sample='irae__sample_casedef_index',
                        highlights='irae__highlights_donor',
@@ -12,17 +18,22 @@ def select_from_athena(sample='irae__sample_casedef_index',
     :param origin: default GPT_OSS_120B
     :return: str SELECT
     """
+    view = highlights + '_' + sample.replace('irae__sample_casedef_', '')
+
     sample_cols = [f'sample.{col}' for col in SAMPLE_COLS]
-    sample_cols = '\n\t,'.join(sample_cols)
+    sample_cols = '\n,'.join(sample_cols)
 
     highlight_cols = [f'highlights.{col}' for col in HIGHLIGHT_COLS]
-    highlight_cols = '\n\t,'.join(highlight_cols)
+    highlight_cols = '\n,'.join(highlight_cols)
 
-    _ctas = 'CREATE or replace view irae__highlights_donor_index AS'
-    _select = "\nSELECT distinct" + f"\n\t{sample_cols} \n\t,{highlight_cols}"
-    _from =  f"\nFROM {sample} as sample, \n\t {highlights} as highlights "
-    _where = "\nWHERE highlights.note_ref = sample.documentreference_ref"
-    _origin = f"\n AND\torigin='{origin}'"
-    _order = "\nORDER by \n\t" + "subject_ref, sort_by_date, enc_period_ordinal, doc_ordinal\n"
-
-    return _ctas + _select + _from + _where + _origin + _order
+    _sql = [
+        f"CREATE or replace view {view} AS",
+        "SELECT distinct",
+        sample_cols, ',',
+        highlight_cols,
+        f"FROM  {sample} as sample, {highlights} as highlights",
+        f"WHERE highlights.{NOTE_REF} = sample.{DOCUMENT_REF}",
+        f"AND   origin='{origin}'",
+        f"ORDER BY {SUBJECT_REF}, {SORT_BY_DATE}, {ENC_ORDINAL}, {DOC_ORDINAL}",
+    ]
+    return '\n'.join(_sql)
