@@ -1,15 +1,16 @@
 ###############################################################################
 # SAMPLES
 ###############################################################################
-SAMPLE_PRE_CSV = 'irae__sample_casedef_pre.csv'
-SAMPLE_INDEX_CSV = 'irae__sample_casedef_index.csv'
-SAMPLE_POST_CSV = 'irae__sample_casedef_post.csv'
+SAMPLE_PRE = 'irae__sample_casedef_pre'
+SAMPLE_INDEX = 'irae__sample_casedef_index'
+SAMPLE_POST = 'irae__sample_casedef_post'
 
 ###############################################################################
 # ORIGIN
 ###############################################################################
-GPT_OSS_120B = 'irae__nlp_donor_gpt_oss_120b'
-GPT_4o = 'irae__nlp_donor_gpt4o'
+NLP_GPT_OSS_120B= 'irae__nlp_gpt_oss_120b'
+NLP_DONOR_GPT_OSS_120B = 'irae__nlp_donor_gpt_oss_120b'
+NLP_DONOR_GPT_4o = 'irae__nlp_donor_gpt4o'
 
 ###############################################################################
 # COLUMNS
@@ -28,15 +29,9 @@ SAMPLE_COLS = [SUBJECT_REF, ENCOUNTER_REF, DOCUMENT_REF,
 HIGHLIGHT_COLS = ['sublabel_name', 'sublabel_value', 'span']
 
 ###############################################################################
-# TASKS
+# SAMPLE PERIODS
 ###############################################################################
 HIGHLIGHTS_DONOR_INDEX_100 = 'highlights_donor_index_100'
-
-###############################################################################
-# EMPTY (NONE, NOT MENTIONED)
-###############################################################################
-NOT_MENTIONED = 'NOT_MENTIONED'
-NONE_OF_THE_ABOVE = 'NONE_OF_THE_ABOVE'
 
 ###############################################################################
 # irae__highlights
@@ -66,22 +61,11 @@ NONE_OF_THE_ABOVE = 'NONE_OF_THE_ABOVE'
 # doc_type_display    	doc_type
 # doc_type_system     	doc_type
 
-###############################################################################
-# Deprecated, from prior tabular outputs of "aggregate results" from Dylan
-###############################################################################
-# BOTH_INDEX = '2025-10-21-donor-and-non-donor-index'
-# DONOR_INDEX = '2025-10-16-donor-characteristics-index'
-# DONOR_INDEX_10 = '2025-10-16-donor-characteristics-index-10'
-# LONGITUDINAL_INDEX_10 = '2025-10-16-non-donor-characteristics-index-10'
-# LONGITUDINAL_POST_10 = '2025-10-16-non-donor-characteristics-post-10'
-# GPT_OSS_CSV = 'gpt-oss-120b-azure_aggregate-results.csv'
-# E3_IRAE_DIR = 'e3:/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/'
+def name_view(highlights:str, sample:str) -> str:
+    """
+    :return: str view name like 'irae__highlights_donor_index'
+    """
+    sample_period = sample.replace('irae__sample_casedef_', '')
+    return highlights + '_' + sample_period
 
-###############################################################################
-# E3 paths
-###############################################################################
-# export IRAE_DIR='/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/'
-# scp "e3:/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/2025-10-21-donor-and-non-donor-index/output/*.csv" .
-# scp "e3:/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/2025-10-16-donor-characteristics/output/*.csv" .
-# scp "e3:/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/2025-10-16-non-donor-characteristics/output/*.csv" .
-# scp "e3:/lab-share/CHIP-Mandl-e2/Public/dp-llm/llm-structured-data-extraction/data/irae/2025-10-16-non-donor-characteristics-post-10/output/*.csv" .
+

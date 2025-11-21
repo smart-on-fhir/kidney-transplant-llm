@@ -2,13 +2,10 @@ from pathlib import Path
 import pandas as pd
 from kidney_transplant_llm.postproc.schema import (
     SUBJECT_REF,
-    ENCOUNTER_REF,
-    SAMPLE_COLS,
-    NOT_MENTIONED,
-    NONE_OF_THE_ABOVE)
+    SAMPLE_COLS)
 
 EXCLUDE_COLS = SAMPLE_COLS
-EXCLUDE_VALS = [NOT_MENTIONED, NONE_OF_THE_ABOVE]
+EXCLUDE_VALS = []
 
 ###############################################################################
 # Term Frequency for each column
@@ -52,8 +49,8 @@ def count_tf(parsed_csv:Path|str, stratifier:str = SUBJECT_REF, first=False) -> 
         for _, row in term_freq.iterrows():
             out_rows.append({
                 stratifier: row[stratifier],
+                "count": row["cnt"],
                 "column": col,
-                "value": row[col],
-                "count": row["cnt"]
+                "value": row[col]
             })
     return pd.DataFrame(out_rows)

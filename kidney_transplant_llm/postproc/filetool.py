@@ -11,17 +11,16 @@ def path_phi_dir() -> Path | None:
     return Path(os.environ['LLM_PHI_DIR']) / 'irae'
 
 def path_sample_pre() -> Path | None:
-    return path_sample(SAMPLE_PRE_CSV)
+    return path_sample(f'{SAMPLE_PRE}.csv')
 
 def path_sample_index() -> Path | None:
-    return path_sample(SAMPLE_INDEX_CSV)
+    return path_sample(f'{SAMPLE_INDEX}.csv')
 
 def path_sample_post() -> Path | None:
-    return path_sample(SAMPLE_POST_CSV)
+    return path_sample(f'{SAMPLE_POST}.csv')
 
 def path_sample(sample_csv: str) -> Path | None:
     return path_phi_dir() / 'sample_casedef' / sample_csv
 
-def path_highlights(highlights_csv='irae__highlights_donor.csv',
-                    highlights_dir=HIGHLIGHTS_DONOR_INDEX_100) -> Path | None:
-        return path_phi_dir() / highlights_dir / highlights_csv
+def path_highlights(highlights_csv='irae__highlights_donor.csv') -> Path | None:
+        return path_phi_dir() / 'highlights' / highlights_csv
