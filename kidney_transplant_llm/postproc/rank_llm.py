@@ -1,6 +1,11 @@
 from pathlib import Path
 import pandas as pd
-from kidney_transplant_llm.postproc.schema import *
+from kidney_transplant_llm.postproc.schema import (
+    SUBJECT_REF,
+    ENCOUNTER_REF,
+    SAMPLE_COLS,
+    NOT_MENTIONED,
+    NONE_OF_THE_ABOVE)
 
 EXCLUDE_COLS = SAMPLE_COLS
 EXCLUDE_VALS = [NOT_MENTIONED, NONE_OF_THE_ABOVE]
@@ -22,8 +27,9 @@ def count_tf(parsed_csv:Path|str, stratifier:str = SUBJECT_REF, first=False) -> 
     out_rows = list()
 
     for col in df.columns:
-        if col in EXCLUDE_COLS or '_spans_' in col:
-            # print(f'Skipping {col}')
+        print(f'#### column= {col}')
+        if col in EXCLUDE_COLS or ('_spans_' in col) or ('span'==col):
+            print(f'Skipping {col}')
             continue
 
         df_filtered = df[df[col].notna() & ~df[col].isin(EXCLUDE_VALS)]

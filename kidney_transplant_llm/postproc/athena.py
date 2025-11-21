@@ -18,10 +18,11 @@ def select_from_athena(sample='irae__sample_casedef_index',
     highlight_cols = [f'highlights.{col}' for col in HIGHLIGHT_COLS]
     highlight_cols = '\n\t,'.join(highlight_cols)
 
-    _select = "SELECT distinct" + f"\n\t{sample_cols} \n\t,{highlight_cols}"
+    _ctas = 'CREATE or replace view irae__highlights_donor_index AS'
+    _select = "\nSELECT distinct" + f"\n\t{sample_cols} \n\t,{highlight_cols}"
     _from =  f"\nFROM {sample} as sample, \n\t {highlights} as highlights "
     _where = "\nWHERE highlights.note_ref = sample.documentreference_ref"
     _origin = f"\n AND\torigin='{origin}'"
-    _order = "\nORDER by \n\t" + "subject_ref, sort_by_date, enc_period_ordinal, doc_ordinal"
+    _order = "\nORDER by \n\t" + "subject_ref, sort_by_date, enc_period_ordinal, doc_ordinal\n"
 
-    return _select + _from + _where + _origin + _order
+    return _ctas + _select + _from + _where + _origin + _order
