@@ -61,8 +61,13 @@ def path_sample(sample_csv: str) -> Path | None:
             return file_csv
     return None
 
-def path_e3(target_dir, file_csv=GPT_OSS_CSV) -> str:
-    return Path(E3_IRAE_DIR) / target_dir / 'output' / file_csv
+def path_highlights(sample_csv: str) -> Path | None:
+    if path_phi_dir():
+        file_csv = path_phi_dir() / HIGHLIGHTS_DONOR_INDEX_100 / sample_csv
+        if file_csv.exists():
+            print(file_csv)
+            return file_csv
+    return None
 
 def copy_e3_files() -> str:
     """
@@ -70,11 +75,11 @@ def copy_e3_files() -> str:
     """
     cmd = list()
     target_list = [
-        BOTH_INDEX,
-        DONOR_INDEX,
-        DONOR_INDEX_10,
-        LONGITUDINAL_INDEX_10,
-        LONGITUDINAL_POST_10
+        # BOTH_INDEX,
+        # DONOR_INDEX,
+        # DONOR_INDEX_10,
+        # LONGITUDINAL_INDEX_10,
+        # LONGITUDINAL_POST_10
     ]
     cmd.append(f"cd {path_phi_dir()}")
     for target in target_list:

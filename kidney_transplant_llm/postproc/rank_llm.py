@@ -3,22 +3,26 @@ import pandas as pd
 from kidney_transplant_llm.postproc.schema import *
 from kidney_transplant_llm.postproc import filetool
 
-EXCLUDE_COLS = [PATIENT_ID, DOCUMENT_ID]
+
+EXCLUDE_COLS = SAMPLE_COLS
 EXCLUDE_VALS = [NOT_MENTIONED, NONE_OF_THE_ABOVE]
+
+###############################################################################
+# Deprecated
+###############################################################################
+# def count_tf_both_index(stratifier:str = SUBJECT_REF, first=False) -> pd.DataFrame:
+#     return count_tf(parsed_csv=filetool.path_both_index_csv(), stratifier=stratifier, first=first)
+#
+# def count_tf_donor(stratifier:str = SUBJECT_REF, first=False) -> pd.DataFrame:
+#     return count_tf(parsed_csv=filetool.path_donor_csv(), stratifier=stratifier, first=first)
+#
+# def count_tf_ongitudinal(stratifier:str = SUBJECT_REF, first=False) -> pd.DataFrame:
+#     return count_tf(parsed_csv=filetool.path_long_post_10_csv(), stratifier=stratifier, first=first)
 
 ###############################################################################
 # Term Frequency for each column
 ###############################################################################
-def count_tf_both_index(stratifier:str = PATIENT_ID, first=False) -> pd.DataFrame:
-    return count_tf(parsed_csv=filetool.path_both_index_csv(), stratifier=stratifier, first=first)
-
-def count_tf_donor(stratifier:str = PATIENT_ID, first=False) -> pd.DataFrame:
-    return count_tf(parsed_csv=filetool.path_donor_csv(), stratifier=stratifier, first=first)
-
-def count_tf_ongitudinal(stratifier:str = PATIENT_ID, first=False) -> pd.DataFrame:
-    return count_tf(parsed_csv=filetool.path_long_post_10_csv(), stratifier=stratifier, first=first)
-
-def count_tf(parsed_csv:Path|str, stratifier:str = PATIENT_ID, first=False) -> pd.DataFrame:
+def count_tf(parsed_csv:Path|str, stratifier:str = SUBJECT_REF, first=False) -> pd.DataFrame:
     """
     Get Term Frequency for each CSV column, stratified by `stratifier`.
     From parsed_csv count the number of times (term frequency) of each column:value pair.
@@ -66,22 +70,32 @@ def count_tf(parsed_csv:Path|str, stratifier:str = PATIENT_ID, first=False) -> p
 ###############################################################################
 # Main
 ###############################################################################
-def main():
+def deprecated_aggregated_results():
+    """
+    This method was used to read
+    gpt-oss-120b-azure_aggregate-results.csv
+    """
     print('processing TF (term frequency) counts')
-
-    both_csv = filetool.path_both_index_csv()
-    donor_csv = filetool.path_donor_csv()
+    both_csv = None # filetool.path_both_index_csv()
+    donor_csv = None # filetool.path_donor_csv()
     longitudinal_csv = filetool.path_long_post_10_csv()
 
     for target_csv in [both_csv, donor_csv, longitudinal_csv]:
         for first in [True, False]:
             first_label = 'first' if first else 'all'
-            for stratifier in [PATIENT_ID]:
+            for stratifier in [SUBJECT_REF]:
                 target_out = f'{target_csv}.{stratifier}.{first_label}.cnt.csv'
 
                 df_target = count_tf(target_csv, stratifier=stratifier, first=first)
                 df_target.to_csv(target_out, index=False)
                 print(target_out)
 
+def from_highlights():
+    input_csv = Path('/Users/andy/chip/kidney-transplant-llm/kidney_transplant_llm/postproc/irae__highlights_donor.wide.csv')
+    output_csv = str(input_csv).replace('.csv', '.tf.csv')
+    output_df = count_tf(input_csv, stratifier=SUBJECT_REF)
+    output_df.to_csv(output_csv, index=False)
+
+
 if __name__ == '__main__':
-    main()
+    from_highlights()

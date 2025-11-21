@@ -67,14 +67,15 @@ def merge(source:DataFrame, target:DataFrame, merge_on, merge_add) -> DataFrame:
         how='left')
 
 def merge_defaults():
-    merge_csv(source=filetool.path_sample_index(),
-              target=filetool.path_both_index_csv())
-
-    merge_csv(source=filetool.path_sample_index(),
-              target=filetool.path_donor_csv())
-
-    merge_csv(source=filetool.path_sample_post(),
-              target=filetool.path_long_post_10_csv())
+    # merge_csv(source=filetool.path_sample_index(),
+    #           target=filetool.path_both_index_csv())
+    #
+    # merge_csv(source=filetool.path_sample_index(),
+    #           target=filetool.path_donor_csv())
+    #
+    # merge_csv(source=filetool.path_sample_post(),
+    #           target=filetool.path_long_post_10_csv())
+    pass
 
 if __name__ == '__main__':
     print('are you sure you want to update default CSV?')
