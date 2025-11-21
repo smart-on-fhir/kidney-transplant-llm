@@ -1,45 +1,90 @@
-from typing import List
 from enum import StrEnum, auto
 from pydantic import BaseModel, Field
 
+
 class SpanAugmentedMention(BaseModel):
-    has_mention: bool # True, False
-    spans: list[str]
+    has_mention: bool = Field(
+        False,
+        description="Whether there is any mention of this variable in the text."
+    )
+    spans: list[str] = Field(
+        default_factory=list,
+        description="The text spans where this variable is mentioned."
+    )
+
+
+###############################################################################
+# History of Multiple Transplants
+#
+# Mentions relevant in tracking if this patient has a history of multiple transplants,
+# renal or otherwise.
+###############################################################################
+class MultipleTransplantHistoryMention(SpanAugmentedMention):
+    """
+    Does this patient have a history of multiple transplants, renal or otherwise?
+    For use in reevaluating the patients in our cohort, excluding patients with a history
+    of multiple transplants from our analysis.
+    """
+    multiple_transplant_history: bool = Field(
+        False,
+        description="Whether there is any mention of a history of multiple transplants. "
+    )
+
 
 ###############################################################################
 # Donor Characteristics
-# 
-# For a given transplant, these should be static over time 
+#
+# For a given transplant, these should be static over time
 ###############################################################################
 
 # Dates are treated as strings - no enum needed
 class DonorTransplantDateMention(SpanAugmentedMention):
+    """
+    Date of the first renal transplant. If there is only one transplant mentioned,
+    assume that this is the first transplant. If a POD (post-operative day) is mentioned,
+    use that to infer the date.
+    """
     donor_transplant_date: str | None = Field(
         None,
-        description='Exact date of renal transplant; use YYYY-MM-DD format in your response. Only highlight date mentions with an explicit day, month, and year (e.g. 2020-01-15). All other date mentions, or an absence of a date mention, should be indicated with None.'
+        description='Exact date of first renal transplant; use YYYY-MM-DD format in your response. Only highlight date mentions with an explicit day, month, and year (e.g. 2020-01-15). All other date mentions, or an absence of a date mention, should be indicated with None.'
     )
+
 
 class DonorType(StrEnum):
     LIVING = 'Donor was alive at time of renal transplant'
     DECEASED = 'Donor was deceased at time of renal transplant'
     NOT_MENTIONED = "Donor was not mentioned as living or deceased"
 
+
 class DonorTypeMention(SpanAugmentedMention):
+    """
+    Type of donor in the first renal transplant. If there is only one transplant
+    mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment.
+    """
     donor_type: DonorType = Field(
         DonorType.NOT_MENTIONED,
-        description='Was the renal donor living at the time of transplant?'
+        description='Was the first renal donor living at the time of renal transplant?'
     )
+
 
 class DonorRelationship(StrEnum):
-    RELATED = 'Donor was related to the renal transplant recipient'
-    UNRELATED = 'Donor was unrelated to the renal transplant recipient'
+    RELATED = 'Donor was biologically related to the renal transplant recipient'
+    UNRELATED = 'Donor was biologically unrelated to the renal transplant recipient'
     NOT_MENTIONED = "Donor relationship status was not mentioned"
 
+
 class DonorRelationshipMention(SpanAugmentedMention):
+    """
+    Relatedness of the donor and recipient in the first renal transplant. If there is only one
+    transplant mentioned, assume that this is the first transplant. Exclude donors that are only
+    hypothetical or under evaluation/assessment.
+    """
     donor_relationship: DonorRelationship = Field(
         DonorRelationship.NOT_MENTIONED,
-        description='Was the renal donor related to the recipient?'
+        description='Was the first renal transplant donor biologically related to the recipient?'
     )
+
 
 class DonorHlaMatchQuality(StrEnum):
     WELL = "Well matched (0-1 mismatches) OR recipient explicitly documented as not sensitized"
@@ -47,11 +92,17 @@ class DonorHlaMatchQuality(StrEnum):
     POOR = "Poorly matched (5-6 mismatches) OR recipient explicitly documented as highly sensitized"
     NOT_MENTIONED = "HLA match quality not mentioned"
 
+
 class DonorHlaMatchQualityMention(SpanAugmentedMention):
+    """
+    Human leukocyte antigen (HLA) match quality of the first renal transplant. If there is only one
+    transplant mentioned, assume that this is the first transplant.
+    """
     donor_hla_match_quality: DonorHlaMatchQuality = Field(
         DonorHlaMatchQuality.NOT_MENTIONED,
-        description='What was the renal transplant HLA match quality?'
+        description='What was the HLA match quality for the first renal transplant?'
     )
+
 
 class DonorHlaMismatchCount(StrEnum):
     ZERO = "0"
@@ -63,11 +114,17 @@ class DonorHlaMismatchCount(StrEnum):
     SIX = "6"
     NOT_MENTIONED = 'HLA mismatch count not mentioned'
 
+
 class DonorHlaMismatchCountMention(SpanAugmentedMention):
+    """
+    Human leukocyte antigen (HLA) mismatch count for the first renal transplant. If there is only
+    one transplant mentioned, assume that this is the first transplant.
+    """
     donor_hla_mismatch_count: DonorHlaMismatchCount = Field(
         DonorHlaMismatchCount.NOT_MENTIONED,
-        description='What was the renal donor-recipient HLA mismatch count?'
+        description='What was the donor-recipient HLA mismatch count for the first renal transplant?'
     )
+
 
 ###############################################################################
 # Therapeutic Status Compliance
@@ -78,11 +135,13 @@ class RxTherapeuticStatus(StrEnum):
     SUPRA_THERAPEUTIC = 'Immunosuppression levels are documented as supratherapeutic, above therapeutic level, or above target range.'
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class RxTherapeuticStatusMention(SpanAugmentedMention):
     rx_therapeutic_status: RxTherapeuticStatus = Field(
-        RxTherapeuticStatus.NONE_OF_THE_ABOVE, 
+        RxTherapeuticStatus.NONE_OF_THE_ABOVE,
         description='In the present encounter, what is the documented immunosuppression level?'
     )
+
 
 ###############################################################################
 # Medication Compliance
@@ -93,15 +152,16 @@ class RxCompliance(StrEnum):
     NON_COMPLIANT = "Patient is documented as noncompliant with immunosuppressive medications."
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class RxComplianceMention(SpanAugmentedMention):
     rx_compliance: RxCompliance = Field(
-        RxCompliance.NONE_OF_THE_ABOVE, 
+        RxCompliance.NONE_OF_THE_ABOVE,
         description='In the present encounter, is the patient documented as compliant with immunosuppressive medications?'
     )
 
 
 ###############################################################################
-# THE FOLLOWING DATA ELEMENTS TRACK BOTH 
+# THE FOLLOWING DATA ELEMENTS TRACK BOTH
 # THE HISTORY AND THE PRESENT STATUS OF VARIABLES
 ###############################################################################
 
@@ -126,15 +186,17 @@ class DSAPresent(StrEnum):
     SUSPECTED = "DSA suspected, DSA likely, DSA cannot be ruled out, DSA test result pending, or treatment with IVIG/plasmapheresis"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class DSAMention(SpanAugmentedMention):
     dsa_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of donor specific antibodies (DSA)?"
     )
     dsa: DSAPresent = Field(
-        DSAPresent.NONE_OF_THE_ABOVE, 
+        DSAPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents donor specific antibodies (DSA) as current, active, or being evaluated/treated now?"
     )
+
 
 ############################################################################################################
 # Infection (** Any **)
@@ -146,15 +208,17 @@ class InfectionPresent(StrEnum):
     SUSPECTED = "Infection is suspected, likely, cannot be ruled out, infection is a differential diagnosis or infectious test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class InfectionMention(SpanAugmentedMention):
     infection_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of an infection?"
     )
     infection: InfectionPresent = Field(
-        InfectionPresent.NONE_OF_THE_ABOVE, 
+        InfectionPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents infection as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # Infection (Viral)
@@ -164,25 +228,17 @@ class ViralInfectionPresent(StrEnum):
     SUSPECTED = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
-class ViralInfectionName(StrEnum):
-    EBV = "Epstein Barr Virus (EBV)"
-    CMV = "Cytomegalovirus (CMV)"
-    BK = "BK Virus (BK)"
-    OTHER = "Other virus"
 
 class ViralInfectionMention(SpanAugmentedMention):
     viral_infection_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of a viral infection?"
     )
     viral_infection: ViralInfectionPresent = Field(
-        ViralInfectionPresent.NONE_OF_THE_ABOVE, 
+        ViralInfectionPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents viral infection as current, active, or being evaluated/treated now?"
     )
-    viral_infection_name: List[ViralInfectionName] = Field(
-        default_factory=list,
-        description="If a viral infection was mentioned, which virus name(s) were mentioned?"
-    )
+
 
 ###############################################################################
 # Infection (Bacterial)
@@ -192,15 +248,17 @@ class BacterialInfectionPresent(StrEnum):
     SUSPECTED = "Bacterial infection is suspected, likely, cannot be ruled out, bacterial infection is a differential diagnosis or bacterial test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class BacterialInfectionMention(SpanAugmentedMention):
     bacterial_infection_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of a bacterial infection?"
     )
     bacterial_infection: BacterialInfectionPresent = Field(
-        BacterialInfectionPresent.NONE_OF_THE_ABOVE, 
+        BacterialInfectionPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents bacterial infection as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # Infection (Fungal)
@@ -210,19 +268,17 @@ class FungalInfectionPresent(StrEnum):
     SUSPECTED = "Fungal infection is suspected, likely, cannot be ruled out, fungal infection is a differential diagnosis or fungal test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class FungalInfectionMention(SpanAugmentedMention):
     fungal_infection_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of a fungal infection?"
     )
     fungal_infection: FungalInfectionPresent = Field(
-        FungalInfectionPresent.NONE_OF_THE_ABOVE, 
+        FungalInfectionPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents fungal infection as current, active, or being evaluated/treated now?"
     )
-    fungal_infection_candida: bool = Field(
-        False,
-        description="If a fungal infection was mentioned, was the fungus in the candida genus?"
-    )
+
 
 ###############################################################################
 # Graft Rejection
@@ -245,15 +301,17 @@ class GraftRejectionPresent(StrEnum):
     SUSPECTED = "Kidney graft rejection presumed, suspected, likely, cannot be ruled out, biopsy result pending, or treatment with IVIG/plasmapheresis"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class GraftRejectionMention(SpanAugmentedMention):
     graft_rejection_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of kidney graft rejection?"
     )
     graft_rejection: GraftRejectionPresent = Field(
-        GraftRejectionPresent.NONE_OF_THE_ABOVE, 
+        GraftRejectionPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents kidney graft rejection as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # Graft Failure
@@ -263,15 +321,17 @@ class GraftFailurePresent(StrEnum):
     SUSPECTED = "Kidney graft failure presumed, suspected, likely, or cannot be ruled out"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class GraftFailureMention(SpanAugmentedMention):
     graft_failure_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of kidney graft failure?"
     )
     graft_failure: GraftFailurePresent = Field(
-        GraftFailurePresent.NONE_OF_THE_ABOVE, 
+        GraftFailurePresent.NONE_OF_THE_ABOVE,
         description="What evidence documents kidney graft failure as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # PTLD
@@ -286,15 +346,17 @@ class PTLDPresent(StrEnum):
     SUSPECTED = "PTLD presumed, suspected, likely, cannot be ruled out, PTLD biopsy result pending, or treatment with chemotherapy/radiation"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class PTLDMention(SpanAugmentedMention):
     ptld_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of post transplant lymphoproliferative disorder (PTLD)?"
     )
     ptld: PTLDPresent = Field(
-        PTLDPresent.NONE_OF_THE_ABOVE, 
+        PTLDPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents post transplant lymphoproliferative disorder (PTLD) as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # Cancer
@@ -310,15 +372,17 @@ class CancerPresent(StrEnum):
     SUSPECTED = "Cancer is presumed, suspected, likely, cannot be ruled out, biopsy of any lesion, or treatment with chemotherapy/radiation"
     NONE_OF_THE_ABOVE = "None of the above"
 
+
 class CancerMention(SpanAugmentedMention):
     cancer_history: bool = Field(
-        False, 
+        False,
         description="Does the patient have a past medical history of cancer?"
     )
     cancer: CancerPresent = Field(
-        CancerPresent.NONE_OF_THE_ABOVE, 
+        CancerPresent.NONE_OF_THE_ABOVE,
         description="What evidence documents cancer as current, active, or being evaluated/treated now?"
     )
+
 
 ###############################################################################
 # Deceased
@@ -326,11 +390,11 @@ class CancerMention(SpanAugmentedMention):
 ###############################################################################
 class DeceasedMention(SpanAugmentedMention):
     deceased: bool | None = Field(
-        None, 
+        None,
         description='Does the present encounter document that the patient is deceased?'
     )
     deceased_date: str | None = Field(
-        None, 
+        None,
         description=(
             'If the patient is deceased, include the date the patient became deceased. Use YYYY-MM-DD format if possible. '
             'Use None if there is no date recorded or if the patient is not observed as deceased.'
@@ -338,18 +402,17 @@ class DeceasedMention(SpanAugmentedMention):
     )
 
 
-
 ###############################################################################
-# Aggregated Annotation and Mention Classes 
+# Aggregated Annotation and Mention Classes
 ###############################################################################
 
-class KidneyTransplantAnnotation(BaseModel): 
+class KidneyTransplantAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants.
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
@@ -372,14 +435,24 @@ class KidneyTransplantAnnotation(BaseModel):
     deceased_mention: DeceasedMention
 
 
-
-class KidneyTransplantDonorGroupAnnotation(BaseModel): 
+class MultipleTransplantHistoryAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
-    transplants. 
+    An object-model for annotations of patients with a history of multiple transplants.
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
+    the relevant details of the finding, as well as some additional evidence
+    metadata to validate findings post-hoc.
+    """
+    multiple_transplant_history_mention: MultipleTransplantHistoryMention
+
+
+class KidneyTransplantDonorGroupAnnotation(BaseModel):
+    """
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
+    transplants.
+    Take care to avoid false positives, like confusing information that only
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
@@ -390,10 +463,10 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
 
 
-class KidneyTransplantLongitudinalAnnotation(BaseModel): 
+class KidneyTransplantLongitudinalAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants.
 
     This class only includes longitudinally variable mentions, i.e. those
@@ -401,7 +474,7 @@ class KidneyTransplantLongitudinalAnnotation(BaseModel):
     graft rejection/failure, DSA, PTLD, cancer, and deceased status.
 
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
@@ -419,15 +492,13 @@ class KidneyTransplantLongitudinalAnnotation(BaseModel):
     deceased_mention: DeceasedMention
 
 
-
-
-class KidneyTransplantComplianceGroupAnnotation(BaseModel): 
+class KidneyTransplantComplianceGroupAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants. This class only includes therapeutic status and compliance mentions.
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
@@ -435,14 +506,14 @@ class KidneyTransplantComplianceGroupAnnotation(BaseModel):
     rx_compliance_mention: RxComplianceMention
 
 
-class KidneyTransplantInfectionGroupAnnotation(BaseModel): 
+class KidneyTransplantInfectionGroupAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants. This class only includes infection and cancer-related mentions.
 
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
@@ -452,59 +523,59 @@ class KidneyTransplantInfectionGroupAnnotation(BaseModel):
     fungal_infection_mention: FungalInfectionMention
 
 
-
-class KidneyTransplantRejectionFailureGroupAnnotation(BaseModel): 
+class KidneyTransplantRejectionFailureGroupAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants. This class only includes graft rejection, DSA, graft failure mentions.
 
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
     dsa_mention: DSAMention
     graft_rejection_mention: GraftRejectionMention
     graft_failure_mention: GraftFailureMention
-    
 
-class KidneyTransplantPostTransplantMalignanciesAnnotation(BaseModel): 
+
+class KidneyTransplantPostTransplantMalignanciesAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants. This class only includes post transplant malignancies.
 
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
 
-class KidneyTransplantDeathGroupAnnotation(BaseModel): 
+
+class KidneyTransplantDeathGroupAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE) 
-    observations found in a patient's chart, relating specifically to kidney 
+    An object-model for annotations of immune related adverse event (IRAE)
+    observations found in a patient's chart, relating specifically to kidney
     transplants. This class only includes deceased mentions.
 
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
+    appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
     """
     deceased_mention: DeceasedMention
 
 
-
 ###############################################################################
-# Artifacts for Label Studio usage  
+# Artifacts for Label Studio usage
 ###############################################################################
 
 # Enum describing all the relevant mention types' display labels
 # Names of Enum members should be 1 to 1 with the KidneyTransplantAnnotation fields
 class KidneyTransplantMentionLabels(StrEnum):
+    multiple_transplant_history_mention = auto()
     donor_transplant_date_mention = auto()
     donor_type_mention = auto()
     donor_relationship_mention = auto()
@@ -523,10 +594,12 @@ class KidneyTransplantMentionLabels(StrEnum):
     cancer_mention = auto()
     deceased_mention = auto()
 
+
 #  Groups to be used in the eventual labelstudio interface
 # Right now this only encodes background, but could be used to organize/
 # determine sorting order, etc
 class KidneyTransplantMentionGroups(StrEnum):
+    MULTIPLE_TRANSPLANT_HISTORY = auto()
     TRANSPLANT_DATE = auto()
     DONOR = auto()
     THERAPEUTIC = auto()
@@ -537,135 +610,145 @@ class KidneyTransplantMentionGroups(StrEnum):
     CANCER = auto()
     ENDPOINTS_FAILURE_DECEASED = auto()
 
+
 kidney_transplant_mention_groups_metadata = {
-    KidneyTransplantMentionGroups.TRANSPLANT_DATE : {
+    KidneyTransplantMentionGroups.MULTIPLE_TRANSPLANT_HISTORY: {
+        "background": "#FFD700"
+    },
+    KidneyTransplantMentionGroups.TRANSPLANT_DATE: {
         "background": "#008B8B"
     },
-    KidneyTransplantMentionGroups.DONOR : {
+    KidneyTransplantMentionGroups.DONOR: {
         "background": "#00FFFF"
     },
-    KidneyTransplantMentionGroups.THERAPEUTIC : {
+    KidneyTransplantMentionGroups.THERAPEUTIC: {
         "background": '#90ee90'
     },
-    KidneyTransplantMentionGroups.COMPLIANCE : {
+    KidneyTransplantMentionGroups.COMPLIANCE: {
         "background": '#20b2aa'
     },
-    KidneyTransplantMentionGroups.DSA : {
+    KidneyTransplantMentionGroups.DSA: {
         "background": '#9370db'
     },
-    KidneyTransplantMentionGroups.INFECTION : {
+    KidneyTransplantMentionGroups.INFECTION: {
         "background": '#DC143C'
     },
-    KidneyTransplantMentionGroups.REJECTION : {
+    KidneyTransplantMentionGroups.REJECTION: {
         "background": "#FF00FF"
     },
-    KidneyTransplantMentionGroups.CANCER : {
+    KidneyTransplantMentionGroups.CANCER: {
         "background": "#FF8C00"
     },
-    KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED : {
+    KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED: {
         "background": "#00008B"
     },
 }
 
 # Tying the Label Enum to the Group Enum and other metadata (display strings, e.g.)
 kidney_transplant_mention_ls_metadata = {
-    KidneyTransplantMentionLabels.donor_transplant_date_mention : {
-        "display": "Transplate Date",
+    KidneyTransplantMentionLabels.multiple_transplant_history_mention: {
+        "display": "Multiple Transplant History",
+        "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
+        "hotkey": "H",
+        "hotkey_mnemonic": "History of multiple transplants?",
+    },
+    KidneyTransplantMentionLabels.donor_transplant_date_mention: {
+        "display": "Transplant Date",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
         "hotkey": "W",
         "hotkey_mnemonic": "Which day?",
     },
-    KidneyTransplantMentionLabels.donor_type_mention : {
+    KidneyTransplantMentionLabels.donor_type_mention: {
         "display": "Donor Type",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "L",
         "hotkey_mnemonic": "Living donor?",
     },
-    KidneyTransplantMentionLabels.donor_relationship_mention : {
+    KidneyTransplantMentionLabels.donor_relationship_mention: {
         "display": "Donor Relationship",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "S",
         "hotkey_mnemonic": "Sibling?",
     },
-    KidneyTransplantMentionLabels.donor_hla_match_quality_mention : {
+    KidneyTransplantMentionLabels.donor_hla_match_quality_mention: {
         "display": "Hla Match Quality",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "Q",
         "hotkey_mnemonic": "Quality?",
     },
-    KidneyTransplantMentionLabels.donor_hla_mismatch_count_mention : {
+    KidneyTransplantMentionLabels.donor_hla_mismatch_count_mention: {
         "display": "Hla Mismatch Count",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "M",
         "hotkey_mnemonic": "Mismatch?",
     },
-    KidneyTransplantMentionLabels.rx_therapeutic_status_mention : {
+    KidneyTransplantMentionLabels.rx_therapeutic_status_mention: {
         "display": "Rx Therapeutic",
         "group": KidneyTransplantMentionGroups.THERAPEUTIC,
         "hotkey": "E",
         "hotkey_mnemonic": "Effect?",
     },
-    KidneyTransplantMentionLabels.rx_compliance_mention : {
+    KidneyTransplantMentionLabels.rx_compliance_mention: {
         "display": "Rx Compliance",
         "group": KidneyTransplantMentionGroups.COMPLIANCE,
         "hotkey": "U",
         "hotkey_mnemonic": "Use?",
     },
-    KidneyTransplantMentionLabels.dsa_mention : {
+    KidneyTransplantMentionLabels.dsa_mention: {
         "display": "DSA",
         "group": KidneyTransplantMentionGroups.DSA,
         "hotkey": "A",
         "hotkey_mnemonic": "Antibodies?",
     },
-    KidneyTransplantMentionLabels.infection_mention : {
+    KidneyTransplantMentionLabels.infection_mention: {
         "display": "Infection",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "I",
         "hotkey_mnemonic": "Infection?",
     },
-    KidneyTransplantMentionLabels.viral_infection_mention : {
+    KidneyTransplantMentionLabels.viral_infection_mention: {
         "display": "Viral",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "V",
         "hotkey_mnemonic": "Viral?",
     },
-    KidneyTransplantMentionLabels.bacterial_infection_mention : {
+    KidneyTransplantMentionLabels.bacterial_infection_mention: {
         "display": "Bacterial",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "B",
         "hotkey_mnemonic": "Bacterial?",
     },
-    KidneyTransplantMentionLabels.fungal_infection_mention : {
+    KidneyTransplantMentionLabels.fungal_infection_mention: {
         "display": "Fungal",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "G",
         "hotkey_mnemonic": "funGal?",
     },
-    KidneyTransplantMentionLabels.graft_rejection_mention : {
+    KidneyTransplantMentionLabels.graft_rejection_mention: {
         "display": "Graft Rejection",
         "group": KidneyTransplantMentionGroups.REJECTION,
         "hotkey": "R",
         "hotkey_mnemonic": "Rejection?",
     },
-    KidneyTransplantMentionLabels.graft_failure_mention : {
+    KidneyTransplantMentionLabels.graft_failure_mention: {
         "display": "Graft Failure",
         "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
         "hotkey": "F",
         "hotkey_mnemonic": "Failure?",
     },
-    KidneyTransplantMentionLabels.ptld_mention : {
+    KidneyTransplantMentionLabels.ptld_mention: {
         "display": "PTLD",
         "group": KidneyTransplantMentionGroups.CANCER,
         "hotkey": "P",
         "hotkey_mnemonic": "PTLD?",
     },
-    KidneyTransplantMentionLabels.cancer_mention : {
+    KidneyTransplantMentionLabels.cancer_mention: {
         "display": "Cancer",
         "group": KidneyTransplantMentionGroups.CANCER,
         "hotkey": "C",
         "hotkey_mnemonic": "Cancer?",
     },
-    KidneyTransplantMentionLabels.deceased_mention    : {
+    KidneyTransplantMentionLabels.deceased_mention: {
         "display": "Deceased",
         "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
         "hotkey": "D",
