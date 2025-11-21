@@ -29,11 +29,6 @@ SAMPLE_COLS = [SUBJECT_REF, ENCOUNTER_REF, DOCUMENT_REF,
 HIGHLIGHT_COLS = ['sublabel_name', 'sublabel_value', 'span']
 
 ###############################################################################
-# SAMPLE PERIODS
-###############################################################################
-HIGHLIGHTS_DONOR_INDEX_100 = 'highlights_donor_index_100'
-
-###############################################################################
 # irae__highlights
 ###############################################################################
 # note_ref      (documentreference_ref)
