@@ -1,3 +1,4 @@
+from typing import List
 from enum import StrEnum, auto
 from pydantic import BaseModel, Field
 
@@ -163,6 +164,12 @@ class ViralInfectionPresent(StrEnum):
     SUSPECTED = "Viral infection is suspected, likely, cannot be ruled out, viral infection is a differential diagnosis or viral test result is pending"
     NONE_OF_THE_ABOVE = "None of the above"
 
+class ViralInfectionName(StrEnum):
+    EBV = "Epstein Barr Virus (EBV)"
+    CMV = "Cytomegalovirus (CMV)"
+    BK = "BK Virus (BK)"
+    OTHER = "Other virus"
+
 class ViralInfectionMention(SpanAugmentedMention):
     viral_infection_history: bool = Field(
         False, 
@@ -171,6 +178,10 @@ class ViralInfectionMention(SpanAugmentedMention):
     viral_infection: ViralInfectionPresent = Field(
         ViralInfectionPresent.NONE_OF_THE_ABOVE, 
         description="What evidence documents viral infection as current, active, or being evaluated/treated now?"
+    )
+    viral_infection_name: List[ViralInfectionName] = Field(
+        default_factory=list,
+        description="If a viral infection was mentioned, which virus name(s) were mentioned?"
     )
 
 ###############################################################################
@@ -207,6 +218,10 @@ class FungalInfectionMention(SpanAugmentedMention):
     fungal_infection: FungalInfectionPresent = Field(
         FungalInfectionPresent.NONE_OF_THE_ABOVE, 
         description="What evidence documents fungal infection as current, active, or being evaluated/treated now?"
+    )
+    fungal_infection_candida: bool = Field(
+        False,
+        description="If a fungal infection was mentioned, was the fungus in the candida genus?"
     )
 
 ###############################################################################
