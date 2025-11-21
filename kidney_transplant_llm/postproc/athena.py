@@ -11,9 +11,9 @@ from kidney_transplant_llm.postproc.schema import (
     HIGHLIGHT_COLS,
     NLP_DONOR_GPT_OSS_120B)
 
-def select_sql(highlights='irae__highlights_donor',
-               sample='irae__sample_casedef_index',
-               origin=NLP_DONOR_GPT_OSS_120B) -> str:
+def create_view_str(highlights='irae__highlights_donor',
+                    sample='irae__sample_casedef_index',
+                    origin=NLP_DONOR_GPT_OSS_120B) -> str:
     """
     :param sample: SQL Table name of sample CaseDef
     :param highlights: SQL Table name of highlights LLM
@@ -41,12 +41,12 @@ def select_sql(highlights='irae__highlights_donor',
     ]
     return '\n'.join(_sql)
 
-def select_sql_file(highlights='irae__highlights_donor',
+def create_view_sql(highlights='irae__highlights_donor',
                     sample='irae__sample_casedef_index',
                     origin=NLP_DONOR_GPT_OSS_120B) -> Path:
 
     view = filetool.name_view(highlights, sample)
-    text_sql = select_sql(highlights, sample, origin)
+    text_sql = create_view_str(highlights, sample, origin)
     file_sql = filetool.path_highlights(f'{view}.sql')
     with open(str(file_sql), 'w') as f:
         f.write(text_sql)

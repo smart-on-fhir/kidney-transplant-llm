@@ -10,14 +10,14 @@ from kidney_transplant_llm.postproc import (
     athena,
     filetool,
     pivot_table,
-    rank_llm)
+    cumulative)
 
 def pipeline(highlights:str, sample:str, origin:str):
     view = filetool.name_view(highlights, sample)
     print('######################################################################')
     print('VIEW: ', view)
     print(f'Step1: create view {view}')
-    output_sql = athena.select_sql_file(highlights= highlights, sample=sample, origin=origin)
+    output_sql = athena.create_view_sql(highlights= highlights, sample=sample, origin=origin)
 
     print(f'Output: {output_sql}')
     print('######################################################################')
