@@ -72,9 +72,9 @@ def pivot_highlights_df(
     wide.columns.name = None
     return wide
 
-def pivot_highlights_csv(highlights_csv:str = 'irae__highlights_donor.csv') -> Path:
+def pivot_highlights_csv(highlights_csv:str = 'irae__highlights_donor_index.csv') -> Path:
     input_csv = filetool.path_highlights(highlights_csv)
     output_csv = Path(str(input_csv).replace('.csv', '.pivot.csv'))
     output_df = pivot_highlights_df(pd.read_csv(input_csv))
-    output_df.to_csv(output_csv)
+    output_df.to_csv(output_csv, index=False)
     return output_csv
