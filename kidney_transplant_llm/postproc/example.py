@@ -30,7 +30,7 @@ def pipeline(highlights:str, sample:str, origin:str):
     print('Step3: Rank LLM term frequency')
     input_csv = filetool.path_highlights(f'{view}.pivot.csv')
     output_csv = filetool.path_highlights(f'{view}.pivot.tf.csv')
-    output_df = rank_llm.count_tf(input_csv, stratifier=SUBJECT_REF)
+    output_df = cumulative.count_tf(input_csv, stratifier=SUBJECT_REF)
     output_df.to_csv(output_csv, index=False)
     print(output_csv)
     print('######################################################################')
