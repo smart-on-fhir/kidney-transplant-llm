@@ -20,6 +20,7 @@ def print_counts_info(df: pd.DataFrame, subvalue_types: list[str]):
     unique_ids = df['subject_ref'].unique()
     print(f'DIRICHLET_MIN_COUNT cutoff (how many repeated observations to be sure) set to {DIRICHLET_MIN_COUNT}')
     print(f'Total unique subject ids: {len(unique_ids)}')
+    print()
 
     for subvalue in subvalue_types:
         subvalue_df = df[df['column'] == subvalue]
@@ -43,9 +44,11 @@ def print_counts_info(df: pd.DataFrame, subvalue_types: list[str]):
             print(f'\t\tFor subject_refs with EXACTLY 1 row, checking counts against Dirichlet min count of {DIRICHLET_MIN_COUNT}:')
             # Point back to the subvalue_df to get the actual counts
             for sid in counts_ones.index.unique():
-                max_count = max(subvalue_df[subvalue_df['subject_ref'] == sid]['count'].values)
+                counts = subvalue_df[subvalue_df['subject_ref'] == sid]['count']
+                # There should only be one row here since we filtered to counts == 1; but just in case, take the max
+                max_count = max(counts.values)
                 if max_count >= DIRICHLET_MIN_COUNT:
-                    ids_above_cutoff += sid
+                    ids_above_cutoff.append(sid)
             print(f'\t\tNumber of {subvalue} instances with count BELOW Dirichlet min count: {len(counts_ones.index.unique()) - len(set(ids_above_cutoff))}')
             print(f'\t\tNumber of {subvalue} instances with count above Dirichlet min count: {len(set(ids_above_cutoff))}')
             print('--------------------------------------------------')
