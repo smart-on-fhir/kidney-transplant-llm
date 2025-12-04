@@ -7,7 +7,9 @@ version = "0.1.0"
 requires-python = ">= 3.11"
 # If you need python libraries, add them here
 dependencies = [
+    "pandas"
 ]
+
 # You can alter this to discuss your study specifics
 description = "Kidney Transplant LLM for Immune Related Adverse Events (IRAE)"
 readme = "README.md"
