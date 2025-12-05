@@ -125,49 +125,81 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
     )
 
 class Serostatus(StrEnum):
-    SEROPOSITIVE = 'Documented seropositive (IgG positive)'
-    SERONEGATIVE = 'Documented seronegative (IgG negative)'
-    NOT_MENTIONED = "Serostatus not mentioned"
+    """
+    Serostatus classification based on IgG serology or explicit seropositive/seronegative statements.
+    """
+    SEROPOSITIVE = "SEROPOSITIVE"     # Documented IgG positive / seropositive
+    SERONEGATIVE = "SERONEGATIVE"     # Documented IgG negative / seronegative
+    NOT_MENTIONED = "NOT_MENTIONED"   # No serostatus documentation found
+
 
 class DonorRecipientSerostatus(SpanAugmentedMention):
     """
-    CMV and EBV serostatus for donor and recipient at the time of transplant.
-    OTHER denotes serostatus for unnamed virus.
+    CMV, EBV, and ANY virus serostatus for donor and recipient at the time of the
+    renal transplant (index date).
     """
     # CMV donor
     cmv_donor_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "What was the CMV serostatus of the renal donor?"
+        description=(
+            "CMV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'CMV D+', 'CMV D-', 'donor CMV IgG positive', 'donor CMV IgG negative', etc."
+        ),
     )
 
     # EBV donor
     ebv_donor_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "What was the EBV serostatus of the renal donor?"
+        description=(
+            "EBV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'EBV D+', 'EBV D-', 'donor EBV IgG positive', 'donor EBV IgG negative', etc."
+        ),
     )
 
-    # ANY virus donor
+    # ANY virus donor (including CMV or EBV)
     any_donor_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "Was the renal donor seropositive for any virus?"
+        description=(
+            "Overall serostatus of the renal donor for ANY virus. "
+            "Set SEROPOSITIVE if the note documents the donor as seropositive for "
+            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
+            "or uses generic language such as 'donor is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if it explicitly states the donor was seronegative for all IgG tests. "
+            "Otherwise use NOT_MENTIONED."
+        ),
     )
 
     # CMV recipient
     cmv_recipient_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "What was the CMV serostatus of the renal transplant recipient?"
+        description=(
+            "CMV serostatus of the recipient at the time of renal transplant. "
+            "Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'CMV R+', 'CMV R-', 'recipient CMV IgG positive', 'recipient CMV IgG negative', etc."
+        ),
     )
 
     # EBV recipient
     ebv_recipient_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "What was the EBV serostatus of the renal transplant recipient?"
+        description=(
+            "EBV serostatus of the recipient at the time of renal transplant. "            
+            "Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'EBV R+', 'EBV R-', 'recipient EBV IgG positive', 'recipient EBV IgG negative', etc."
+        ),
     )
 
-    # ANY virus donor
+    # ANY virus recipient (including CMV or EBV)
     any_recipient_serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
-        description= "Was the renal transplant recipient seropositive for any virus?"
+        description=(
+            "Serostatus of the recipient at the time of renal transplant for ANY virus. "            
+            "Set SEROPOSITIVE if the note documents the recipient as seropositive for "
+            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
+            "or if the text states 'recipient is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if explicitly stated the recipient was seronegative. "
+            "Otherwise use NOT_MENTIONED."
+        ),
     )
 
 
