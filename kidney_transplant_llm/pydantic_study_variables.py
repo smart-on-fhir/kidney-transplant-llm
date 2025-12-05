@@ -124,6 +124,52 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
         description='What was the donor-recipient HLA mismatch count for the first renal transplant?'
     )
 
+class Serostatus(StrEnum):
+    SEROPOSITIVE = 'Documented seropositive (IgG positive)'
+    SERONEGATIVE = 'Documented seronegative (IgG negative)'
+    NOT_MENTIONED = "Serostatus not mentioned"
+
+class DonorRecipientSerostatus(SpanAugmentedMention):
+    """
+    CMV and EBV serostatus for donor and recipient at the time of transplant.
+    OTHER denotes serostatus for unnamed virus.
+    """
+    # CMV donor
+    cmv_donor_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "What was the CMV serostatus of the renal donor?"
+    )
+
+    # EBV donor
+    ebv_donor_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "What was the EBV serostatus of the renal donor?"
+    )
+
+    # ANY virus donor
+    any_donor_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "Was the renal donor seropositive for any virus?"
+    )
+
+    # CMV recipient
+    cmv_recipient_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "What was the CMV serostatus of the renal transplant recipient?"
+    )
+
+    # EBV recipient
+    ebv_recipient_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "What was the EBV serostatus of the renal transplant recipient?"
+    )
+
+    # ANY virus donor
+    any_recipient_serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description= "Was the renal transplant recipient seropositive for any virus?"
+    )
+
 
 ###############################################################################
 # Therapeutic Status Compliance
