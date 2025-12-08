@@ -132,6 +132,22 @@ class Serostatus(StrEnum):
     SERONEGATIVE = "SERONEGATIVE"     # Documented IgG negative / seronegative
     NOT_MENTIONED = "NOT_MENTIONED"   # No serostatus documentation found
 
+class SerostatusDonor(SpanAugmentedMention):
+    """
+    Overall serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "Overall serostatus of the renal donor for ANY virus. "
+            "Set SEROPOSITIVE if the note documents the donor as seropositive for "
+            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
+            "or uses generic language such as 'donor is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if it explicitly states the donor was seronegative for all IgG tests. "
+            "Otherwise use NOT_MENTIONED."
+        ),
+    )
+
 class SerostatusDonorCMV(SpanAugmentedMention):
     """
     CMV serostatus of the donor at the time of first renal transplant.
@@ -156,18 +172,18 @@ class SerostatusDonorEBV(SpanAugmentedMention):
         ),
     )
 
-class SerostatusDonorAny(SpanAugmentedMention):
+class SerostatusRecipient(SpanAugmentedMention):
     """
-    Overall serostatus of the donor at the time of first renal transplant.
+    Overall serostatus of the recipient at the time of first renal transplant.
     """
     serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
-            "Overall serostatus of the renal donor for ANY virus. "
-            "Set SEROPOSITIVE if the note documents the donor as seropositive for "
+            "Serostatus of the recipient at the time of renal transplant for ANY virus. "
+            "Set SEROPOSITIVE if the note documents the recipient as seropositive for "
             "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
-            "or uses generic language such as 'donor is seropositive' without naming the virus. "
-            "Set SERONEGATIVE only if it explicitly states the donor was seronegative for all IgG tests. "
+            "or if the text states 'recipient is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if explicitly stated the recipient was seronegative. "
             "Otherwise use NOT_MENTIONED."
         ),
     )
@@ -199,21 +215,6 @@ class SerostatusRecipientEBV(SpanAugmentedMention):
     )
 
 
-class SerostatusRecipientAny(SpanAugmentedMention):
-    """
-    Overall serostatus of the recipient at the time of first renal transplant.
-    """
-    serostatus: Serostatus = Field(
-        Serostatus.NOT_MENTIONED,
-        description=(
-            "Serostatus of the recipient at the time of renal transplant for ANY virus. "
-            "Set SEROPOSITIVE if the note documents the recipient as seropositive for "
-            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
-            "or if the text states 'recipient is seropositive' without naming the virus. "
-            "Set SERONEGATIVE only if explicitly stated the recipient was seronegative. "
-            "Otherwise use NOT_MENTIONED."
-        ),
-    )
 
 ###############################################################################
 # Therapeutic Status Compliance
@@ -510,6 +511,12 @@ class KidneyTransplantAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+    donor_serostatus_mention: SerostatusDonor
+    donor_serostatus_cmv_mention: SerostatusDonorCMV
+    donor_serostatus_ebv_mention: SerostatusDonorEBV
+    recipient_serostatus_mention: SerostatusRecipient
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
     rx_therapeutic_status_mention: RxTherapeuticStatusMention
     rx_compliance_mention: RxComplianceMention
     dsa_mention: DSAMention
@@ -549,6 +556,12 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+    donor_serostatus_mention: SerostatusDonor
+    donor_serostatus_cmv_mention: SerostatusDonorCMV
+    donor_serostatus_ebv_mention: SerostatusDonorEBV
+    recipient_serostatus_mention: SerostatusRecipient
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
 
 
 class KidneyTransplantLongitudinalAnnotation(BaseModel):
@@ -669,6 +682,12 @@ class KidneyTransplantMentionLabels(StrEnum):
     donor_relationship_mention = auto()
     donor_hla_match_quality_mention = auto()
     donor_hla_mismatch_count_mention = auto()
+    donor_serostatus_mention  = auto()
+    donor_serostatus_cmv_mention = auto()
+    donor_serostatus_ebv_mention = auto()
+    recipient_serostatus_mention = auto()
+    recipient_serostatus_cmv_mention = auto()
+    recipient_serostatus_ebv_mention = auto()
     rx_therapeutic_status_mention = auto()
     rx_compliance_mention = auto()
     dsa_mention = auto()
