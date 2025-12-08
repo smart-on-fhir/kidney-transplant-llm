@@ -132,14 +132,11 @@ class Serostatus(StrEnum):
     SERONEGATIVE = "SERONEGATIVE"     # Documented IgG negative / seronegative
     NOT_MENTIONED = "NOT_MENTIONED"   # No serostatus documentation found
 
-
-class DonorRecipientSerostatus(SpanAugmentedMention):
+class SerostatusDonorCMV(SpanAugmentedMention):
     """
-    CMV, EBV, and ANY virus serostatus for donor and recipient at the time of the
-    renal transplant (index date).
+    CMV serostatus of the donor at the time of first renal transplant.
     """
-    # CMV donor
-    cmv_donor_serostatus: Serostatus = Field(
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
             "CMV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
@@ -147,8 +144,11 @@ class DonorRecipientSerostatus(SpanAugmentedMention):
         ),
     )
 
-    # EBV donor
-    ebv_donor_serostatus: Serostatus = Field(
+class SerostatusDonorEBV(SpanAugmentedMention):
+    """
+    EBV serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
             "EBV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
@@ -156,8 +156,11 @@ class DonorRecipientSerostatus(SpanAugmentedMention):
         ),
     )
 
-    # ANY virus donor (including CMV or EBV)
-    any_donor_serostatus: Serostatus = Field(
+class SerostatusDonorAny(SpanAugmentedMention):
+    """
+    Overall serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
             "Overall serostatus of the renal donor for ANY virus. "
@@ -169,8 +172,11 @@ class DonorRecipientSerostatus(SpanAugmentedMention):
         ),
     )
 
-    # CMV recipient
-    cmv_recipient_serostatus: Serostatus = Field(
+class SerostatusRecipientCMV(SpanAugmentedMention):
+    """
+    CMV serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
             "CMV serostatus of the recipient at the time of renal transplant. "
@@ -179,21 +185,28 @@ class DonorRecipientSerostatus(SpanAugmentedMention):
         ),
     )
 
-    # EBV recipient
-    ebv_recipient_serostatus: Serostatus = Field(
+class SerostatusRecipientEBV(SpanAugmentedMention):
+    """
+    EBV serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
-            "EBV serostatus of the recipient at the time of renal transplant. "            
+            "EBV serostatus of the recipient at the time of renal transplant. "
             "Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
             "Look for patterns like 'EBV R+', 'EBV R-', 'recipient EBV IgG positive', 'recipient EBV IgG negative', etc."
         ),
     )
 
-    # ANY virus recipient (including CMV or EBV)
-    any_recipient_serostatus: Serostatus = Field(
+
+class SerostatusRecipientAny(SpanAugmentedMention):
+    """
+    Overall serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
         Serostatus.NOT_MENTIONED,
         description=(
-            "Serostatus of the recipient at the time of renal transplant for ANY virus. "            
+            "Serostatus of the recipient at the time of renal transplant for ANY virus. "
             "Set SEROPOSITIVE if the note documents the recipient as seropositive for "
             "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
             "or if the text states 'recipient is seropositive' without naming the virus. "
@@ -201,7 +214,6 @@ class DonorRecipientSerostatus(SpanAugmentedMention):
             "Otherwise use NOT_MENTIONED."
         ),
     )
-
 
 ###############################################################################
 # Therapeutic Status Compliance
