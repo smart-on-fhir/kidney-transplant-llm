@@ -515,16 +515,6 @@ class MultipleTransplantHistoryAnnotation(BaseModel):
     """
     An object-model for annotations of patients with a history of multiple transplants.
     Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
-    the relevant details of the finding, as well as some additional evidence
-    metadata to validate findings post-hoc.
-    """
-    multiple_transplant_history_mention: MultipleTransplantHistoryMention
-
-class MultipleTransplantHistoryAnnotation(BaseModel):
-    """
-    An object-model for annotations of patients with a history of multiple transplants.
-    Take care to avoid false positives, like confusing information that only
     appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
     metadata to validate findings post-hoc.
