@@ -135,7 +135,7 @@ class Serostatus(StrEnum):
     SERONEGATIVE = "SERONEGATIVE"     
     NOT_MENTIONED = "NOT_MENTIONED"   
 
-class SerostatusDonor(SpanAugmentedMention):
+class SerostatusDonorMention(SpanAugmentedMention):
     """
     Overall serostatus of the donor at the time of first renal transplant.
     """
@@ -151,7 +151,7 @@ class SerostatusDonor(SpanAugmentedMention):
         ),
     )
 
-class SerostatusDonorCMV(SpanAugmentedMention):
+class SerostatusDonorCMVMention(SpanAugmentedMention):
     """
     CMV serostatus of the donor at the time of first renal transplant.
     """
@@ -163,7 +163,7 @@ class SerostatusDonorCMV(SpanAugmentedMention):
         ),
     )
 
-class SerostatusDonorEBV(SpanAugmentedMention):
+class SerostatusDonorEBVMention(SpanAugmentedMention):
     """
     EBV serostatus of the donor at the time of first renal transplant.
     """
@@ -175,7 +175,7 @@ class SerostatusDonorEBV(SpanAugmentedMention):
         ),
     )
 
-class SerostatusRecipient(SpanAugmentedMention):
+class SerostatusRecipientMention(SpanAugmentedMention):
     """
     Overall serostatus of the recipient at the time of first renal transplant.
     """
@@ -191,7 +191,7 @@ class SerostatusRecipient(SpanAugmentedMention):
         ),
     )
 
-class SerostatusRecipientCMV(SpanAugmentedMention):
+class SerostatusRecipientCMVMention(SpanAugmentedMention):
     """
     CMV serostatus of the recipient at the time of first renal transplant.
     """
@@ -204,7 +204,7 @@ class SerostatusRecipientCMV(SpanAugmentedMention):
         ),
     )
 
-class SerostatusRecipientEBV(SpanAugmentedMention):
+class SerostatusRecipientEBVMention(SpanAugmentedMention):
     """
     EBV serostatus of the recipient at the time of first renal transplant.
     """
@@ -514,12 +514,12 @@ class KidneyTransplantAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
-    donor_serostatus_mention: SerostatusDonor
-    donor_serostatus_cmv_mention: SerostatusDonorCMV
-    donor_serostatus_ebv_mention: SerostatusDonorEBV
-    recipient_serostatus_mention: SerostatusRecipient
-    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
-    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
+    donor_serostatus_mention: SerostatusDonorMention
+    donor_serostatus_cmv_mention: SerostatusDonorCMVMention
+    donor_serostatus_ebv_mention: SerostatusDonorEBVMention
+    recipient_serostatus_mention: SerostatusRecipientMention
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMVMention
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBVMention
     rx_therapeutic_status_mention: RxTherapeuticStatusMention
     rx_compliance_mention: RxComplianceMention
     dsa_mention: DSAMention
@@ -559,12 +559,12 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
-    donor_serostatus_mention: SerostatusDonor
-    donor_serostatus_cmv_mention: SerostatusDonorCMV
-    donor_serostatus_ebv_mention: SerostatusDonorEBV
-    recipient_serostatus_mention: SerostatusRecipient
-    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
-    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
+    donor_serostatus_mention: SerostatusDonorMention
+    donor_serostatus_cmv_mention: SerostatusDonorCMVMention
+    donor_serostatus_ebv_mention: SerostatusDonorEBVMention
+    recipient_serostatus_mention: SerostatusRecipientMention
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMVMention
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBVMention
 
 
 class KidneyTransplantLongitudinalAnnotation(BaseModel):
