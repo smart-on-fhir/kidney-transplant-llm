@@ -127,10 +127,13 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
 class Serostatus(StrEnum):
     """
     Serostatus classification based on IgG serology or explicit seropositive/seronegative statements.
+    - SEROPOSITIVE: Documented IgG positive / seropositive
+    - SERONEGATIVE: Documented IgG negative / seronegative
+    - NOT_MENTIONED: No serostatus documentation found
     """
-    SEROPOSITIVE = "SEROPOSITIVE"     # Documented IgG positive / seropositive
-    SERONEGATIVE = "SERONEGATIVE"     # Documented IgG negative / seronegative
-    NOT_MENTIONED = "NOT_MENTIONED"   # No serostatus documentation found
+    SEROPOSITIVE = "SEROPOSITIVE"     
+    SERONEGATIVE = "SERONEGATIVE"     
+    NOT_MENTIONED = "NOT_MENTIONED"   
 
 class SerostatusDonor(SpanAugmentedMention):
     """
