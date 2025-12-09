@@ -124,6 +124,100 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
         description='What was the donor-recipient HLA mismatch count for the first renal transplant?'
     )
 
+class Serostatus(StrEnum):
+    """
+    Serostatus classification based on IgG serology or explicit seropositive/seronegative statements.
+    - SEROPOSITIVE: Documented IgG positive / seropositive
+    - SERONEGATIVE: Documented IgG negative / seronegative
+    - NOT_MENTIONED: No serostatus documentation found
+    """
+    SEROPOSITIVE = "SEROPOSITIVE"     
+    SERONEGATIVE = "SERONEGATIVE"     
+    NOT_MENTIONED = "NOT_MENTIONED"   
+
+class SerostatusDonor(SpanAugmentedMention):
+    """
+    Overall serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "Overall serostatus of the renal donor for ANY virus. "
+            "Set SEROPOSITIVE if the note documents the donor as seropositive for "
+            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
+            "or uses generic language such as 'donor is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if it explicitly states the donor was seronegative for all IgG tests. "
+            "Otherwise use NOT_MENTIONED."
+        ),
+    )
+
+class SerostatusDonorCMV(SpanAugmentedMention):
+    """
+    CMV serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "CMV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'CMV D+', 'CMV D-', 'donor CMV IgG positive', 'donor CMV IgG negative', etc."
+        ),
+    )
+
+class SerostatusDonorEBV(SpanAugmentedMention):
+    """
+    EBV serostatus of the donor at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "EBV serostatus of the renal donor. Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'EBV D+', 'EBV D-', 'donor EBV IgG positive', 'donor EBV IgG negative', etc."
+        ),
+    )
+
+class SerostatusRecipient(SpanAugmentedMention):
+    """
+    Overall serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "Serostatus of the recipient at the time of renal transplant for ANY virus. "
+            "Set SEROPOSITIVE if the note documents the recipient as seropositive for "
+            "ANY virus (including CMV, EBV, HBV, HCV, HSV, VZV, or an unspecified virus), "
+            "or if the text states 'recipient is seropositive' without naming the virus. "
+            "Set SERONEGATIVE only if explicitly stated the recipient was seronegative. "
+            "Otherwise use NOT_MENTIONED."
+        ),
+    )
+
+class SerostatusRecipientCMV(SpanAugmentedMention):
+    """
+    CMV serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "CMV serostatus of the recipient at the time of renal transplant. "
+            "Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'CMV R+', 'CMV R-', 'recipient CMV IgG positive', 'recipient CMV IgG negative', etc."
+        ),
+    )
+
+class SerostatusRecipientEBV(SpanAugmentedMention):
+    """
+    EBV serostatus of the recipient at the time of first renal transplant.
+    """
+    serostatus: Serostatus = Field(
+        Serostatus.NOT_MENTIONED,
+        description=(
+            "EBV serostatus of the recipient at the time of renal transplant. "
+            "Choose one of: 'SEROPOSITIVE', 'SERONEGATIVE', 'NOT_MENTIONED'. "
+            "Look for patterns like 'EBV R+', 'EBV R-', 'recipient EBV IgG positive', 'recipient EBV IgG negative', etc."
+        ),
+    )
+
+
 
 ###############################################################################
 # Therapeutic Status Compliance
@@ -420,6 +514,12 @@ class KidneyTransplantAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+    donor_serostatus_mention: SerostatusDonor
+    donor_serostatus_cmv_mention: SerostatusDonorCMV
+    donor_serostatus_ebv_mention: SerostatusDonorEBV
+    recipient_serostatus_mention: SerostatusRecipient
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
     rx_therapeutic_status_mention: RxTherapeuticStatusMention
     rx_compliance_mention: RxComplianceMention
     dsa_mention: DSAMention
@@ -432,16 +532,6 @@ class KidneyTransplantAnnotation(BaseModel):
     ptld_mention: PTLDMention
     cancer_mention: CancerMention
     deceased_mention: DeceasedMention
-
-class MultipleTransplantHistoryAnnotation(BaseModel):
-    """
-    An object-model for annotations of patients with a history of multiple transplants.
-    Take care to avoid false positives, like confusing information that only
-    appears in family history for patient history. Annotations should indicate 
-    the relevant details of the finding, as well as some additional evidence
-    metadata to validate findings post-hoc.
-    """
-    multiple_transplant_history_mention: MultipleTransplantHistoryMention
 
 class MultipleTransplantHistoryAnnotation(BaseModel):
     """
@@ -469,6 +559,12 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
     donor_relationship_mention: DonorRelationshipMention
     donor_hla_match_quality_mention: DonorHlaMatchQualityMention
     donor_hla_mismatch_count_mention: DonorHlaMismatchCountMention
+    donor_serostatus_mention: SerostatusDonor
+    donor_serostatus_cmv_mention: SerostatusDonorCMV
+    donor_serostatus_ebv_mention: SerostatusDonorEBV
+    recipient_serostatus_mention: SerostatusRecipient
+    recipient_serostatus_cmv_mention: SerostatusRecipientCMV
+    recipient_serostatus_ebv_mention: SerostatusRecipientEBV
 
 
 class KidneyTransplantLongitudinalAnnotation(BaseModel):
@@ -589,6 +685,12 @@ class KidneyTransplantMentionLabels(StrEnum):
     donor_relationship_mention = auto()
     donor_hla_match_quality_mention = auto()
     donor_hla_mismatch_count_mention = auto()
+    donor_serostatus_mention  = auto()
+    donor_serostatus_cmv_mention = auto()
+    donor_serostatus_ebv_mention = auto()
+    recipient_serostatus_mention = auto()
+    recipient_serostatus_cmv_mention = auto()
+    recipient_serostatus_ebv_mention = auto()
     rx_therapeutic_status_mention = auto()
     rx_compliance_mention = auto()
     dsa_mention = auto()
@@ -658,91 +760,125 @@ kidney_transplant_mention_ls_metadata = {
         "display": "Multiple Transplant History",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
         "hotkey": "H",
-        "hotkey_mnemonic": "History of multiple transplants?",
+        "hotkey_mnemonic": "(H)istory of multiple transplants?",
     },
     KidneyTransplantMentionLabels.donor_transplant_date_mention: {
         "display": "Transplant Date",
         "group": KidneyTransplantMentionGroups.TRANSPLANT_DATE,
-        "hotkey": "W",
-        "hotkey_mnemonic": "Which day?",
+        "hotkey": "D",
+        "hotkey_mnemonic": "(D)ate of first transplant",
     },
     KidneyTransplantMentionLabels.donor_type_mention: {
         "display": "Donor Type",
         "group": KidneyTransplantMentionGroups.DONOR,
-        "hotkey": "L",
-        "hotkey_mnemonic": "Living donor?",
+        "hotkey": "S",
+        "hotkey_mnemonic": "(S)urvival of donor?",
     },
     KidneyTransplantMentionLabels.donor_relationship_mention: {
         "display": "Donor Relationship",
         "group": KidneyTransplantMentionGroups.DONOR,
-        "hotkey": "S",
-        "hotkey_mnemonic": "Sibling?",
+        "hotkey": "K",
+        "hotkey_mnemonic": "(K)inship of donor?",
     },
     KidneyTransplantMentionLabels.donor_hla_match_quality_mention: {
         "display": "Hla Match Quality",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "Q",
-        "hotkey_mnemonic": "Quality?",
+        "hotkey_mnemonic": "(Q)uality HLA compatibility?",
     },
     KidneyTransplantMentionLabels.donor_hla_mismatch_count_mention: {
         "display": "Hla Mismatch Count",
         "group": KidneyTransplantMentionGroups.DONOR,
         "hotkey": "M",
-        "hotkey_mnemonic": "Mismatch?",
+        "hotkey_mnemonic": "(M)isMatch HLA compatibility?",
     },
+    KidneyTransplantMentionLabels.donor_serostatus_mention: {
+        "display": "Donor serostatus +/-",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "O",
+        "hotkey_mnemonic": "(O)verall donor serostatus?",
+    },
+
+    KidneyTransplantMentionLabels.donor_serostatus_cmv_mention: {
+        "display": "Donor CMV serostatus",
+        "group": KidneyTransplantMentionGroups.DONOR,
+    },
+
+    KidneyTransplantMentionLabels.donor_serostatus_ebv_mention: {
+        "display": "Donor EBV serostatus",
+        "group": KidneyTransplantMentionGroups.DONOR,
+    },
+
+    KidneyTransplantMentionLabels.recipient_serostatus_mention: {
+        "display": "Recipient Serostatus +/-",
+        "group": KidneyTransplantMentionGroups.DONOR,
+        "hotkey": "X",
+        "hotkey_mnemonic": "e(X)isting serostatus of recipient",
+    },
+
+    KidneyTransplantMentionLabels.recipient_serostatus_cmv_mention: {
+        "display": "Recipient CMV serostatus",
+        "group": KidneyTransplantMentionGroups.DONOR,
+    },
+
+    KidneyTransplantMentionLabels.recipient_serostatus_ebv_mention: {
+        "display": "Recipient EBV serostatus",
+        "group": KidneyTransplantMentionGroups.DONOR,
+    },
+
     KidneyTransplantMentionLabels.rx_therapeutic_status_mention: {
         "display": "Rx Therapeutic",
         "group": KidneyTransplantMentionGroups.THERAPEUTIC,
-        "hotkey": "E",
-        "hotkey_mnemonic": "Effect?",
+        "hotkey": "T",
+        "hotkey_mnemonic": "(T)herapeutic Rx?",
     },
     KidneyTransplantMentionLabels.rx_compliance_mention: {
         "display": "Rx Compliance",
         "group": KidneyTransplantMentionGroups.COMPLIANCE,
         "hotkey": "U",
-        "hotkey_mnemonic": "Use?",
+        "hotkey_mnemonic": "(U)sing Rx?",
     },
     KidneyTransplantMentionLabels.dsa_mention: {
         "display": "DSA",
         "group": KidneyTransplantMentionGroups.DSA,
         "hotkey": "A",
-        "hotkey_mnemonic": "Antibodies?",
+        "hotkey_mnemonic": "(A)ntibodies?",
     },
     KidneyTransplantMentionLabels.infection_mention: {
         "display": "Infection",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "I",
-        "hotkey_mnemonic": "Infection?",
+        "hotkey_mnemonic": "(I)nfection?",
     },
     KidneyTransplantMentionLabels.viral_infection_mention: {
         "display": "Viral",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "V",
-        "hotkey_mnemonic": "Viral?",
+        "hotkey_mnemonic": "(V)iral?",
     },
     KidneyTransplantMentionLabels.bacterial_infection_mention: {
         "display": "Bacterial",
         "group": KidneyTransplantMentionGroups.INFECTION,
         "hotkey": "B",
-        "hotkey_mnemonic": "Bacterial?",
+        "hotkey_mnemonic": "(B)acterial?",
     },
     KidneyTransplantMentionLabels.fungal_infection_mention: {
         "display": "Fungal",
         "group": KidneyTransplantMentionGroups.INFECTION,
-        "hotkey": "G",
-        "hotkey_mnemonic": "funGal?",
+        "hotkey": "Z",
+        "hotkey_mnemonic": "Fungus like (Z)ombie ants",
     },
     KidneyTransplantMentionLabels.graft_rejection_mention: {
         "display": "Graft Rejection",
         "group": KidneyTransplantMentionGroups.REJECTION,
         "hotkey": "R",
-        "hotkey_mnemonic": "Rejection?",
+        "hotkey_mnemonic": "Graft (R)ejection?",
     },
     KidneyTransplantMentionLabels.graft_failure_mention: {
         "display": "Graft Failure",
         "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
         "hotkey": "F",
-        "hotkey_mnemonic": "Failure?",
+        "hotkey_mnemonic": "Graft (F)ailure?",
     },
     KidneyTransplantMentionLabels.ptld_mention: {
         "display": "PTLD",
@@ -754,12 +890,12 @@ kidney_transplant_mention_ls_metadata = {
         "display": "Cancer",
         "group": KidneyTransplantMentionGroups.CANCER,
         "hotkey": "C",
-        "hotkey_mnemonic": "Cancer?",
+        "hotkey_mnemonic": "(C)ancer?",
     },
     KidneyTransplantMentionLabels.deceased_mention: {
         "display": "Deceased",
         "group": KidneyTransplantMentionGroups.ENDPOINTS_FAILURE_DECEASED,
-        "hotkey": "D",
-        "hotkey_mnemonic": "Deceased?",
+        "hotkey": "X",
+        "hotkey_mnemonic": "(X) marks deceased",
     },
 }
