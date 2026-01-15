@@ -4,4 +4,8 @@ venv/
 data/
 
 __pycache__/
-*.pyc   
+*.pyc
+
+/kidney_transplant_llm/donor.json
+/kidney_transplant_llm/history.json
+/kidney_transplant_llm/longitudinal.json
