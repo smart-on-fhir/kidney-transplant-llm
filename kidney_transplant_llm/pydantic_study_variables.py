@@ -1,3 +1,6 @@
+import json
+import os
+
 from enum import StrEnum, auto
 from pydantic import BaseModel, Field
 
@@ -899,3 +902,16 @@ kidney_transplant_mention_ls_metadata = {
         "hotkey_mnemonic": "(X) marks deceased",
     },
 }
+
+
+if __name__ == "__main__":
+    basedir = os.path.dirname(__file__)
+
+    with open(f"{basedir}/donor.json", "w", encoding="utf8") as f:
+        json.dump(KidneyTransplantDonorGroupAnnotation.model_json_schema(), f, indent=2)
+
+    with open(f"{basedir}/history.json", "w", encoding="utf8") as f:
+        json.dump(MultipleTransplantHistoryAnnotation.model_json_schema(), f, indent=2)
+
+    with open(f"{basedir}/longitudinal.json", "w", encoding="utf8") as f:
+        json.dump(KidneyTransplantLongitudinalAnnotation.model_json_schema(), f, indent=2)
