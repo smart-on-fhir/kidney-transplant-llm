@@ -250,5 +250,5 @@ class KidneyTransplantDonorGroupAnnotation(BaseModel):
 if __name__ == "__main__":
     basedir = os.path.dirname(__file__)
 
-    with open(f"{basedir}/irae_donor.json", "w", encoding="utf8") as f:
+    with open(f"{basedir}/schemas/irae_donor.json", "w", encoding="utf8") as f:
         json.dump(KidneyTransplantDonorGroupAnnotation.model_json_schema(), f, indent=2)

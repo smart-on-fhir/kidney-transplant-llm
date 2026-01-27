@@ -325,5 +325,5 @@ class KidneyTransplantLongitudinalAnnotation(BaseModel):
 if __name__ == "__main__":
     basedir = os.path.dirname(__file__)
 
-    with open(f"{basedir}/irae_outcomes.json", "w", encoding="utf8") as f:
+    with open(f"{basedir}/schemas/irae_outcomes.json", "w", encoding="utf8") as f:
         json.dump(KidneyTransplantLongitudinalAnnotation.model_json_schema(), f, indent=2)

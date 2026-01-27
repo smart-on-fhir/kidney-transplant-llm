@@ -368,5 +368,5 @@ class ImmunosuppressiveMedicationsAnnotation(BaseModel):
 if __name__ == "__main__":
     basedir = os.path.dirname(__file__)
 
-    with open(f"{basedir}/irae_medications.json", "w", encoding="utf8") as f:
+    with open(f"{basedir}/schemas/irae_medications.json", "w", encoding="utf8") as f:
         json.dump(ImmunosuppressiveMedicationMention.model_json_schema(), f, indent=2)
