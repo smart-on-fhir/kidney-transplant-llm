@@ -262,12 +262,12 @@
     "drug_class": {
       "$ref": "#/$defs/RxClassImmunosuppression",
       "default": "None of the above",
-      "description": "Extract the Immunosuppressive drug class or therapy modality class or therapy modality documented for this medication, if present"
+      "description": "Extract the Immunosuppressive drug class or therapy modality documented for this medication, if present"
     },
     "ingredient": {
       "$ref": "#/$defs/RxIngredientImmunosuppression",
       "default": "None of the above",
-      "description": "Extract the Specific immunosuppressive drug ingredient ingredient documented for this medication, if present"
+      "description": "Extract the specific immunosuppressive drug ingredient documented for this medication, if present"
     }
   },
   "title": "ImmunosuppressiveMedicationMention",
