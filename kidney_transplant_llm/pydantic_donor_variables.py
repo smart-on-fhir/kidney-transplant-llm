@@ -225,9 +225,9 @@ class DonorHlaMismatchCountMention(SpanAugmentedMention):
 
 class KidneyTransplantDonorGroupAnnotation(BaseModel):
     """
-    An object-model for annotations of immune related adverse event (IRAE)
-    observations found in a patient's chart, relating specifically to kidney
-    transplants.
+    An object-model for annotations of donor and recipient transplant information
+    found in a patient's chart, relating specifically to kidney transplants.
+
     Take care to avoid false positives, like confusing information that only
     appears in family history for patient history. Annotations should indicate
     the relevant details of the finding, as well as some additional evidence
