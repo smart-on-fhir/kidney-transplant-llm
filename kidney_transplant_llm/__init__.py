@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 """Exposes pydantic classes and postprocessing functions for kidney transplant data."""
 
-=======
 
 # Main Pydantic Study Variable Export 
 from kidney_transplant_llm.pydantic_study_variables import (
@@ -72,4 +70,3 @@ from kidney_transplant_llm.medication.annotation import (
     PolyclonalAntibodies,
     RxClassImmunosuppression,
 )
->>>>>>> 1df7e68 (renamed the transplant_llm folder for consistency across projects; got the appropriate fields exposed through the module init file for use in other projects)
